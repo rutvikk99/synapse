@@ -4,7 +4,7 @@ Demos and labs for Synapse in a Day content.
 
 ## Setup
 
-Link to demo setup instructions.
+Follow the [demo setup instructions](demos/setup/README.md).
 
 ## Demos
 
