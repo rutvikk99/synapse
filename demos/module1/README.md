@@ -107,4 +107,18 @@ Azure Synapse Analytics is the evolution of the Azure SQL data warehouse service
 
     > **Note**: The SQL pool must be running before you can display its tables.
 
+3. Expand **Tables** and **Programmability/Stored procedures**.
+
+    The **tables** listed under the SQL pool store data from multiple sources, such as SAP Hana, Twitter, Azure SQL Database, and external files copied over from an orchestration pipeline. Synapse Analytics gives us the ability to combine these data sources for analytics and reporting, all in one location.
+
+    You will also see familiar database components, such as **stored procedures**. You can execute the stored procedures using T-SQL scripts, or execute them as part of an orchestration pipeline.
+
+4. Select the **Linked** tab, expand the **Azure Data Lake Storage Gen2** group, then expand the **primary storage** for the workspace.
+
+    ![The linked tab is highlighted.](media/data-linked.png "Linked")
+
+    Every Synapse workspace has a primary ADLS Gen2 account associated with it. This serves as the **data lake**, which is a great place to store flat files, such as files copied over from on-premises data stores, exported data or data copied directly from external services and applications, telemetry data, etc.
+
+    In our example, we have several containers that hold files and folders that we can explore and use from within our workspace. Here you can see marketing campaign data, CSV files containing customer information, finance information imported from an external database, machine learning assets, IoT device telemetry, SAP Hana data, and tweets, just to name a few.
+
 ## Designing a Modern Data Warehouse using Azure Synapse Analytics
