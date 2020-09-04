@@ -1,9 +1,23 @@
 # Realize Integrated Analytical Solutions with Azure Synapse Analytics
 
 - [Realize Integrated Analytical Solutions with Azure Synapse Analytics](#realize-integrated-analytical-solutions-with-azure-synapse-analytics)
+  - [About Azure Synapse Analytics](#about-azure-synapse-analytics)
   - [Surveying the Components of Azure Synapse Analytics](#surveying-the-components-of-azure-synapse-analytics)
   - [Exploring Azure Synapse Studio](#exploring-azure-synapse-studio)
+    - [The Data hub](#the-data-hub)
   - [Designing a Modern Data Warehouse using Azure Synapse Analytics](#designing-a-modern-data-warehouse-using-azure-synapse-analytics)
+
+## About Azure Synapse Analytics
+
+Azure Synapse is an end-to-end analytics platform which combines SQL data warehousing, big data analytics, and data integration into a single integrated environment.
+
+Synapse empowers users to gain quick access and insights across all of their data, enabling a whole new level of performance and scale that is simply unmatched in the industry.
+
+As you will see here in our workspace, Synapse brings all of our data into a single service. Synapse does not just remove the silos between people in the organization, it also brings the data closer together.
+
+*Supplementary Info:*
+
+Azure Synapse Analytics is the evolution of the Azure SQL data warehouse service. With Azure Synapse, we give you a unified service with fully integrated capabilities, not just ETL. We've also enabled hybrid data ingestion and orchestration and secure Self Service Enterprise Analytics. Through our data warehouse we're also providing AI and big data processing built into Synapse. We've added capabilities such as efficient compute for on-demand query processing as well as monitoring, management, and integrated security.
 
 ## Surveying the Components of Azure Synapse Analytics
 
@@ -70,5 +84,27 @@
     When you select **Packages (1)** on the left-hand menu, you can view whether a `requirements.txt` file has been added to manage Python packages for Spark instances. You can **upload an environment config file (2)**, or select the ellipses (...) to the **right-hand side of a package file (3)** to access options to re-upload, download, or delete the file.
 
 ## Exploring Azure Synapse Studio
+
+1. Open Synapse workspace in the resource group, then select either **Launch Synapse Studio** or the **Workspace web URL**.
+
+    ![The two Synapse Studio links are highlighted with an arrow pointing between them on the Overview blade of Synapse workspace.](media/synapse-workspace-studio-links.png "Synapse workspace")
+
+    Synapse Studio is where you manage your workspace, explore data, create data movement pipelines, write T-SQL scripts, create and run Synapse Spark notebooks, build mapping data flows, create reports, and monitor your environment.
+
+    Most of your work will be done here.
+
+### The Data hub
+
+1. Select the **Data** hub.
+
+    ![The data hub is highlighted.](media/data-hub.png "Data hub")
+
+    The data hub is where you access your provisioned SQL pool databases and SQL serverless databases in your workspace, as well as external data sources, such as storage accounts and other linked services.
+
+2. Under the **Workspace (2)** tab of the Data hub (1), expand the **SQLPool01 (3)** SQL pool underneath **Databases**.
+
+    ![The workspace is shown under the Data hub.](media/data-workspace.png "Workspace")
+
+    > **Note**: The SQL pool must be running before you can display its tables.
 
 ## Designing a Modern Data Warehouse using Azure Synapse Analytics
