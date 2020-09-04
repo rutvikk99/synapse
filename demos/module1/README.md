@@ -160,6 +160,17 @@ Azure Synapse Analytics is the evolution of the Azure SQL data warehouse service
 
     The Develop hub is where you manage SQL scripts, Synapse notebooks, data flows, and Power BI reports.
 
+2. Expand each of the groups under the Develop menu.
+
+    ![Each of the sections are expanded.](media/develop-menu.png "Develop")
+
+    The Develop hub in our sample environment contains examples of the following artifacts:
+
+    1. **SQL scripts** contains T-SQL scripts that you publish to your workspace. Within the scripts, you can execute commands against any of the provisioned SQL pools or on-demand SQL serverless pools to which you have access.
+    2. **Notebooks** contains Synapse Spark notebooks used for data engineering and data science tasks. When you execute a notebook, you select a Spark pool as its compute target.
+    3. **Data flows** are powerful data transformation workflows that use the power of Apache Spark, but are authored using a code-free GUI.
+    4. **Power BI** reports can be embedded here, giving you access to the advanced visualizations they provide without ever leaving the Synapse workspace.
+
 ### The Orchestrate hub
 
 1. Select the **Orchestrate** hub.
