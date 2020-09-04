@@ -5,6 +5,10 @@
   - [Surveying the Components of Azure Synapse Analytics](#surveying-the-components-of-azure-synapse-analytics)
   - [Exploring Azure Synapse Studio](#exploring-azure-synapse-studio)
     - [The Data hub](#the-data-hub)
+    - [The Develop hub](#the-develop-hub)
+    - [The Orchestrate hub](#the-orchestrate-hub)
+    - [The Monitor hub](#the-monitor-hub)
+    - [The Manage hub](#the-manage-hub)
   - [Designing a Modern Data Warehouse using Azure Synapse Analytics](#designing-a-modern-data-warehouse-using-azure-synapse-analytics)
 
 ## About Azure Synapse Analytics
@@ -99,7 +103,7 @@ Azure Synapse Analytics is the evolution of the Azure SQL data warehouse service
 
     ![The data hub is highlighted.](media/data-hub.png "Data hub")
 
-    The data hub is where you access your provisioned SQL pool databases and SQL serverless databases in your workspace, as well as external data sources, such as storage accounts and other linked services.
+    The Data hub is where you access your provisioned SQL pool databases and SQL serverless databases in your workspace, as well as external data sources, such as storage accounts and other linked services.
 
 2. Under the **Workspace (2)** tab of the Data hub (1), expand the **SQLPool01 (3)** SQL pool underneath **Databases**.
 
@@ -140,5 +144,39 @@ Azure Synapse Analytics is the evolution of the Azure SQL data warehouse service
     *Notice all the new Campaign names.*
 
     ![The file contents are displayed.](media/file-preview.png "File preview")
+
+### The Develop hub
+
+1. Select the **Develop** hub.
+
+    ![The develop hub is highlighted.](media/develop-hub.png "Develop hub")
+
+    The Develop hub is where you manage SQL scripts, Synapse notebooks, data flows, and Power BI reports.
+
+### The Orchestrate hub
+
+1. Select the **Orchestrate** hub.
+
+    ![The orchestrate hub is highlighted.](media/orchestrate-hub.png "Orchestrate hub")
+
+    Manage orchestration pipelines within the Orchestrate hub. If you are familiar with Azure Data Factory, then you will feel at home in this hub. The pipeline creation experience is the same as in ADF, which gives you another powerful integration built in to Synapse Analytics, removing the need to use Azure Data Factory for data movement and transformation pipelines.
+
+### The Monitor hub
+
+1. Select the **Monitor** hub.
+
+    ![The monitor hub is highlighted.](media/monitor-hub.png "Monitor hub")
+
+    Use the Monitor hub to view pipeline and trigger runs, integration runtime status, Apache Spark jobs, SQL requests, and data flow debug activities. If you want to see the status of a job or activity, this is where you want to go.
+
+    The Monitor hub is your first stop for debugging issues and gaining insight on resource usage.
+
+### The Manage hub
+
+1. Select the **Manage** hub.
+
+    ![The manage hub is highlighted.](media/manage-hub.png "Manage hub")
+
+    The Manage hub enables you to perform some of the same actions we saw in the Azure portal, such as managing SQL and Spark pools. However, there is a lot more you can do in this hub that you cannot do anywhere else, such as managing Linked Services and integration runtimes, and creating pipeline triggers.
 
 ## Designing a Modern Data Warehouse using Azure Synapse Analytics
