@@ -117,8 +117,28 @@ Azure Synapse Analytics is the evolution of the Azure SQL data warehouse service
 
     ![The linked tab is highlighted.](media/data-linked.png "Linked")
 
-    Every Synapse workspace has a primary ADLS Gen2 account associated with it. This serves as the **data lake**, which is a great place to store flat files, such as files copied over from on-premises data stores, exported data or data copied directly from external services and applications, telemetry data, etc.
+    Every Synapse workspace has a primary ADLS Gen2 account associated with it. This serves as the **data lake**, which is a great place to store flat files, such as files copied over from on-premises data stores, exported data or data copied directly from external services and applications, telemetry data, etc. *Everything is in one place*.
 
-    In our example, we have several containers that hold files and folders that we can explore and use from within our workspace. Here you can see marketing campaign data, CSV files containing customer information, finance information imported from an external database, machine learning assets, IoT device telemetry, SAP Hana data, and tweets, just to name a few.
+    In our example, we have several containers that hold files and folders that we can explore and use from within our workspace. Here you can see marketing campaign data, CSV files, finance information imported from an external database, machine learning assets, IoT device telemetry, SAP Hana data, and tweets, just to name a few.
+
+    Now that we have all this data in once place, we can start previewing some of it right here, right now.
+
+    Let's look at Campaign data.
+
+5. Select the **customcsv** storage container.
+
+    ![The customcsv storage container is highlighted.](media/customcsv-container.png "customcsv storage container")
+
+    Let’s preview Campaign data to understand new campaign names.
+
+6. Right-click on the **CampaignAnalyticsLatest.csv** file **(1)**, then select **Preview (2)**.
+
+    ![The file and its preview context menu item are highlighted.](media/file-preview-menu.png "File preview")
+
+    The file explorer capabilities allow you to quickly find files and perform actions on them, like preview file contents, generate new SQL scripts or notebooks to access the file, create a new data flow or dataset, and manage the file.
+
+    *Notice all the new Campaign names.*
+
+    ![The file contents are displayed.](media/file-preview.png "File preview")
 
 ## Designing a Modern Data Warehouse using Azure Synapse Analytics
