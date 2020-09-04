@@ -185,6 +185,18 @@ Azure Synapse Analytics is the evolution of the Azure SQL data warehouse service
 
     > **Note**: The last script does the same thing, but just using a subquery format.
 
+7. Select the **8 External Data To Synapse Via Copy Into (1)** script. **DO NOT EXECUTE**. Scroll through the script file, using the commentary below to explain what it does.
+
+    ![Lines 1-31 are highlighted.](media/script3.png "Script 3")
+
+    In this script, we create a table to store Twitter data stored in Parquet files. We use the **COPY** command to quickly and efficiently load all data stored in Parquet files into the new table.
+
+    Finally, we select the first 10 rows to verify the data load.
+
+    The COPY command and PolyBase can be used to import data from various formats into the SQL pool, either through T-SQL scripts like we see here, or from orchestration pipelines.
+
+8. 
+
 ### The Orchestrate hub
 
 1. Select the **Orchestrate** hub.
