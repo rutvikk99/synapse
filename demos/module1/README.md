@@ -228,6 +228,16 @@ Azure Synapse Analytics is the evolution of the Azure SQL data warehouse service
 
     The Manage hub enables you to perform some of the same actions we saw in the Azure portal, such as managing SQL and Spark pools. However, there is a lot more you can do in this hub that you cannot do anywhere else, such as managing Linked Services and integration runtimes, and creating pipeline triggers.
 
+2. Show each of the management categories grouped under Analytics pools, External connections, Orchestration, and Security.
+
+    ![The categories are highlighted.](media/manage-categories.png "Manage categories")
+
+    1. **SQL pools** lists the provisioned SQL pools and on-demand SQL serverless pools for the workspace. You can can add new pools or hover over a SQL pool to **pause** or **scale** it. You should pause a SQL pool when it's not being used in order to save costs.
+    2. **Apache Spark pools** lets you manage your Spark pools by configuring the auto-pause and auto-scale settings. You can provision a new Apache Spark pool from this blade.
+    3. **Linked services** enables you to manage connections to external resources. Here you can see linked services for our data lake storage account, Azure Key Vault, Power BI, and Synapse Analytics. **Task**: Select **+ New** to show how many types of linked services you can add.
+    4. **Triggers** provides you a central location to create or remove pipeline triggers. Alternatively, you can add triggers from the pipeline.
+    5. **Integration runtimes** lists the IR for the workspace, which serve as the compute infrastructure for data integration capabilities, like those provided by pipelines. **Task**: Hover over the integration runtimes to show the monitoring, code, and delete (if applicable) links. Click on a **code link** to show how you can modify the parameters in JSON format, including the TTL (time to live) setting for the IR.
+
 ## Designing a Modern Data Warehouse using Azure Synapse Analytics
 
 ### One place for all your data
