@@ -179,6 +179,16 @@ Azure Synapse Analytics is the evolution of the Azure SQL data warehouse service
 
     Manage orchestration pipelines within the Orchestrate hub. If you are familiar with Azure Data Factory, then you will feel at home in this hub. The pipeline creation experience is the same as in ADF, which gives you another powerful integration built in to Synapse Analytics, removing the need to use Azure Data Factory for data movement and transformation pipelines.
 
+2. Expand Pipelines and select **1 Master Pipeline (1)**. Point out the **Activities (2)** that can be added to the pipeline, and show the **pipeline canvas (3)** on the right.
+
+    ![The pipelines group is expanded within the Orchestrate hub.](media/orchestrate-pipelines.png "Orchestrate - Pipelines")
+
+    Our Synapse workspace contains 16 pipelines that enable us to orchestrate data movement and transformation steps over data from several sources.
+
+    The **Activities** list contains a large number of activities that you can drag and drop onto the pipeline canvas on the right.
+
+    > Expand a few activity categories to show what's available, such as Notebook, Spark, and SQL pool stored procedure activities under Synapse.
+
 ### The Monitor hub
 
 1. Select the **Monitor** hub.
@@ -187,7 +197,28 @@ Azure Synapse Analytics is the evolution of the Azure SQL data warehouse service
 
     Use the Monitor hub to view pipeline and trigger runs, integration runtime status, Apache Spark jobs, SQL requests, and data flow debug activities. If you want to see the status of a job or activity, this is where you want to go.
 
-    The Monitor hub is your first stop for debugging issues and gaining insight on resource usage.
+    The Monitor hub is your first stop for debugging issues and gaining insight on resource usage. You can see a history of all the activities taking place in the workspace and which ones are active now.
+
+2. Show each of the monitoring categories grouped under Orchestration and Activities.
+
+    ![The categories are highlighted.](media/monitoring-categories.png "Monitoring categories")
+
+    1. **Pipeline runs** shows all pipeline run activities. You can view the run details, including inputs and outputs for the activities, and any error messages that occurred. You can also come here to stop a pipeline, if needed.
+    2. **Trigger runs** shows you all pipeline runs caused by automated triggers. You can create triggers that run on a recurring schedule or tumbling window. You can also create event-based triggers that execute a pipeline any time a blob is created or deleted in a storage container.
+    3. **Integration runtimes** shows the status of all self-hosted and Azure integration runtimes.
+    4. **Apache Spark applications** shows all the Spark applications that are running or have run in your workspace.
+    5. **SQL requests** shows all SQL scripts executed either directly by you or another user, or executed in other ways, like from a pipeline run.
+    6. **Data flow debug** shows active and previous debug sessions. When you author a data flow, you can enable the debugger and execute the data flow without needing to add it to a pipeline and trigger an execute. Using the debugger speeds up and simplifies the development process. Since the debugger requires an active Spark cluster, it can take a few minutes after you enable the debugger before you can use it.
+
+3. Select **SQL requests (1)**, then switch to the **SQLPool01 (2)** pool to see the list of SQL requests.
+
+    ![The SQL requests blade is shown with the SQL pool selected.](media/monitoring-sql-requests.png "SQL requests")
+
+4. Hover over a SQL request, then select the **Request content** icon to view the SQL request that was sent to the SQL pool. *You may need to try a few before you find one with interesting content*.
+
+    ![The request content icon is highligghted.](media/request-content.png "Request content")
+
+    ![The content details are shown.](media/request-content-view.png "Request content")
 
 ### The Manage hub
 
@@ -266,6 +297,32 @@ SHOW NOTEBOOKS
 #### Stage 1: Data ingest and preparation
 
 SHOW PIPELINES
+
+1. Select the **Orchestrate** hub.
+
+    ![The orchestrate hub is highlighted.](media/orchestrate-hub.png "Orchestrate hub")
+
+    Manage orchestration pipelines within the Orchestrate hub. If you are familiar with Azure Data Factory, then you will feel at home in this hub. The pipeline creation experience is the same as in ADF, which gives you another powerful integration built in to Synapse Analytics, removing the need to use Azure Data Factory for data movement and transformation pipelines.
+
+2. Expand Pipelines and select **1 Master Pipeline (1)**. Point out the **Activities (2)** that can be added to the pipeline, and show the **pipeline canvas (3)** on the right.
+
+    ![The pipelines group is expanded within the Orchestrate hub.](media/orchestrate-pipelines.png "Orchestrate - Pipelines")
+
+    Our Synapse workspace contains 16 pipelines that enable us to orchestrate data movement and transformation steps over data from several sources.
+
+    The **Activities** list contains a large number of activities that you can drag and drop onto the pipeline canvas on the right.
+
+    > Expand a few activity categories to show what's available, such as Notebook, Spark, and SQL pool stored procedure activities under Synapse.
+
+    Here we see that we have three execute (child) pipelines:
+
+    ![The pipeline canvas is displayed.](media/master-pipeline-children.png "Pipeline canvas")
+
+3. Select the **Execute Customize All Pipeline** activity **(1)**. Select the **Settings (2)** tab. Show that the invoked pipeline is **Customize All (3)**, then select **Open (4)**.
+
+    ![The pipeline activity is selected and the Open button is highlighted.](media/master-pipeline-child.png "Settings")
+
+4. 
 
 #### Stage 2: Model & serve
 
