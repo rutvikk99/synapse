@@ -1,5 +1,10 @@
 # Realize Integrated Analytical Solutions with Azure Synapse Analytics
 
+- [Realize Integrated Analytical Solutions with Azure Synapse Analytics](#realize-integrated-analytical-solutions-with-azure-synapse-analytics)
+  - [Surveying the Components of Azure Synapse Analytics](#surveying-the-components-of-azure-synapse-analytics)
+  - [Exploring Azure Synapse Studio](#exploring-azure-synapse-studio)
+  - [Designing a Modern Data Warehouse using Azure Synapse Analytics](#designing-a-modern-data-warehouse-using-azure-synapse-analytics)
+
 ## Surveying the Components of Azure Synapse Analytics
 
 1. Start with the Azure resource group, `synapse-in-a-day-demos`.
