@@ -153,6 +153,18 @@ Azure Synapse Analytics is the evolution of the Azure SQL data warehouse service
 
     The Develop hub is where you manage SQL scripts, Synapse notebooks, data flows, and Power BI reports.
 
+2. Expand **SQL scripts** and select **1 SQL Query With Synapse (1)**. Make sure you are connected to **SQLPool01 (2)**. **Highlight (3)** the first line of the script and execute. Observe that the number of records in the Sales table is 3,443,486 **(4)**.
+
+    ![The first SQL script is shown with the first line highlighted.](media/script1.png "Script 1 - count")
+
+    If we execute the first line in this SQL script, we can see that we have almost 3.5 million rows contained within.
+
+3. **Highlight** the rest of the script (lines 8 - 18) and execute.
+
+    ![The second part of the script is highlighted and the results are displayed.](media/script1-2.png "Script 1 - join")
+
+    One of the benefits of using a modern data warehouse like Synapse Analytics is that you can combine all your data in one place. The script we just executed joins data from a sales database, product catalog, millennial customers extracted from demographics data, and twitter.
+
 ### The Orchestrate hub
 
 1. Select the **Orchestrate** hub.
