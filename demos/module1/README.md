@@ -165,6 +165,26 @@ Azure Synapse Analytics is the evolution of the Azure SQL data warehouse service
 
     One of the benefits of using a modern data warehouse like Synapse Analytics is that you can combine all your data in one place. The script we just executed joins data from a sales database, product catalog, millennial customers extracted from demographics data, and twitter.
 
+4. Select the **2 JSON Extractor (1)** script and make sure you're still connected to **SQLPool01**. Highlight the **first select statement (2)** (line 3). Observe that the data stored in the **TwitterData** column **(3)** is in JSON format.
+
+    ![The first line of Script 2 is highlighted.](media/script2.png "Script 2")
+
+    Azure Synapse enables you to store JSON in standard textual format. Use standard SQL language for querying JSON data.
+
+5. Highlight the next SQL statement (**lines 8 - 15**) and execute.
+
+    ![Lines 8-15 are highlighted.](media/script2-2.png "Script 2")
+
+    We can use JSON functions, such as `JSON_VALUE` and `ISJSON` to extract the JSON data and extract it to specific structured columns.
+
+6. Highlight the next SQL statement (**lines 21 - 29**) and execute.
+
+    ![Lines 21-29 are highlighted.](media/script2-3.png "Script 2")
+
+    We want to filter for the **#sunglassess** hashtag. This query fetches and extracts the JSON data into structured columns, then filters on the derived `Hashtag` column.
+
+    > **Note**: The last script does the same thing, but just using a subquery format.
+
 ### The Orchestrate hub
 
 1. Select the **Orchestrate** hub.
