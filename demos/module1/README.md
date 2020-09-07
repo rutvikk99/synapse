@@ -290,6 +290,34 @@ Synapse Analytics enables you to ingest data from multiple data sources through 
 
     ![The mapping tab contents are displayed.](media/pipeline-email-analytics-mapping.png "Mapping")
 
+9. Select the **MarketingDBMigration (1)** pipeline. Direct your attention to the pipeline's canvas **(2)**.
+
+    ![The pipeline is displayed.](media/pipeline-marketingdbmigration.png "MarketingDBMigration pipeline")
+
+    This pipeline is responsible for copying data from a Teradata database. The first activity is a lookup to make sure that the source data exists. If data exists, it flows to the copy data activity to move the source data into the data lake (ADLS Gen2 primary data source). The next step is a Notebook activity, which uses Apache Spark within a Synapse Notebook to perform data engineering tasks. The last step is another copy data activity that loads the prepared data and stores it into an Azure Synapse SQL pool table.
+
+    This workflow is common when conducting data movement orchestration. Synapse Analytics pipelines makes it easy to define data movement and transformation steps, and encapsulates these steps into a repeatable process that you can maintain and monitor within your modern data warehouse.
+
+10. Select the **SalesDBMigration (1)** pipeline. Direct your attention to the pipeline's canvas **(2)**.
+
+    ![The pipeline is displayed.](media/pipeline-salesdbmigration.png "SalesDBMigration pipeline")
+
+    Here is another example of a data movement orchestration pipeline that helps us combine external data sources into our warehouse. In this case, we load data from an Oracle sales database into an Azyre Synapse SQL pool table.
+
+11. Select the **SAP HANA TO ADLS** pipeline. This pipeline copies data from a financial SAP HANA data source into the SQL pool.
+
+12. Select the **+** button at the top of the **Orchestrate** blade, then select **Pipeline** to create a new pipeline.
+
+    ![The New and Pipeline menu items are highlighted.](media/new-pipeline.png "New pipeline")
+
+13. Expand the `Move & transform` activity group, then drag the **Copy data** activity onto the design canvas **(1)**. With the Copy data activity selected, select the **Source** tab **(2)**, then select **+ New (3)** next to the source dataset.
+
+    ![The Copy data activity is dragged on the canvas and the New button next to Source dataset under the Source tab is highlighted.](media/new-pipeline-new-source.png "New Source")
+
+14. Scroll through the list of dataset sources to show the large number of data connections at your disposal.
+
+    ![The list of dataset sources is displayed.](media/new-dataset.png "New dataset")
+
 ### Unlimited data scale
 
 SHOW primary ADLS Gen2 account and scaling options for SQL and Spark pools.
