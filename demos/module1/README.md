@@ -237,6 +237,8 @@ Azure Synapse Analytics is the evolution of the Azure SQL data warehouse service
     3. **Linked services** enables you to manage connections to external resources. Here you can see linked services for our data lake storage account, Azure Key Vault, Power BI, and Synapse Analytics. **Task**: Select **+ New** to show how many types of linked services you can add.
     4. **Triggers** provides you a central location to create or remove pipeline triggers. Alternatively, you can add triggers from the pipeline.
     5. **Integration runtimes** lists the IR for the workspace, which serve as the compute infrastructure for data integration capabilities, like those provided by pipelines. **Task**: Hover over the integration runtimes to show the monitoring, code, and delete (if applicable) links. Click on a **code link** to show how you can modify the parameters in JSON format, including the TTL (time to live) setting for the IR.
+    6. **Access control** is where you go to add and remove users to one of three security groups: workspace admin, SQL admin, and Apache Spark for Azure Synapse Analytics admin.
+    7. **Managed private endpoints** is where you manage private endpoints, which use a private IP address from within a virtual network to connect to an Azure service or your own private link service. Connections using private endpoints listed here provide access to Synapse workspace endpoints (SQL, SqlOndemand and Dev).
 
 ## Designing a Modern Data Warehouse using Azure Synapse Analytics
 
@@ -244,7 +246,49 @@ Azure Synapse Analytics is the evolution of the Azure SQL data warehouse service
 
 With a modern data warehouse, we have one hub for all data when using Synapse Analytics.
 
-SHOW PIPELINES
+Synapse Analytics enables you to ingest data from multiple data sources through its orchestration pipelines.
+
+1. Select the **Orchestrate** hub.
+
+    ![The orchestrate hub is highlighted.](media/orchestrate-hub.png "Orchestrate hub")
+
+    Manage orchestration pipelines within the Orchestrate hub. If you are familiar with Azure Data Factory, then you will feel at home in this hub. The pipeline creation experience is the same as in ADF, which gives you another powerful integration built in to Synapse Analytics, removing the need to use Azure Data Factory for data movement and transformation pipelines.
+
+2. Expand Pipelines and select **Customize EMail Analytics (1)**. Select the **Copy data** activity on the canvas **(2)**, select the **Source** tab **(3)**, then select **Preview data (4)**.
+
+    ![The pipeline is selected and the source is displayed.](media/pipeline-email-analytics.png "Customize EMail Analytics")
+
+    Here we see the source CSV data that the pipeline ingests.
+
+    ![The email analytics source CSV data is displayed.](media/email-analytics-preview.png "Preview data")
+
+3. Close the preview, then select **Open** next to the `CustomEmailAnalytics` source dataset.
+
+    ![The Open button is highlighted.](media/pipeline-email-analytics-open-source.png "Source dataset")
+
+4. Show the **Linked service** associated with the dataset's connection, as well as the CSV file path **(1)**. **Close (2)** the dataset to return to the pipeline.
+
+    ![The dataset is displayed.](media/customemailanalytics-dataset.png "CustomEmailAnalytics dataset")
+
+5. On the pipeline, select the **Sink** tab **(1)**. The bulk insert copy method is selected and there is a pre-copy script that truncates the `EmailAnalytics` table, which runs prior to copying the data from the CSV source **(2)**. Select **Open** next to the `EmailAnalytics` sink dataset **(3)**.
+
+    ![The sink tab is selected and its contents displayed as described.](media/pipeline-email-analytics-sink.png "Sink")
+
+6. The **Linked service** is the Azure Synapse Analytics SQL pool, and the **Table** is `EmailAnalytics` **(1)**. The Copy data activity in the pipeline uses the connection details in this dataset to copy data from the CSV data source into the SQL pool. Select **Preview data (2)**.
+
+    ![The EmailAnalytics Synapse Analytics data set is displayed.](media/emailanalytics-dataset.png "EmailAnalytics")
+
+    We can see that the table already contains data, which means that we have successfully run the pipeline in the past.
+
+    ![The email analytics destination SQL pool table is displayed.](media/emailanalytics-preview.png "Preview data")
+
+7. **Close** the `EmailAnalytics` dataset.
+
+    ![The close button is highlighted.](media/emailanalytics-close.png "Close")
+
+8. Select the **Mapping** tab. This is where you configure the mapping between the source and sink datasets. The **Import schemas** button attempts to infer the schema for your datasets if they are based on unstructured or semi-structured data sources, like CSV or JSON files. It also reads the schema from structured data sources, like Synapse Analytics SQL pools. You also have the option to manually create your schema mapping by clicking on **+ New mapping** or by modifying the data types.
+
+    ![The mapping tab contents are displayed.](media/pipeline-email-analytics-mapping.png "Mapping")
 
 ### Unlimited data scale
 
