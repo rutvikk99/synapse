@@ -320,15 +320,51 @@ Synapse Analytics enables you to ingest data from multiple data sources through 
 
 ### Unlimited data scale
 
-SHOW primary ADLS Gen2 account and scaling options for SQL and Spark pools.
+1. Select the **Manage** hub.
+
+    ![The manage hub is highlighted.](media/manage-hub.png "Manage hub")
+
+2. Select **SQL pools (1)**. Hover over **SQLPool01** and select the **Scale** button **(2)**.
+
+    ![The scale button is highlighted.](media/sql-pool-scale-button.png "Scale")
+
+3. Drag the **Performance level** slider right and left.
+
+    ![The performance level slider is displayed.](media/sql-pool-scale.png "Scale")
+
+    You can scale out or back compute by adjusting the number of Data Warehouse Units (DWUs) assigned to your SQL pool. This adjusts the loading and query performance linearly as you add more units.
+
+    To perform a scale operation, SQL pool first kills all incoming queries and then rolls back transactions to ensure a consistent state. Scaling only occurs once the transaction rollback is complete.
+
+    You can scale SQL compute at any time by using this slider. You can also programmatically adjust the Data Warehouse Units, enabling scenarios where you automatically scale your pool based on a schedule or other factors.
+
+4. Cancel the Scale dialog, then select **Apache Spark pools (1)** in the Manage hub left-hand menu. Hover over **SparkPool01** and select the **auto-scale settings** button **(2)**.
+
+    ![The auto-scale settings button is highlighted.](media/spark-pool-scale-button.png "Scale")
+
+5. Drag the **Number of nodes** slider right and left.
+
+    ![The number of nodes slider is displayed.](media/spark-pool-scale.png "Auto-scale settings")
+
+    You can configure the Apache Spark pool to have a fixed size by disabling the autoscale setting. Here we have enabled autoscale and set the minimum and maximum number of nodes to control the amount of scale applied. When you enable autoscale, Synapse Analytics monitors the resource requirements of the load and scales the number of nodes up or down. It does this by continuously monitoring pending CPU, pending memory, free CPU, free memory, and used memory per node metrics. It checks these metrics every 30 seconds and makes scaling decisions based on the values.
+
+    > It can take 1-5 minutes for a scaling operation to complete.
+
+6. Cancel the auto-scale dialog, then select **Linked services (1)** in the Manage hub left-hand menu. Make note of the **WorkspaceDefaultStorage** ADLS Gen2 storage account **(2)**.
+
+    ![The default storage linked service is highlighted.](media/default-storage.png "Default storage")
+
+    When you provision a new Azure Synapse Analytics workspace, you define the default storage Azure Data Lake Storage Gen2 account. Data Lake Storage Gen2 makes Azure Storage the foundation for building enterprise data lakes on Azure. Designed from the start to service multiple petabytes of information while sustaining hundreds of gigabits of throughput, Data Lake Storage Gen2 allows you to easily manage massive amounts of data.
+
+    Its hierarchical namespace organizes files into a hierarchy of directories for efficient access and more granular security, down to the file-level.
+
+    > ADLS Gen2 provides virtually limitless scale for your data lake. You can attach additional ADLS Gen2 accounts for greater scale and flexibility as needed.
 
 ### Familiar tools and ecosystem
 
 1. Select the **Develop** hub.
 
     ![The develop hub is highlighted.](media/develop-hub.png "Develop hub")
-
-    The Develop hub is where you manage SQL scripts, Synapse notebooks, data flows, and Power BI reports.
 
 2. Expand **SQL scripts** and select **1 SQL Query With Synapse (1)**. Make sure you are connected to **SQLPool01 (2)**. **Highlight (3)** the first line of the script and execute. Observe that the number of records in the Sales table is 3,443,486 **(4)**.
 
