@@ -408,13 +408,27 @@ Synapse Analytics enables you to ingest data from multiple data sources through 
 
     The COPY command and PolyBase can be used to import data from various formats into the SQL pool, either through T-SQL scripts like we see here, or from orchestration pipelines.
 
-SHOW NOTEBOOKS
+8. Select the **Data** hub.
+
+    ![The data hub is highlighted](media/data-hub.png "Data hub")
+
+9. Select the **Linked** tab **(1)**, expand the `Azure Data Lake Storage Gen2` group, expand the Primary storage account, then select the **twitterdata** container **(2)**. Right-click on the **dbo.TwitterAnalytics.parquet** file **(3)**, then select **New notebook (4)**.
+
+    ![The TwitterAnalytics Parquet file and New notebook menu item are highlighted.](media/new-twitteranalytics-notebook.png "New notebook")
+
+    Synapse Studio provides several options to work with files stored in attached storage accounts, such as creating a new SQL script, a notebook, data flow, or new dataset.
+
+    Synapse Notebooks enable you to harness the power of Apache Spark to explore and analyze data, conduct data engineering tasks, and do data science. Authentication and authorization with linked services, such as the primary data lake storage account, are fully integrated, allowing you to immediately start working with files without dealing with account credentials.
+
+    Here we see a new notebook that loads a Spark DataFrame **(1)** with the Parquet file that we right-clicked on in the Data hub. We can immediately start exploring the file contents in just a couple simple steps. At the top of the notebook, we see that it is attached to **SparkPool01**, our Spark pool, and the notebook language is set to **Python (2)**.
+
+    > **Note to presenter**: Do not execute the notebook unless the Spark pool is ready **(3)**. It can take up to 5 minutes to start the pool if it is idle. Alternatively, you can execute the notebook, then come back to it later to view the results.
+
+    ![The new Synapse Notebook is displayed.](media/new-notebook.png "New notebook")
 
 ### Modern data warehouse stages
 
 #### Stage 1: Data ingest and preparation
-
-SHOW PIPELINES
 
 1. Select the **Orchestrate** hub.
 
