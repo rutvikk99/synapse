@@ -434,8 +434,6 @@ Synapse Analytics enables you to ingest data from multiple data sources through 
 
     ![The orchestrate hub is highlighted.](media/orchestrate-hub.png "Orchestrate hub")
 
-    Manage orchestration pipelines within the Orchestrate hub. If you are familiar with Azure Data Factory, then you will feel at home in this hub. The pipeline creation experience is the same as in ADF, which gives you another powerful integration built in to Synapse Analytics, removing the need to use Azure Data Factory for data movement and transformation pipelines.
-
 2. Expand Pipelines and select **1 Master Pipeline (1)**. Point out the **Activities (2)** that can be added to the pipeline, and show the **pipeline canvas (3)** on the right.
 
     ![The pipelines group is expanded within the Orchestrate hub.](media/orchestrate-pipelines.png "Orchestrate - Pipelines")
@@ -443,8 +441,6 @@ Synapse Analytics enables you to ingest data from multiple data sources through 
     Our Synapse workspace contains 16 pipelines that enable us to orchestrate data movement and transformation steps over data from several sources.
 
     The **Activities** list contains a large number of activities that you can drag and drop onto the pipeline canvas on the right.
-
-    > Expand a few activity categories to show what's available, such as Notebook, Spark, and SQL pool stored procedure activities under Synapse.
 
     Here we see that we have three execute (child) pipelines:
 
@@ -454,11 +450,77 @@ Synapse Analytics enables you to ingest data from multiple data sources through 
 
     ![The pipeline activity is selected and the Open button is highlighted.](media/master-pipeline-child.png "Settings")
 
-4. 
+    As you can see, there are five child pipelines. This **first execute pipeline activity** cleans and ingests new Manufacturer campaign data for the Campaign Analytics report.
+
+4. Select the **Campaign Analytics** activity **(1)**, select the **Settings** tab **(2)**, observe the invoked pipeline is set to **Customize All (3)**, then select **Open (4)**.
+
+    ![The pipeline is displayed as described.](media/customize-all-pipeline.png "Customize All pipeline")
+
+5. **Observe** how cleaning and ingesting happens in the pipeline by clicking on each activity.
+
+    ![The pipeline activities are displayed.](media/customize-campaign-analytics.png "Customize Campaign Analytics")
+
+6. Select the **Develop** hub.
+
+    ![The develop hub is highlighted.](media/develop-hub.png "Develop hub")
+
+7. Expand `Data flows`, then select the **ingest_data_from_sap_hana_to_azure_synapse** data flow.
+
+    ![The data flow is displayed.](media/data-flow.png "Data flow")
+
+    As stated earlier, data flows are powerful data transformation workflows that use the power of Apache Spark, but are authored using a code-free GUI. The work you do in the UI gets transformed into code executed by a managed Spark cluster, automatically, without having to write any code or manage the cluster.
+
+    > **Note to presenter**: Select each data flow item as you speak to the points below.
+
+    The data flow performs the following functions:
+
+    1. Extracts data from the SAP HANA data source (**Select `DatafromSAPHANA` step**).
+    2. Retrieves only those rows for an upsert activity, where the `ShipDate` value is greater than `2014-01-01` (**Select `Last5YearsData` step**).
+    3. Performs data type transformations on the source columns, using a Derived Column activity (**Select the top `DerivedColumn` activity**).
+    4. In the top path of the data flow, we select all columns, then load the data into the `AggregatedSales_SAPHANANew` Synapse pool table (**Select the `Selectallcolumns` activity and the `LoadtoAzureSynapse` activity**).
+    5. In the bottom path of the data flow, we select a subset of the columns (**Select the `SelectRequiredColumns` activity**).
+    6. Then we group by four of the columns (**Select the `TotalSalesByYearMonthDay` activity**) and create sum and average aggregates on the `SalesAmount` column (**Select the Aggregates option**).
+    7. Finally, the aggregated data is loaded into the `AggregatedSales_SAPHANA` Synapse pool table (**Select the `LoadtoSynapse` activity**).
 
 #### Stage 2: Model & serve
 
-SHOW NOTEBOOKS WITH AML INTEGRATION
+1. Select the **Develop** hub.
+
+    ![The develop hub is highlighted.](media/develop-hub.png "Develop hub")
+
+2. Expand `Notebooks`, then select **1 Products Recommendation**.
+
+    ![The notebook is selected.](media/products-recommendation-notebook.png "Products Recommendation notebook")
+
+    This Synapse Notebook provides customized product recommendations.
+
+    > **Note to presenter**: This notebook contains cell outputs from a previous run. You can read through the output and explain what the notebook does by reading the prompts below.
+
+    1. Data is ingested from CSV files using PySpark (**cell 4**).
+
+    2. The model is trained using the PySpark ML-Lib recommendations module (**cells 7 & 8**).
+
+    3. Product recommendations are generated for each user (**cells 9-12**).
+
+3. Select the **2 AutoML Number of Customer Visit to Department** notebook.
+
+    ![The notebook is selected.](media/automl-notebook.png "AutoML notebook")
+
+    This uses Azure Machine Learning's AutoML feature to predict the number of customers likely to visit different departments in a store.
+
+    > **Note to presenter**: This notebook contains cell outputs from a previous run. You can read through the output and explain what the notebook does by reading the prompts below.
+
+    1. Data is ingested from CSV files using PySpark (**cell 7**).
+
+    2. We use exploratory data analysis to understand the underlying patterns and correlations among features in the data (**cells 9-12**).
+
+    3. Prepare the data by converting date fields to a specific format, and other data types to numeric format (**cells 14 & 15**).
+
+    4. Configure AutoML using `AutoMLConfig` and create a new experiment in the Azure Machine Learning workspace (**cells 19-21**).
+
+    5. Remotely run the experiment to train the model with more than 25 ML algorithms, grading each according to performance. We create a time-series model with lag and rolling window features (**cells 23 * 24**).
+
+    6. Run and explore the forecast, then register the model (**cells 26-29**).
 
 #### Stage 3: Visualize
 
