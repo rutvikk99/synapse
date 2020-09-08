@@ -296,7 +296,7 @@ Synapse Analytics enables you to ingest data from multiple data sources through 
 
     ![The pipeline is displayed.](media/pipeline-marketingdbmigration.png "MarketingDBMigration pipeline")
 
-    This pipeline is responsible for copying data from a Teradata database. The first activity is a lookup to make sure that the source data exists. If data exists, it flows to the copy data activity to move the source data into the data lake (ADLS Gen2 primary data source). The next step is a Notebook activity, which uses Apache Spark within a Synapse Notebook to perform data engineering tasks. The last step is another copy data activity that loads the prepared data and stores it into an Azure Synapse SQL pool table.
+    This pipeline is responsible for copying data from a Teradata database. The first activity is a **lookup** **(2)** to make sure that the source data exists. If data exists, it flows to the **copy data activity** **(3)** to move the source data into the data lake (ADLS Gen2 primary data source). The next step is a **Notebook activity** **(4)**, which uses Apache Spark within a Synapse Notebook to perform data engineering tasks. The last step is another **copy data activity** **(5)** that loads the prepared data and stores it into an Azure Synapse SQL pool table.
 
     This workflow is common when conducting data movement orchestration. Synapse Analytics pipelines makes it easy to define data movement and transformation steps, and encapsulates these steps into a repeatable process that you can maintain and monitor within your modern data warehouse.
 
