@@ -1,6 +1,6 @@
 # Realize Integrated Analytical Solutions with Azure Synapse Analytics
 
-<style>
+<style type="text/css" rel="stylesheet">
 ol ol,ul ol{list-style-type:decimal}
 </style>
 
