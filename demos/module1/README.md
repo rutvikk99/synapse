@@ -1,5 +1,9 @@
 # Realize Integrated Analytical Solutions with Azure Synapse Analytics
 
+<style>
+ol ol,ul ol{list-style-type:decimal}
+</style>
+
 - [Realize Integrated Analytical Solutions with Azure Synapse Analytics](#realize-integrated-analytical-solutions-with-azure-synapse-analytics)
   - [About Azure Synapse Analytics](#about-azure-synapse-analytics)
   - [Surveying the Components of Azure Synapse Analytics](#surveying-the-components-of-azure-synapse-analytics)
