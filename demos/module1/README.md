@@ -48,16 +48,10 @@ Azure Synapse Analytics is the evolution of the Azure SQL data warehouse service
 
     The Synapse workspace portal resource contains links to configure your workspace, manage access through Access control (IAM), firewalls, managed identities, and private endpoint connections, and view metrics. It also contains important information about your Synapse Analytics environment, such as:
 
-    <ol style="list-style-type:decimal">
-        <li>The **Primary ADLS Gen2 account URL (1)**, which identifies the primary data lake storage account.</li>
-        <li>The **SQL endpoint** and **SQL on-demand endpoint (2)**, which are used to integrate with external tools, such as SQL Server Management Studio (SSMS), Azure Data Studio, and Power BI.</li>
-        <li>The **Workspace web URL (3)**, a direct link to Synapse Studio for the workspace.</li>
-        <li>Available resources, such as **SQL pools** and **Apache Spark pools (4)**.</li>
-    </ol>
-    <!-- 1. The **Primary ADLS Gen2 account URL (1)**, which identifies the primary data lake storage account.
+    1. The **Primary ADLS Gen2 account URL (1)**, which identifies the primary data lake storage account.
     2. The **SQL endpoint** and **SQL on-demand endpoint (2)**, which are used to integrate with external tools, such as SQL Server Management Studio (SSMS), Azure Data Studio, and Power BI.
     3. The **Workspace web URL (3)**, a direct link to Synapse Studio for the workspace.
-    4. Available resources, such as **SQL pools** and **Apache Spark pools (4)**. -->
+    4. Available resources, such as **SQL pools** and **Apache Spark pools (4)**.
 
 3. Select the **SQL pool**.
 
