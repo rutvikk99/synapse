@@ -524,4 +524,48 @@ Synapse Analytics enables you to ingest data from multiple data sources through 
 
 #### Stage 3: Visualize
 
-SHOW POWER BI REPORTS
+1. Select the **Develop** hub.
+
+    ![The develop hub is highlighted.](media/develop-hub.png "Develop hub")
+
+2. Expand `Power BI`, expand `SynapseDemos`, expand `Power BI reports`, then select **1-CDP Vision Demo (1)**. Select the arrows to collapse the **Visualizations** pane **(2)** and the **Fields** pane **(3)** to increase the report size.
+
+    ![The report is displayed.](media/cdp-vision-report.png "CDP Vision Demo report")
+
+    As you can see, we can create, edit, and view Power BI reports from within Synapse Studio! As a business analyst, data engineer, or developer, you no longer need to open another browser window, sign in to Power BI, and toggle back and forth between environments.
+
+3. Select a **Campaign Name** and **Region** within the **Decomposition Tree Analysis** tab to explore the data. If you hover over an item, you will see a tool tip.
+
+    ![The decomposition tree analysis tab is displayed.](media/decomposition-tree-analysis.png "Decomposition Tree Analysis")
+
+4. Select the **Campaign Analytics** tab at the bottom of the report.
+
+    ![The campaign analytics tab is highlighted.](media/campaign-analytics-tab.png "Campaign Analytics")
+
+    The Campaign Analytics report combines data from the various data sources we looked at today to create a compelling visualization of valuable data within an interactive interface.
+
+    > **Note to presenter**: Select various filters, campaigns, and chart values to filter the results. Select an item to for the second time to deselect it.
+
+    ![The campaign analytics tab is displayed.](media/campaign-analytics.png "Campaign Analytics")
+
+5. Select **Power BI datasets (1)** in the left-hand menu, hover over the **2-Billion Rows Demo** dataset and select the **New Power BI report** icon **(2)**.
+
+    ![The new Power BI report icon is highlighted on the Billion rows demo dataset.](media/new-pbi-report.png "New Power BI Report")
+
+    Here is how we can create a brand new Power BI report from a dataset that is part of the linked Power BI workspace, from within Synapse Studio.
+
+6. Expand the `Category` table, then **drag-and-drop** the **Category** field on to the report canvas. This creates a new Table visualization that shows the categories.
+
+    ![The categories table visualization is displayed on the report canvas.](media/new-pbi-report-categories.png "Categories visualization")
+
+7. Select a blank area on the report canvas to deselect the table, then select the **Pie chart** visualization.
+
+    ![The pie chart visualization is selected.](media/pie-chart-selected.png "Pie chart")
+
+8. Expand the `ProdChamp` table. Drag **Campaign** onto the **Legend** field, then drag **ProductID** onto the **Values** field. Resize the pie chart and hover over the pie slices to see the tool tips.
+
+    ![The new pie chart is displayed with the field configuration as described.](media/new-pbi-report-campaign.png "Count of ProductID by Campaign")
+
+    We have very quickly created a new Power BI report, using data stored within our Synapse Analytics workspace, without ever leaving the studio.
+
+    As you can see, the goal, and one of the primary strengths of Azure Synapse Analytics, is to help you build a modern data warehouse and have access to all of your data in one place.
