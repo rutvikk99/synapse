@@ -1,5 +1,7 @@
 # Realize Integrated Analytical Solutions with Azure Synapse Analytics
 
+In this demo, we show the primary features of Azure Synapse Analytics, and how they can be used to build a Modern Data Warehouse solution. The following table of contents describes and links to the elements of the demo:
+
 - [Realize Integrated Analytical Solutions with Azure Synapse Analytics](#realize-integrated-analytical-solutions-with-azure-synapse-analytics)
   - [About Azure Synapse Analytics](#about-azure-synapse-analytics)
   - [Surveying the Components of Azure Synapse Analytics](#surveying-the-components-of-azure-synapse-analytics)
@@ -28,7 +30,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
 *Supplementary Info:*
 
-Azure Synapse Analytics is the evolution of the Azure SQL data warehouse service. With Azure Synapse, we give you a unified service with fully integrated capabilities, not just ETL. We've also enabled hybrid data ingestion and orchestration and secure Self Service Enterprise Analytics. Through our data warehouse we're also providing AI and big data processing built into Synapse. We've added capabilities such as efficient compute for on-demand query processing as well as monitoring, management, and integrated security.
+Azure Synapse is a limitless analytics service that brings together enterprise data warehousing and Big Data analytics. It gives you the freedom to query data on your terms, using either serverless or provisioned resources—at scale. Azure Synapse brings these two worlds together with a unified experience to ingest, prepare, manage, and serve data for immediate BI and machine learning needs.
 
 ## Surveying the Components of Azure Synapse Analytics
 
