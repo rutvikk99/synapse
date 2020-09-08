@@ -44,7 +44,7 @@ Azure Synapse is a limitless analytics service that brings together enterprise d
 
     In this example, we have a retail customer that uses Synapse Analytics as the central piece of a modern data warehouse. They ingest data from various sources, cleanse, transform, and analyze the data, train machine learning models, and create various reports. We will show these other related components alongside the Synapse Analytics components as a point of reference, but will focus on Synapse for now.
 
-2. Open the **Synapse workspace**.
+2. Open the **Synapse workspace** by selecting the item in the resource group.
 
     ![The areas discussed below are highlighted and numbered in the image.](media/workspace1.png "Synapse workspace")
 
