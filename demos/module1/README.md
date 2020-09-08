@@ -3,6 +3,7 @@
 In this demo, we show the primary features of Azure Synapse Analytics, and how they can be used to build a Modern Data Warehouse solution. The following table of contents describes and links to the elements of the demo:
 
 - [Realize Integrated Analytical Solutions with Azure Synapse Analytics](#realize-integrated-analytical-solutions-with-azure-synapse-analytics)
+  - [Demo prerequisites](#demo-prerequisites)
   - [About Azure Synapse Analytics](#about-azure-synapse-analytics)
   - [Surveying the Components of Azure Synapse Analytics](#surveying-the-components-of-azure-synapse-analytics)
   - [Exploring Azure Synapse Studio](#exploring-azure-synapse-studio)
@@ -19,6 +20,21 @@ In this demo, we show the primary features of Azure Synapse Analytics, and how t
       - [Stage 1: Data ingest and preparation](#stage-1-data-ingest-and-preparation)
       - [Stage 2: Model & serve](#stage-2-model--serve)
       - [Stage 3: Visualize](#stage-3-visualize)
+
+## Demo prerequisites
+
+1. An Azure Account with the ability to create an Azure Synapse Workspace
+2. Make sure the following resource providers are registered for your Azure Subscription.  
+
+   - Microsoft.Sql
+   - Microsoft.Synapse
+   - Microsoft.StreamAnalytics
+   - Microsoft.EventHub  
+
+    See [further documentation](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/resource-providers-and-types#azure-portal) for more information on registering resource providers on the Azure Portal.
+
+3. A Power BI Pro or Premium account to host Power BI reports, dashboards, and configuration of streaming datasets.
+4. Complete the [environment setup instructions](../setup/module1.md).
 
 ## About Azure Synapse Analytics
 
