@@ -14,6 +14,9 @@ In this demo, we show ways you can optimize data warehouse workloads that use th
     - [Identify performance issues related to tables](#identify-performance-issues-related-to-tables)
     - [Create hash distribution and columnstore index](#create-hash-distribution-and-columnstore-index)
     - [Improve table structure with partitioning](#improve-table-structure-with-partitioning)
+      - [Table distributions](#table-distributions)
+      - [Indexes](#indexes)
+      - [Partitioning](#partitioning)
     - [Use result set caching](#use-result-set-caching)
 
 ## Understanding developer features of Azure Synapse Analytics
@@ -488,5 +491,117 @@ Let's start by experimenting with different parameters.
     ![The script run time of 6 seconds is highlighted in the query results.](media/sale-hash-result.png "Hash table results")
 
 ### Improve table structure with partitioning
+
+Table partitions enable you to divide your data into smaller groups of data. Partitioning can benefit data maintenance and query performance. Whether it benefits both or just one is dependent on how data is loaded and whether the same column can be used for both purposes, since partitioning can only be done on one column.
+
+Date columns are usually good candidates for partitioning tables at the distributions level. In the case of Tailwind Trader's sales data, partitioning based on the `TransactionDateId` column seems to be a good choice.
+
+The SQL pool already contains two versions of the `Sale` table that have been partitioned using `TransactionDateId`. These tables are `[wwi_perf].[Sale_Partition01]` and `[wwi_perf].[Sale_Partition02]`. Below are the CTAS queries that have been used to create these tables.
+
+1. In the query window, replace the script with the following CTAS queries that create the partition tables:
+
+    ```sql
+    CREATE TABLE [wwi_perf].[Sale_Partition01]
+    WITH
+    (
+      DISTRIBUTION = HASH ( [CustomerId] ),
+      CLUSTERED COLUMNSTORE INDEX,
+      PARTITION
+      (
+        [TransactionDateId] RANGE RIGHT FOR VALUES (
+                20190101, 20190201, 20190301, 20190401, 20190501, 20190601, 20190701, 20190801, 20190901, 20191001, 20191101, 20191201)
+      )
+    )
+    AS
+    SELECT
+      *
+    FROM	
+      [wwi_perf].[Sale_Heap]
+    OPTION  (LABEL  = 'CTAS : Sale_Partition01')
+
+    CREATE TABLE [wwi_perf].[Sale_Partition02]
+    WITH
+    (
+      DISTRIBUTION = HASH ( [CustomerId] ),
+      CLUSTERED COLUMNSTORE INDEX,
+      PARTITION
+      (
+        [TransactionDateId] RANGE RIGHT FOR VALUES (
+                20190101, 20190401, 20190701, 20191001)
+      )
+    )
+    AS
+    SELECT *
+    FROM
+        [wwi_perf].[Sale_Heap]
+    OPTION  (LABEL  = 'CTAS : Sale_Partition02')
+    ```
+
+    > **Note to presenter**
+    >
+    > These queries have already been run on the SQL pool. **Do not** execute the script.
+
+Notice the two partitioning strategies we've used here. The first partitioning scheme is month-based and the second is quarter-based **(3)**.
+
+![The queries are highlighted as described.](media/partition-ctas.png "Partition CTAS queries")
+
+#### Table distributions
+
+As you can see, the two partitioned tables are hash-distributed **(1)**. A distributed table appears as a single table, but the rows are actually stored across 60 distributions. The rows are distributed with a hash or round-robin algorithm.
+
+The types of distributions are:
+
+- **Round-robin distributed**: Distributes table rows evenly across all distributions at random.
+- **Hash distributed**: Distributes table rows across the Compute nodes by using a deterministic hash function to assign each row to one distribution.
+- **Replicated**: Full copy of table accessible on each Compute node.
+
+A hash-distributed table distributes table rows across the Compute nodes by using a deterministic hash function to assign each row to one distribution.
+
+Since identical values always hash to the same distribution, the data warehouse has built-in knowledge of the row locations.
+
+Azure Synapse Analytics uses this knowledge to minimize data movement during queries, which improves query performance. Hash-distributed tables work well for large fact tables in a star schema. They can have very large numbers of rows and still achieve high performance. There are, of course, some design considerations that help you to get the performance the distributed system is designed to provide.
+
+*Consider using a hash-distributed table when:*
+
+- The table size on disk is more than 2 GB.
+- The table has frequent insert, update, and delete operations.
+
+#### Indexes
+
+Looking at the query, also notice that both partitioned tables are configured with a **clustered columnstore index (2)**. There are different types of indexes you can use in Azure Synapse Analytics:
+
+- **Clustered Columnstore index (Default Primary)**: Offers the highest level of data compression and best overall query performance.
+- **Clustered index (Primary)**: Is performant for looking up a single to few rows.
+- **Heap (Primary)**: Benefits from faster loading and landing temporary data. It is best for small lookup tables.
+- **Nonclustered indexes (Secondary)**: Enable ordering of multiple columns in a table and allows multiple nonclustered on a single table. These can be created on any of the above primary indexes and offer more performant lookup queries.
+
+By default, Azure Synapse Analytics creates a clustered columnstore index when no index options are specified on a table. Clustered columnstore tables offer both the highest level of data compression as well as the best overall query performance. They will generally outperform clustered index or heap tables and are usually the best choice for large tables. For these reasons, clustered columnstore is the best place to start when you are unsure of how to index your table.
+
+There are a few scenarios where clustered columnstore may not be a good option:
+
+- Columnstore tables do not support `varchar(max)`, `nvarchar(max)`, and `varbinary(max)`. Consider heap or clustered index instead.
+- Columnstore tables may be less efficient for transient data. Consider heap and perhaps even temporary tables.
+- Small tables with less than 100 million rows. Consider heap tables.
+
+#### Partitioning
+
+Again, with this query, we partition the two tables differently **(3)** so we can evaluate the performance difference and decide which partitioning strategy is best long-term. The one we ultimately go with depends on various factors with Tailwind Trader's data. You may decide to keep both to optimize query performance, but then you double the data storage and maintenance requirements for managing the data.
+
+Partitioning is supported on all table types.
+
+The **RANGE RIGHT** option that we use in the query **(3)** is used for time partitions. RANGE LEFT is used for number partitions.
+
+The primary benefits to partitioning is that it:
+
+- Improves efficiency and performance of loading and querying by limiting the scope to a subset of data.
+- Offers significant query performance enhancements where filtering on the partition key can eliminate unnecessary scans and eliminate I/O (input/output operations).
+
+The reason we have created two tables with different partition strategies **(3)** is to experiment with proper sizing.
+
+While partitioning can be used to improve performance, creating a table with too many partitions can hurt performance under some circumstances. These concerns are especially true for clustered columnstore tables, like we created here. For partitioning to be helpful, it is important to understand when to use partitioning and the number of partitions to create. There is no hard fast rule as to how many partitions are too many, it depends on your data and how many partitions you loading simultaneously. A successful partitioning scheme usually has tens to hundreds of partitions, not thousands.
+
+*Supplemental information*:
+
+When creating partitions on clustered columnstore tables, it is important to consider how many rows belong to each partition. For optimal compression and performance of clustered columnstore tables, a minimum of 1 million rows per distribution and partition is needed. Before partitions are created, Azure Synapse Analytics already divides each table into 60 distributed databases. Any partitioning added to a table is in addition to the distributions created behind the scenes. Using this example, if the sales fact table contained 36 monthly partitions, and given that Azure Synapse Analytics has 60 distributions, then the sales fact table should contain 60 million rows per month, or 2.1 billion rows when all months are populated. If a table contains fewer than the recommended minimum number of rows per partition, consider using fewer partitions in order to increase the number of rows per partition.
 
 ### Use result set caching
