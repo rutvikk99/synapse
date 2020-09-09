@@ -1,6 +1,9 @@
 # Realize Integrated Analytical Solutions with Azure Synapse Analytics
 
+In this demo, we show the primary features of Azure Synapse Analytics, and how they can be used to build a Modern Data Warehouse solution. The following table of contents describes and links to the elements of the demo:
+
 - [Realize Integrated Analytical Solutions with Azure Synapse Analytics](#realize-integrated-analytical-solutions-with-azure-synapse-analytics)
+  - [Demo prerequisites](#demo-prerequisites)
   - [About Azure Synapse Analytics](#about-azure-synapse-analytics)
   - [Surveying the Components of Azure Synapse Analytics](#surveying-the-components-of-azure-synapse-analytics)
   - [Exploring Azure Synapse Studio](#exploring-azure-synapse-studio)
@@ -18,6 +21,21 @@
       - [Stage 2: Model & serve](#stage-2-model--serve)
       - [Stage 3: Visualize](#stage-3-visualize)
 
+## Demo prerequisites
+
+1. An Azure Account with the ability to create an Azure Synapse Workspace
+2. Make sure the following resource providers are registered for your Azure Subscription.  
+
+   - Microsoft.Sql
+   - Microsoft.Synapse
+   - Microsoft.StreamAnalytics
+   - Microsoft.EventHub  
+
+    See [further documentation](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/resource-providers-and-types#azure-portal) for more information on registering resource providers on the Azure Portal.
+
+3. A Power BI Pro or Premium account to host Power BI reports, dashboards, and configuration of streaming datasets.
+4. Complete the [environment setup instructions](../setup/module1.md).
+
 ## About Azure Synapse Analytics
 
 Azure Synapse is an end-to-end analytics platform which combines SQL data warehousing, big data analytics, and data integration into a single integrated environment.
@@ -28,7 +46,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
 *Supplementary Info:*
 
-Azure Synapse Analytics is the evolution of the Azure SQL data warehouse service. With Azure Synapse, we give you a unified service with fully integrated capabilities, not just ETL. We've also enabled hybrid data ingestion and orchestration and secure Self Service Enterprise Analytics. Through our data warehouse we're also providing AI and big data processing built into Synapse. We've added capabilities such as efficient compute for on-demand query processing as well as monitoring, management, and integrated security.
+Azure Synapse is a limitless analytics service that brings together enterprise data warehousing and Big Data analytics. It gives you the freedom to query data on your terms, using either serverless or provisioned resources—at scale. Azure Synapse brings these two worlds together with a unified experience to ingest, prepare, manage, and serve data for immediate BI and machine learning needs.
 
 ## Surveying the Components of Azure Synapse Analytics
 
@@ -42,7 +60,7 @@ Azure Synapse Analytics is the evolution of the Azure SQL data warehouse service
 
     In this example, we have a retail customer that uses Synapse Analytics as the central piece of a modern data warehouse. They ingest data from various sources, cleanse, transform, and analyze the data, train machine learning models, and create various reports. We will show these other related components alongside the Synapse Analytics components as a point of reference, but will focus on Synapse for now.
 
-2. Open the **Synapse workspace**.
+2. Open the **Synapse workspace** by selecting the item in the resource group.
 
     ![The areas discussed below are highlighted and numbered in the image.](media/workspace1.png "Synapse workspace")
 
@@ -294,7 +312,7 @@ Synapse Analytics enables you to ingest data from multiple data sources through 
 
     ![The pipeline is displayed.](media/pipeline-marketingdbmigration.png "MarketingDBMigration pipeline")
 
-    This pipeline is responsible for copying data from a Teradata database. The first activity is a lookup to make sure that the source data exists. If data exists, it flows to the copy data activity to move the source data into the data lake (ADLS Gen2 primary data source). The next step is a Notebook activity, which uses Apache Spark within a Synapse Notebook to perform data engineering tasks. The last step is another copy data activity that loads the prepared data and stores it into an Azure Synapse SQL pool table.
+    This pipeline is responsible for copying data from a Teradata database. The first activity is a **lookup** **(2)** to make sure that the source data exists. If data exists, it flows to the **copy data activity** **(3)** to move the source data into the data lake (ADLS Gen2 primary data source). The next step is a **Notebook activity** **(4)**, which uses Apache Spark within a Synapse Notebook to perform data engineering tasks. The last step is another **copy data activity** **(5)** that loads the prepared data and stores it into an Azure Synapse SQL pool table.
 
     This workflow is common when conducting data movement orchestration. Synapse Analytics pipelines makes it easy to define data movement and transformation steps, and encapsulates these steps into a repeatable process that you can maintain and monitor within your modern data warehouse.
 
