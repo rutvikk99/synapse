@@ -362,6 +362,8 @@ Let's start by experimenting with different parameters.
   
     The script takes up to **30 seconds** to execute and returns the result. There is clearly something wrong with the `Sale_Heap` table that induces the performance hit.
 
+    ![The query execution time of 32 seconds is highlighted in the query results.](media/sale-heap-result.png "Sale Heap result")
+
     > Note the OPTION clause used in the statement. This comes in handy when you're looking to identify your query in the [sys.dm_pdw_exec_requests](https://docs.microsoft.com/en-us/sql/relational-databases/system-dynamic-management-views/sys-dm-pdw-exec-requests-transact-sql) DMV.
     >
     >```sql
