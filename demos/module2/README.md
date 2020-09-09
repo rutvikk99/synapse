@@ -409,7 +409,7 @@ Let's start by experimenting with different parameters.
 
     > **NOTE**
     >
-    >In this case, when we are looking for fast query response times, the heap structure is not a good choice as we will see in a moment. Still, there are cases where using a heap table can help performance rather than hurting it. One such example is when we're looking to ingest large amounts of data into the SQL pool.
+    > In this case, when we are looking for fast query response times, the heap structure is not a good choice as we will see in a moment. Still, there are cases where using a heap table can help performance rather than hurting it. One such example is when we're looking to ingest large amounts of data into the SQL pool.
 
     If we were to review the query plan in detail, we would clearly see the root cause of the performance problem: inter-distribution data movements.
 
@@ -420,6 +420,70 @@ Let's start by experimenting with different parameters.
     This is actually one of the simplest examples given the small size of the data that needs to be shuffled. You can imagine how much worse things become when the shuffled row size becomes larger.
 
 ### Create hash distribution and columnstore index
+
+1. Select the **Develop** hub.
+
+    ![The develop hub is highlighted.](media/develop-hub.png "Develop hub")
+
+2. From the **Develop** menu, select the **+** button **(1)** and choose **SQL Script (2)** from the context menu.
+
+    ![The SQL script context menu item is highlighted.](media/synapse-studio-new-sql-script.png "New SQL script")
+
+3. In the toolbar menu, connect to the **SQL Pool** database to execute the query.
+
+    ![The connect to option is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-connect.png "Query toolbar")
+
+4. In the query window, replace the script with the following:
+
+     ```sql
+    CREATE TABLE [wwi_perf].[Sale_Hash]
+    WITH
+    (
+        DISTRIBUTION = HASH ( [CustomerId] ),
+        CLUSTERED COLUMNSTORE INDEX
+    )
+    AS
+    SELECT
+        *
+    FROM
+        [wwi_perf].[Sale_Heap]
+    ```
+
+5. Select **Run** from the toolbar menu to execute the SQL command.
+
+    ![The run button is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-run.png "Run")
+
+    The query will take up to 4.5 minutes to complete.
+
+    > **NOTE**
+    >
+    > CTAS is a more customizable version of the SELECT...INTO statement.
+    > SELECT...INTO doesn't allow you to change either the distribution method or the index type as part of the operation. You create the new table by using the default distribution type of ROUND_ROBIN, and the default table structure of CLUSTERED COLUMNSTORE INDEX.
+    >
+    > With CTAS, on the other hand, you can specify both the distribution of the table data as well as the table structure type.
+
+6. In the query window, replace the script with the following to see performance improvements:
+
+    ```sql
+    SELECT TOP 1000 * FROM
+    (
+        SELECT
+            S.CustomerId
+            ,SUM(S.TotalAmount) as TotalAmount
+        FROM
+            [wwi_perf].[Sale_Hash] S
+        GROUP BY
+            S.CustomerId
+    ) T
+    ```
+
+7. Select **Run** from the toolbar menu to execute the SQL command.
+
+    ![The run button is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-run.png "Run")
+
+    You should see a performance improvement executing against the new Hash table compared to the first time we ran the script against the Heap table. In our case, the query executed in about half the time.
+
+    ![The script run time of 6 seconds is highlighted in the query results.](media/sale-hash-result.png "Hash table results")
 
 ### Improve table structure with partitioning
 
