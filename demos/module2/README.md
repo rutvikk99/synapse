@@ -836,20 +836,20 @@ Result cache is evicted regularly based on a time-aware least recently used algo
 
     ![The run button is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-run.png "Run")
 
-    > **Important**
+    > **Note to presenter**
     >
     > Make sure you disable result set caching on the SQL pool. Failing to do so will have a negative impact on the remainder of the demos, as it will skew execution times and defeat the purpose of several upcoming exercises.
 
-    > **Note**
-    >
-    > The maximum size of result set cache is 1 TB per database. The cached results are automatically invalidated when the underlying query data change.
-    >
-    > The cache eviction is managed by SQL Analytics automatically following this schedule:
-    > - Every 48 hours if the result set hasn't been used or has been invalidated.
-    > - When the result set cache approaches the maximum size.
-    >
-    > Users can manually empty the entire result set cache by using one of these options:
-    > - Turn OFF the result set cache feature for the database
-    > - Run DBCC DROPRESULTSETCACHE while connected to the database
-    >
-    > Pausing a database won't empty cached result set.
+    The maximum size of result set cache is 1 TB per database. The cached results are automatically invalidated when the underlying query data change.
+
+    The cache eviction is managed by SQL Analytics automatically following this schedule:
+
+    - Every 48 hours if the result set hasn't been used or has been invalidated.
+    - When the result set cache approaches the maximum size.
+
+    Users can manually empty the entire result set cache by using one of these options:
+
+    - Turn OFF the result set cache feature for the database
+    - Run DBCC DROPRESULTSETCACHE while connected to the database
+
+    Pausing a database won't empty cached result set.
