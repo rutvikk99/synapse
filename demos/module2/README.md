@@ -605,3 +605,251 @@ While partitioning can be used to improve performance, creating a table with to
 When creating partitions on clustered columnstore tables, it is important to consider how many rows belong to each partition. For optimal compression and performance of clustered columnstore tables, a minimum of 1 million rows per distribution and partition is needed. Before partitions are created, Azure Synapse Analytics already divides each table into 60 distributed databases. Any partitioning added to a table is in addition to the distributions created behind the scenes. Using this example, if the sales fact table contained 36 monthly partitions, and given that Azure Synapse Analytics has 60 distributions, then the sales fact table should contain 60 million rows per month, or 2.1 billion rows when all months are populated. If a table contains fewer than the recommended minimum number of rows per partition, consider using fewer partitions in order to increase the number of rows per partition.
 
 ### Use result set caching
+
+Tailwind Trader's downstream reports are used by many users, which often means the same query is being executed repeatedly against data that does not change that often. What can they do to improve the performance of these types of queries? How does this approach work when the underlying data changes?
+
+They should consider result-set caching.
+
+Cache the results of a query in the provisioned Azure Synapse SQL pool storage. This enables interactive response times for repetitive queries against tables with infrequent data changes.
+
+> The result-set cache persists even if SQL pool is paused and resumed later.
+
+Query cache is invalidated and refreshed when the underlying table data or query code changes.
+
+Result cache is evicted regularly based on a time-aware least recently used algorithm (TLRU).
+
+1. In the query window, replace the script with the following to check if result set caching is on in the current SQL pool:
+
+    ```sql
+    SELECT
+        name
+        ,is_result_set_caching_on
+    FROM
+        sys.databases
+    ```
+
+2. Select **Run** from the toolbar menu to execute the SQL command.
+
+    ![The run button is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-run.png "Run")
+
+    Look at the output of the query. What is the `is_result_set_caching_on` value for **SQLPool01**? In our case, it is set to `False`, meaning result set caching is currently disabled.
+
+    ![The result set caching is set to False.](media/result-set-caching-disabled.png "SQL query result")
+
+3. In the query window, change the database to **master (1)**, then replace the script **(2)** with the following to activate result set caching:
+
+    ```sql
+    ALTER DATABASE SQLPool01
+    SET RESULT_SET_CACHING ON
+    ```
+
+    ![The master database is selected and the script is displayed.](media/enable-result-set-caching.png "Enable result set caching")
+
+4. Select **Run** from the toolbar menu to execute the SQL command.
+
+    ![The run button is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-run.png "Run")
+
+    > **Important**
+    >
+    > The operations to create a result set cache and retrieve data from the cache happen on the control node of a Synapse SQL pool instance. When result set caching is turned ON, running queries that return a large result set (for example, >1GB) can cause high throttling on the control node and slow down the overall query response on the instance. Those queries are commonly used during data exploration or ETL operations. To avoid stressing the control node and cause performance issue, users should turn OFF result set caching on the database before running those types of queries.
+
+5. In the toolbar menu, connect to the **SQL Pool** database for the next query.
+
+    ![The connect to option is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-connect.png "Query toolbar")
+
+6. In the query window, replace the script with the following query and immediately check if it hit the cache:
+
+    ```sql
+    SELECT
+        D.Year
+        ,D.Quarter
+        ,D.Month
+        ,SUM(S.TotalAmount) as TotalAmount
+        ,SUM(S.ProfitAmount) as TotalProfit
+    FROM
+        [wwi_perf].[Sale_Partition02] S
+        join [wwi].[Date] D on
+            S.TransactionDateId = D.DateId
+    GROUP BY
+        D.Year
+        ,D.Quarter
+        ,D.Month
+    OPTION (LABEL = 'Lab03: Result set caching')
+
+    SELECT
+        result_cache_hit
+    FROM
+        sys.dm_pdw_exec_requests
+    WHERE
+        request_id =
+        (
+            SELECT TOP 1
+                request_id
+            FROM
+                sys.dm_pdw_exec_requests
+            WHERE
+                [label] = 'Lab03: Result set caching'
+            ORDER BY
+                start_time desc
+        )
+    ```
+
+7. Select **Run** from the toolbar menu to execute the SQL command.
+
+    ![The run button is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-run.png "Run")
+
+    As expected, the result is **`False` (0)**.
+
+    ![The returned value is false.](media/result-cache-hit1.png "Result set cache hit")
+
+    Still, you can identify that, while running the query, Synapse has also cached the result set.
+
+8. In the query window, replace the script with the following to get the execution steps:
+
+    ```sql
+    SELECT
+        step_index
+        ,operation_type
+        ,location_type
+        ,status
+        ,total_elapsed_time
+        ,command
+    FROM
+        sys.dm_pdw_request_steps
+    WHERE
+        request_id =
+        (
+            SELECT TOP 1
+                request_id
+            FROM
+                sys.dm_pdw_exec_requests
+            WHERE
+                [label] = 'Lab03: Result set caching'
+            ORDER BY
+                start_time desc
+        )
+    ```
+
+9. Select **Run** from the toolbar menu to execute the SQL command.
+
+    ![The run button is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-run.png "Run")
+
+    The execution plan reveals the building of the result set cache:
+
+    ![The building of the result set cache.](media/result-set-cache-build.png "Result cache build")
+
+    You can control at the user session level the use of the result set cache.
+
+10. In the query window, replace the script with the following to deactivate and activate the result cache:
+
+    ```sql  
+    SET RESULT_SET_CACHING OFF
+
+    SELECT
+        D.Year
+        ,D.Quarter
+        ,D.Month
+        ,SUM(S.TotalAmount) as TotalAmount
+        ,SUM(S.ProfitAmount) as TotalProfit
+    FROM
+        [wwi_perf].[Sale_Partition02] S
+        join [wwi].[Date] D on
+            S.TransactionDateId = D.DateId
+    GROUP BY
+        D.Year
+        ,D.Quarter
+        ,D.Month
+    OPTION (LABEL = 'Lab03: Result set caching off')
+
+    SET RESULT_SET_CACHING ON
+
+    SELECT
+        D.Year
+        ,D.Quarter
+        ,D.Month
+        ,SUM(S.TotalAmount) as TotalAmount
+        ,SUM(S.ProfitAmount) as TotalProfit
+    FROM
+        [wwi_perf].[Sale_Partition02] S
+        join [wwi].[Date] D on
+            S.TransactionDateId = D.DateId
+    GROUP BY
+        D.Year
+        ,D.Quarter
+        ,D.Month
+    OPTION (LABEL = 'Lab03: Result set caching on')
+
+    SELECT TOP 2
+        request_id
+        ,[label]
+        ,result_cache_hit
+    FROM
+        sys.dm_pdw_exec_requests
+    WHERE
+        [label] in ('Lab03: Result set caching off', 'Lab03: Result set caching on')
+    ORDER BY
+        start_time desc
+    ```
+
+11. Select **Run** from the toolbar menu to execute the SQL command.
+
+    ![The run button is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-run.png "Run")
+
+    The result of **`SET RESULT_SET_CACHING OFF`** in the script above is visible in the cache hit test results (The `result_cache_hit` column returns `1` for cache hit, `0` for cache miss, and *negative values* for reasons why result set caching was not used.):
+
+    ![Result cache on and off.](media/result-set-cache-off.png "Result cache on/off results")
+
+12. In the query window, replace the script with the following to check the space used by the result cache:
+
+    ```sql
+    DBCC SHOWRESULTCACHESPACEUSED
+    ```
+
+13. Select **Run** from the toolbar menu to execute the SQL command.
+
+    ![The run button is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-run.png "Run")
+
+    We can see the amount of space reserved, how much is used by data, the amount used for the index, and how much unused space there is for the result cache in the query results.
+
+    ![Check the size of the result set cache.](media/result-set-cache-size.png "Result cache size")
+
+14. In the query window, replace the script with the following to clear the result set cache:
+
+    ```sql
+    DBCC DROPRESULTSETCACHE
+    ```
+
+15. Select **Run** from the toolbar menu to execute the SQL command.
+
+    ![The run button is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-run.png "Run")
+
+16. In the query window, change the database to **master (1)**, then replace the script **(2)** with the following to disable result set caching:
+
+    ```sql
+    ALTER DATABASE SQLPool01
+    SET RESULT_SET_CACHING OFF
+    ```
+
+    ![The master database is selected and the script is displayed.](media/disable-result-set-caching.png "Disable result set caching")
+
+17. Select **Run** from the toolbar menu to execute the SQL command.
+
+    ![The run button is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-run.png "Run")
+
+    > **Important**
+    >
+    > Make sure you disable result set caching on the SQL pool. Failing to do so will have a negative impact on the remainder of the demos, as it will skew execution times and defeat the purpose of several upcoming exercises.
+
+    > **Note**
+    >
+    > The maximum size of result set cache is 1 TB per database. The cached results are automatically invalidated when the underlying query data change.
+    >
+    > The cache eviction is managed by SQL Analytics automatically following this schedule:
+    > - Every 48 hours if the result set hasn't been used or has been invalidated.
+    > - When the result set cache approaches the maximum size.
+    >
+    > Users can manually empty the entire result set cache by using one of these options:
+    > - Turn OFF the result set cache feature for the database
+    > - Run DBCC DROPRESULTSETCACHE while connected to the database
+    >
+    > Pausing a database won't empty cached result set.
