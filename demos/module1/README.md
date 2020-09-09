@@ -16,7 +16,7 @@ In this demo, we show the primary features of Azure Synapse Analytics, and how t
     - [One place for all your data](#one-place-for-all-your-data)
     - [Unlimited data scale](#unlimited-data-scale)
     - [Familiar tools and ecosystem](#familiar-tools-and-ecosystem)
-    - [Modern data warehouse stages](#modern-data-warehouse-stages)
+    - [Modern data warehouse processes](#modern-data-warehouse-processes)
       - [Stage 1: Data ingest and preparation](#stage-1-data-ingest-and-preparation)
       - [Stage 2: Model & serve](#stage-2-model--serve)
       - [Stage 3: Visualize](#stage-3-visualize)
@@ -43,10 +43,6 @@ Azure Synapse is an end-to-end analytics platform which combines SQL data wareho
 Synapse empowers users to gain quick access and insights across all of their data, enabling a whole new level of performance and scale that is simply unmatched in the industry.
 
 As you will see here in our workspace, Synapse brings all of our data into a single service. Synapse does not just remove the silos between people in the organization, it also brings the data closer together.
-
-*Supplementary Info:*
-
-Azure Synapse is a limitless analytics service that brings together enterprise data warehousing and Big Data analytics. It gives you the freedom to query data on your terms, using either serverless or provisioned resources—at scale. Azure Synapse brings these two worlds together with a unified experience to ingest, prepare, manage, and serve data for immediate BI and machine learning needs.
 
 ## Surveying the Components of Azure Synapse Analytics
 
@@ -444,7 +440,7 @@ Synapse Analytics enables you to ingest data from multiple data sources through 
 
     ![The new Synapse Notebook is displayed.](media/new-notebook.png "New notebook")
 
-### Modern data warehouse stages
+### Modern data warehouse processes
 
 #### Stage 1: Data ingest and preparation
 
