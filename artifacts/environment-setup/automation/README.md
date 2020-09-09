@@ -16,7 +16,7 @@
 
 4. Select the **Create** button on the **Resource group** overview page.
 
-5. On the **Create a resource group** screen, select your desired Subscription and Region. For Resource group, enter **Synapse-WS-L400**, then select the **Review + Create** button.
+5. On the **Create a resource group** screen, select your desired Subscription and Region. For Resource group, enter **synapse-in-a-day-demos**, then select the **Review + Create** button.
 
     ![The Create a resource group form is displayed populated with Synapse-MCW as the resource group name.](../media/bhol_resourcegroupform.png)
 
@@ -31,7 +31,7 @@
 2. On the **Custom deployment** form fill in the fields described below.
 
 * **Subscription**: Select your desired subscription for the deployment.
-* **Resource group**: Select the **Synapse-WS-L400** resource group you previously created.
+* **Resource group**: Select the **synapse-in-a-day-demos** resource group you previously created.
 * **Unique Suffix**: This unique suffix will be used naming resources that will created as part of your deployment.
 * **SQL Administrator Login Password**: Provide a strong password for the SQLPool that will be created as part of your deployment. Your password will be needed during the next steps. Make sure you have your password noted and secured.
   

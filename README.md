@@ -9,7 +9,7 @@ Demos and labs for Synapse in a Day content.
 
 ## Setup
 
-Follow the [demo setup instructions](demos/setup/README.md).
+Follow the [demo setup instructions](artifacts/environment-setup/automation/README.md).
 
 ## Demos
 
