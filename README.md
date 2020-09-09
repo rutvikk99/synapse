@@ -2,6 +2,11 @@
 
 Demos and labs for Synapse in a Day content.
 
+- [Synapse in a Day](#synapse-in-a-day)
+  - [Setup](#setup)
+  - [Demos](#demos)
+  - [Tailwind Traders - In search of a modern data warehouse solution](#tailwind-traders---in-search-of-a-modern-data-warehouse-solution)
+
 ## Setup
 
 Follow the [demo setup instructions](demos/setup/README.md).
@@ -34,3 +39,14 @@ The [demos](./demos/) folder contains demo scripts for six modules, each lasting
   - Querying Cosmos DB with Apache Spark for Synapse Analytics
   - Querying Cosmos DB with SQL Serverless for Synapse Analytics
 
+## Tailwind Traders - In search of a modern data warehouse solution
+
+![Tailwind Traders logo.](media/logo.png "Tailwind Traders")
+
+Tailwind Traders has an online store where they sell a variety of products. These products are manufactured from a large number of suppliers that are located around the world. Tailwind Traders enables their suppliers to manage their product inventory directly through a product admin site.  The larger suppliers tend to have their own inventory management systems. They opt out of using the product admin site in favor of exporting their product data using an automated data feed.
+
+Tailwind Traders has a team of data analysts. They analyze sales data and create reports that are intended to make the organization more effective at driving sales and procuring inventory. These reports go to a wide-variety of users, including suppliers, marketing, sales, and corporate leadership.  Their market analysis also includes considering new products offered by their network of suppliers, and anticipating consumer demand for those products. They share this information with invested parties to help plan new product development and production.
+
+Tailwind Traders would like to gain business insights using historical, real-time, and predictive analytics.  The data may reside in both structured and unstructured data sources.  They want to enable their data engineers and data scientists to bring in and run complex queries over petabytes of structured data with billions of rows. At the same time, they want to enable data analysts to share a single source of truth and have a single workspace to collaborate and work with enriched data. They want to accomplish this while minimizing the number of tools and services required to ingest, transform, store, and query their data. They want their wide team that exists across various departments to use one shared tool. They hope they can increase collaboration, share best practices, centralize management, and mature their troubleshooting and monitoring process.
+
+You have been hired as a consultant to work with the teams to help them achieve their aspirations of building a modern data warehouse. Based on their needs, you recommend Azure Synapse Analytics and lead members from each team toward Tailwind Trader’s goal and ultimate success.
