@@ -1,3 +1,4 @@
+IF OBJECT_ID(N'[dbo].[Reset_ML_Environment]', N'P') IS NOT NULL   
 DROP PROCEDURE [dbo].[Reset_ML_Environment]
 GO
 
@@ -24,6 +25,7 @@ WITH (
 END
 GO
 
+IF OBJECT_ID(N'[dbo].[Delete_SelfReferencing_Product_Recommendations]', N'P') IS NOT NULL   
 DROP PROCEDURE [dbo].[Delete_SelfReferencing_Product_Recommendations]
 GO
 
