@@ -845,7 +845,39 @@ foreach ($dataflow in $workloadDataflows.Keys) {
         Wait-ForOperation -WorkspaceName $workspaceName -OperationId $result.operationId
 }
 
+Write-Information "Creating Spark notebooks..."
 
+$notebooks = [ordered]@{
+        "Activity 05 - Model Training" = "$notebooksPath"
+        "Lab 06 - Machine Learning" = "$notebooksPath"
+        "Lab 07 - Spark ML" = "$notebooksPath"
+        "3 Campaign Analytics Data Prep"    = "$notebooksPath"
+        "1 Products Recommendation"   = "$notebooksPath"
+        "2 AutoML Number of Customer Visit to Department" = "$notebooksPath"
+}
+
+$cellParams = [ordered]@{
+        "#SQL_POOL_NAME#" = $sqlPoolName
+        "#SUBSCRIPTION_ID#" = $subscriptionId
+        "#RESOURCE_GROUP_NAME#" = $resourceGroupName
+        "#AML_WORKSPACE_NAME#" = $amlWorkspaceName
+        "#DATA_LAKE_ACCOUNT_NAME#" = $dataLakeAccountName
+        "#DATA_LAKE_NAME#" = $dataLakeAccountName
+        "#DATA_LAKE_ACCOUNT_KEY#" = $dataLakeAccountKey
+}
+
+foreach ($notebookName in $notebooks.Keys) {
+
+        $notebookFileName = "$($notebooks[$notebookName])\$($notebookName).ipynb"
+        Write-Information "Creating notebook $($notebookName) from $($notebookFileName)"
+        
+        $result = Create-SparkNotebook -TemplatesPath $templatesPath -SubscriptionId $subscriptionId -ResourceGroupName $resourceGroupName `
+                -WorkspaceName $workspaceName -SparkPoolName $sparkPoolName -Name $notebookName -NotebookFileName $notebookFileName -CellParams $cellParams
+        $result = Wait-ForOperation -WorkspaceName $workspaceName -OperationId $result.operationId
+        $result
+}
+
+#these have to run after datasetsa and notebook creation!!!
 Write-Information "Create pipelines"
 
 $pipelineList = New-Object System.Collections.ArrayList
@@ -895,39 +927,8 @@ foreach ($pipeline in $pipelineList) {
         }
         catch
         {
+            write-host $_.exception;
         }
-}
-
-Write-Information "Creating Spark notebooks..."
-
-$notebooks = [ordered]@{
-        "Activity 05 - Model Training" = "$notebooksPath"
-        "Lab 06 - Machine Learning" = "$notebooksPath"
-        "Lab 07 - Spark ML" = "$notebooksPath"
-        "3 Campaign Analytics Data Prep"    = "$notebooksPath"
-        "1 Products Recommendation"   = "$notebooksPath"
-        "2 AutoML Number of Customer Visit to Department" = "$notebooksPath"
-}
-
-$cellParams = [ordered]@{
-        "#SQL_POOL_NAME#" = $sqlPoolName
-        "#SUBSCRIPTION_ID#" = $subscriptionId
-        "#RESOURCE_GROUP_NAME#" = $resourceGroupName
-        "#AML_WORKSPACE_NAME#" = $amlWorkspaceName
-        "#DATA_LAKE_ACCOUNT_NAME#" = $dataLakeAccountName
-        "#DATA_LAKE_NAME#" = $dataLakeAccountName
-        "#DATA_LAKE_ACCOUNT_KEY#" = $dataLakeAccountKey
-}
-
-foreach ($notebookName in $notebooks.Keys) {
-
-        $notebookFileName = "$($notebooks[$notebookName])\$($notebookName).ipynb"
-        Write-Information "Creating notebook $($notebookName) from $($notebookFileName)"
-        
-        $result = Create-SparkNotebook -TemplatesPath $templatesPath -SubscriptionId $subscriptionId -ResourceGroupName $resourceGroupName `
-                -WorkspaceName $workspaceName -SparkPoolName $sparkPoolName -Name $notebookName -NotebookFileName $notebookFileName -CellParams $cellParams
-        $result = Wait-ForOperation -WorkspaceName $workspaceName -OperationId $result.operationId
-        $result
 }
 
 Write-Information "Create SQL scripts"
