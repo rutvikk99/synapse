@@ -1152,9 +1152,9 @@ function Create-SQLScript {
         }
     }
 
-    $query = ConvertFrom-Json (ConvertTo-Json $query)
+    #$query = ConvertFrom-Json (ConvertTo-Json $query)
 
-    $jsonItem.properties.content.query = $query.value
+    $jsonItem.properties.content.query = $query
     $item = ConvertTo-Json $jsonItem -Depth 100
 
     $uri = "https://$($WorkspaceName).dev.azuresynapse.net/sqlscripts/$($Name)?api-version=2019-06-01-preview"
@@ -1630,6 +1630,16 @@ function Get-PowerBIWorkspace($name)
     }
     
     #$homeCluser = "https://wabi-west-us-redirect.analysis.windows.net";
+}
+
+function Start-PowerBITrial()
+{
+    #$url = "https://api.powerbi.com/v1.0/myorg/groups";
+    #$result = Invoke-WebRequest -Uri $url -Method GET -ContentType "application/json" -Headers @{ Authorization="Bearer $powerbitoken" } -ea SilentlyContinue;
+    #$homeCluster = $result.Headers["home-cluster-uri"]
+
+    $url = "https://wabi-west-us-b-primary-redirect.analysis.windows.net/powerbi/metadata/trial"
+    $result = Invoke-WebRequest -Uri $url -Method PUT -Body "" -ContentType "application/json" -Headers @{ Authorization="Bearer $powerbitoken" } -ea SilentlyContinue;
 }
 
 function Upload-PowerBIReport($wsId, $name, $filePath)

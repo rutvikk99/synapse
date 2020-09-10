@@ -65,6 +65,10 @@ if($IsCloudLabs){
         }
         Import-Module "..\solliance-synapse-automation"
 
+        Connect-AzAccount
+
+        az login
+
         #Different approach to run automation in Cloud Shell
         $subs = Get-AzSubscription | Select-Object -ExpandProperty Name
         if($subs.GetType().IsArray -and $subs.length -gt 1){
@@ -766,68 +770,7 @@ foreach ($pipeline in $workloadPipelines.Keys) {
         Wait-ForOperation -WorkspaceName $workspaceName -OperationId $result.operationId
 }
 
-Write-Information "Create pipelines"
-
-$pipelineList = New-Object System.Collections.ArrayList
-$temp = "" | select-object @{Name = "FileName"; Expression = {"sap_hana_to_adls"}} , @{Name = "Name"; Expression = {"SAP HANA TO ADLS"}}
-$pipelineList.Add($temp)
-$temp = "" | select-object @{Name = "FileName"; Expression = {"marketing_db_migration"}} , @{Name = "Name"; Expression = {"MarketingDBMigration"}}
-$pipelineList.Add($temp)
-$temp = "" | select-object @{Name = "FileName"; Expression = {"sales_db_migration"}} , @{Name = "Name"; Expression = {"SalesDBMigration"}}
-$pipelineList.Add($temp)
-$temp = "" | select-object @{Name = "FileName"; Expression = {"twitter_data_migration"}} , @{Name = "Name"; Expression = {"TwitterDataMigration"}}
-$pipelineList.Add($temp)
-$temp = "" | select-object @{Name = "FileName"; Expression = {"customize_campaign_analytics"}} , @{Name = "Name"; Expression = {"Customize Campaign Analytics"}}
-$pipelineList.Add($temp)
-$temp = "" | select-object @{Name = "FileName"; Expression = {"customize_decomposition_tree"}} , @{Name = "Name"; Expression = {"Customize Decomposition Tree"}}
-$pipelineList.Add($temp)
-$temp = "" | select-object @{Name = "FileName"; Expression = {"customize_location_analytics"}} , @{Name = "Name"; Expression = {"Customize Location Analytics"}}
-$pipelineList.Add($temp)
-$temp = "" | select-object @{Name = "FileName"; Expression = {"customize_revenue_profitability"}} , @{Name = "Name"; Expression = {"Customize Revenue Profitability"}}
-$pipelineList.Add($temp)
-$temp = "" | select-object @{Name = "FileName"; Expression = {"ML_Department_Visits_Predictions"}} , @{Name = "Name"; Expression = {"ML Department Visits Predictions"}}
-$pipelineList.Add($temp)
-$temp = "" | select-object @{Name = "FileName"; Expression = {"ML_Product_Recommendation"}} , @{Name = "Name"; Expression = {"ML Product Recommendation"}}
-$pipelineList.Add($temp)
-$temp = "" | select-object @{Name = "FileName"; Expression = {"customize_recommendation_insights_ml"}} , @{Name = "Name"; Expression = {"Customize Recommendation Insights ML"}}
-$pipelineList.Add($temp)
-$temp = "" | select-object @{Name = "FileName"; Expression = {"customize_email_analytics"}} , @{Name = "Name"; Expression = {"Customize EMail Analytics"}}
-$pipelineList.Add($temp)
-$temp = "" | select-object @{Name = "FileName"; Expression = {"customize_all"}} , @{Name = "Name"; Expression = {"Customize All"}}
-$pipelineList.Add($temp)
-$temp = "" | select-object @{Name = "FileName"; Expression = {"customize_product_recommendations_ml"}} , @{Name = "Name"; Expression = {"Customize Product Recommendations ML"}}
-$pipelineList.Add($temp)
-$temp = "" | select-object @{Name = "FileName"; Expression = {"1_master_pipeline"}} , @{Name = "Name"; Expression = {"1 Master Pipeline"}}
-$pipelineList.Add($temp)
-$temp = "" | select-object @{Name = "FileName"; Expression = {"reset_ml_data"}} , @{Name = "Name"; Expression = {"Reset ML Data"}}
-$pipelineList.Add($temp)
-
-foreach ($pipeline in $pipelineList) {
-        Write-Information "Creating workload pipeline $($pipeline.Name)"
-        $result = Create-Pipeline -PipelinesPath $pipelinesPath -WorkspaceName $workspaceName -Name $pipeline.Name -FileName $pipeline.FileName -Parameters @{
-                DATA_LAKE_STORAGE_NAME = $dataLakeAccountName
-                DEFAULT_STORAGE = $workspaceName + "-WorkspaceDefaultStorage"
-         }
-        Wait-ForOperation -WorkspaceName $workspaceName -OperationId $result.operationId
-}
-
-Write-Information "Create DataFlow for SAP to HANA Pipeline"
-$params = @{
-        LOAD_TO_SYNAPSE = "AzureSynapseAnalyticsTable8"
-        LOAD_TO_AZURE_SYNAPSE = "AzureSynapseAnalyticsTable9"
-        DATA_FROM_SAP_HANA = "DelimitedText1"
-}
-$workloadDataflows = [ordered]@{
-        ingest_data_from_sap_hana_to_azure_synapse = "ingest_data_from_sap_hana_to_azure_synapse"
-}
-
-foreach ($dataflow in $workloadDataflows.Keys) {
-        Write-Information "Creating dataflow $($workloadDataflows[$dataflow])"
-        $result = Create-Dataflow -DataflowPath $dataflowsPath -WorkspaceName $workspaceName -Name $workloadDataflows[$dataflow] -Parameters $params
-        Wait-ForOperation -WorkspaceName $workspaceName -OperationId $result.operationId
-}
-
-
+#data sets come BEFORE pipelines!
 Write-Information "Create data sets for Lab 08"
 
 $datasets = @{
@@ -885,6 +828,76 @@ foreach ($dataset in $datasets.Keys) {
         Wait-ForOperation -WorkspaceName $workspaceName -OperationId $result.operationId
 }
 
+
+Write-Information "Create DataFlow for SAP to HANA Pipeline"
+$params = @{
+        LOAD_TO_SYNAPSE = "AzureSynapseAnalyticsTable8"
+        LOAD_TO_AZURE_SYNAPSE = "AzureSynapseAnalyticsTable9"
+        DATA_FROM_SAP_HANA = "DelimitedText1"
+}
+$workloadDataflows = [ordered]@{
+        ingest_data_from_sap_hana_to_azure_synapse = "ingest_data_from_sap_hana_to_azure_synapse"
+}
+
+foreach ($dataflow in $workloadDataflows.Keys) {
+        Write-Information "Creating dataflow $($workloadDataflows[$dataflow])"
+        $result = Create-Dataflow -DataflowPath $dataflowsPath -WorkspaceName $workspaceName -Name $workloadDataflows[$dataflow] -Parameters $params
+        Wait-ForOperation -WorkspaceName $workspaceName -OperationId $result.operationId
+}
+
+
+Write-Information "Create pipelines"
+
+$pipelineList = New-Object System.Collections.ArrayList
+$temp = "" | select-object @{Name = "FileName"; Expression = {"sap_hana_to_adls"}} , @{Name = "Name"; Expression = {"SAP HANA TO ADLS"}}
+$pipelineList.Add($temp)
+$temp = "" | select-object @{Name = "FileName"; Expression = {"marketing_db_migration"}} , @{Name = "Name"; Expression = {"MarketingDBMigration"}}
+$pipelineList.Add($temp)
+$temp = "" | select-object @{Name = "FileName"; Expression = {"sales_db_migration"}} , @{Name = "Name"; Expression = {"SalesDBMigration"}}
+$pipelineList.Add($temp)
+$temp = "" | select-object @{Name = "FileName"; Expression = {"twitter_data_migration"}} , @{Name = "Name"; Expression = {"TwitterDataMigration"}}
+$pipelineList.Add($temp)
+$temp = "" | select-object @{Name = "FileName"; Expression = {"customize_campaign_analytics"}} , @{Name = "Name"; Expression = {"Customize Campaign Analytics"}}
+$pipelineList.Add($temp)
+$temp = "" | select-object @{Name = "FileName"; Expression = {"customize_decomposition_tree"}} , @{Name = "Name"; Expression = {"Customize Decomposition Tree"}}
+$pipelineList.Add($temp)
+$temp = "" | select-object @{Name = "FileName"; Expression = {"customize_location_analytics"}} , @{Name = "Name"; Expression = {"Customize Location Analytics"}}
+$pipelineList.Add($temp)
+$temp = "" | select-object @{Name = "FileName"; Expression = {"customize_revenue_profitability"}} , @{Name = "Name"; Expression = {"Customize Revenue Profitability"}}
+$pipelineList.Add($temp)
+$temp = "" | select-object @{Name = "FileName"; Expression = {"ML_Department_Visits_Predictions"}} , @{Name = "Name"; Expression = {"ML Department Visits Predictions"}}
+$pipelineList.Add($temp)
+$temp = "" | select-object @{Name = "FileName"; Expression = {"ML_Product_Recommendation"}} , @{Name = "Name"; Expression = {"ML Product Recommendation"}}
+$pipelineList.Add($temp)
+$temp = "" | select-object @{Name = "FileName"; Expression = {"customize_recommendation_insights_ml"}} , @{Name = "Name"; Expression = {"Customize Recommendation Insights ML"}}
+$pipelineList.Add($temp)
+$temp = "" | select-object @{Name = "FileName"; Expression = {"customize_email_analytics"}} , @{Name = "Name"; Expression = {"Customize EMail Analytics"}}
+$pipelineList.Add($temp)
+$temp = "" | select-object @{Name = "FileName"; Expression = {"customize_all"}} , @{Name = "Name"; Expression = {"Customize All"}}
+$pipelineList.Add($temp)
+$temp = "" | select-object @{Name = "FileName"; Expression = {"customize_product_recommendations_ml"}} , @{Name = "Name"; Expression = {"Customize Product Recommendations ML"}}
+$pipelineList.Add($temp)
+$temp = "" | select-object @{Name = "FileName"; Expression = {"1_master_pipeline"}} , @{Name = "Name"; Expression = {"1 Master Pipeline"}}
+$pipelineList.Add($temp)
+$temp = "" | select-object @{Name = "FileName"; Expression = {"reset_ml_data"}} , @{Name = "Name"; Expression = {"Reset ML Data"}}
+$pipelineList.Add($temp)
+
+foreach ($pipeline in $pipelineList) {
+        Write-Information "Creating workload pipeline $($pipeline.Name)"
+        $result = Create-Pipeline -PipelinesPath $pipelinesPath -WorkspaceName $workspaceName -Name $pipeline.Name -FileName $pipeline.FileName -Parameters @{
+                DATA_LAKE_STORAGE_NAME = $dataLakeAccountName
+                DEFAULT_STORAGE = $workspaceName + "-WorkspaceDefaultStorage"
+         }
+
+         try
+         {
+        Wait-ForOperation -WorkspaceName $workspaceName -OperationId $result.operationId
+        }
+        catch
+        {
+        }
+}
+
 Write-Information "Creating Spark notebooks..."
 
 $notebooks = [ordered]@{
@@ -935,6 +948,7 @@ if($Load30Billion -eq 1) {
 } else {
         $salesRowNumberCount = "3,443,487"
 }
+
 $params = @{
         STORAGE_ACCOUNT_NAME = $dataLakeAccountName
         SAS_KEY = $destinationSasKey
@@ -1114,7 +1128,6 @@ $reportList.Add($temp)
 
 $powerBIDataSetConnectionTemplate = Get-Content -Path "$templatesPath/powerbi_dataset_connection.json"
 $powerBIName = "asaexppowerbi$($uniqueId)"
-$workspaceName = "asaexpworkspace$($uniqueId)"
 
 foreach ($powerBIReport in $reportList) {
 
@@ -1127,7 +1140,7 @@ foreach ($powerBIReport in $reportList) {
     $powerBIReport.PowerBIDataSetId = Get-PowerBIDatasetId $wsid $powerBIReport.Name
 }
 
-Write-Information "Create PowerBI linked service $($keyVaultName)"
+Write-Information "Create PowerBI linked service $($powerBIName)"
 
 $result = Create-PowerBILinkedService -TemplatesPath $templatesPath -WorkspaceName $workspaceName -Name $powerBIName -WorkspaceId $wsid
 Wait-ForOperation -WorkspaceName $workspaceName -OperationId $result.operationId
