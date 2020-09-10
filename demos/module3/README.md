@@ -1,15 +1,21 @@
 # Perform Data Engineering with Azure Synapse Spark Pools
 
+In this demo, we show how Synapse Analytics enables you to perform data engineering tasks using the power of Apache Spark. The following table of contents describes and links to the elements of the demo:
+
 - [Perform Data Engineering with Azure Synapse Spark Pools](#perform-data-engineering-with-azure-synapse-spark-pools)
   - [Ingesting data with Apache Spark notebooks in Azure Synapse Analytics](#ingesting-data-with-apache-spark-notebooks-in-azure-synapse-analytics)
   - [Transforming data with DataFrames in Spark Pools in Azure Synapse Analytics](#transforming-data-with-dataframes-in-spark-pools-in-azure-synapse-analytics)
   - [Integrating SQL and Spark pools in Azure Synapse Analytics](#integrating-sql-and-spark-pools-in-azure-synapse-analytics)
 
-## Ingesting data with Apache Spark notebooks in Azure Synapse Analytics
-
 Tailwind Traders has unstructured and semi-structured files from various data sources. Their data engineers want to use their Spark expertise to explore, ingest, and transform these files.
 
 You recommend using Synapse Notebooks, which are integrated in the Synapse Analytics workspace and used from within Synapse Studio.
+
+## Ingesting data with Apache Spark notebooks in Azure Synapse Analytics
+
+Tailwind Traders has Parquet files stored in their data lake. They want to know how they can quickly access the files and explore them using Apache Spark.
+
+You recommend using the Data hub to view the Parquet files in the connected storage account, then use the _new notebook_ context menu to create a new Synapse Notebook that loads a Spark dataframe with the contents of a selected Parquet file.
 
 1. Open Synapse Studio (<https://web.azuresynapse.net/>).
 
@@ -123,5 +129,7 @@ You recommend using Synapse Notebooks, which are integrated in the Synapse Analy
     ![The aggregates output is displayed.](media/2010-sale-parquet-aggregates.png "Aggregates output")
 
 ## Transforming data with DataFrames in Spark Pools in Azure Synapse Analytics
+
+
 
 ## Integrating SQL and Spark pools in Azure Synapse Analytics
