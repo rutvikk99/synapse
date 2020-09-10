@@ -1062,4 +1062,4 @@ Result cache is evicted regularly based on a time-aware least recently used algo
     - Turn OFF the result set cache feature for the database
     - Run DBCC DROPRESULTSETCACHE while connected to the database
 
-    Pausing a database won't empty cached result set.
+    Pausing a database won't empty the cached result set.
