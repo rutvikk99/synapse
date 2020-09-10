@@ -35,19 +35,21 @@ You propose using window functions to perform calculations over a set of rows. W
 
 One of the key components of window functions is the **`OVER`** clause. This clause determines the partitioning and ordering of a rowset before the associated window function is applied. That is, the OVER clause defines a window or user-specified set of rows within a query result set. A window function then computes a value for each row in the window. You can use the OVER clause with functions to compute aggregated values such as moving averages, cumulative aggregates, running totals, or a top N per group results.
 
-1. Select the **Develop** hub.
+1. Open Synapse Studio (<https://web.azuresynapse.net/>).
+
+2. . Select the **Develop** hub.
 
     ![The develop hub is highlighted.](media/develop-hub.png "Develop hub")
 
-2. From the **Develop** menu, select the **+** button **(1)** and choose **SQL Script (2)** from the context menu.
+3. From the **Develop** menu, select the **+** button **(1)** and choose **SQL Script (2)** from the context menu.
 
     ![The SQL script context menu item is highlighted.](media/synapse-studio-new-sql-script.png "New SQL script")
 
-3. In the toolbar menu, connect to the **SQL Pool** database to execute the query.
+4. In the toolbar menu, connect to the **SQL Pool** database to execute the query.
 
     ![The connect to option is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-connect.png "Query toolbar")
 
-4. In the query window, replace the script with the following to use the `OVER` clause with data from the `wwi_security.Sale` table:
+5. In the query window, replace the script with the following to use the `OVER` clause with data from the `wwi_security.Sale` table:
 
     ```sql
     SELECT
@@ -60,7 +62,7 @@ One of the key components of window functions is the **`OVER`** clause. This cla
     ORDER BY Region;
     ```
 
-5. Select **Run** from the toolbar menu to execute the SQL command.
+6. Select **Run** from the toolbar menu to execute the SQL command.
 
     ![The run button is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-run.png "Run")
 
