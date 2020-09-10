@@ -34,7 +34,7 @@ In this demo, we show the primary features of Azure Synapse Analytics, and how t
     See [further documentation](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/resource-providers-and-types#azure-portal) for more information on registering resource providers on the Azure Portal.
 
 3. A Power BI Pro or Premium account to host Power BI reports, dashboards, and configuration of streaming datasets.
-4. Complete the [environment setup instructions](../setup/module1.md).
+4. Complete the [environment setup instructions](https://github.com/solliancenet/synapse-in-a-day-deployment) (external link).
 
 ## About Azure Synapse Analytics
 
