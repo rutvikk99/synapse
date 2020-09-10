@@ -194,10 +194,46 @@ To achieve this, you use ROWS in combination with UNBOUNDED PRECEDING to limit t
     ![The rows results are displayed.](media/rows-unbounded-preceding.png "ROWS with UNBOUNDED PRECEDING")
 
     In this query, we use the `FIRST_VALUE` analytic function to retrieve the book title with the fewest downloads, as indicated by the **`ROWS UNBOUNDED PRECEDING`** clause over the `Country` partition **(1)**. The `UNBOUNDED PRECEDING` option set the window start to the first row of the partition, giving us the title of the book with the fewest downloads for the country within the partition.
-    
+
     In the result set, we can scroll through the list that of books by country, sorted by number of downloads in ascending order. Here we see that for Germany, `Harry Potter - The Ultimate Quiz Book` (not to be confused with `Harry Potter - The Ultimate Quiz`, which had the most) had the fewest downloads, and `Burn for Me` had the fewest in Sweden **(2)**.
 
 ### Approximate execution using HyperLogLog functions
+
+As Tailwind Traders starts to work with very large data sets, they struggle with slow running queries that typically run quickly. For instance, obtaining a distinct count of all customers in the early stages of data exploration slows down the process. How can they speed up these queries?
+
+You decide to use approximate execution using HyperLogLog accuracy to reduce query latency in exchange for a small reduction in accuracy. This tradeoff works for Tailwind Trader's situation where they just need to get a feel for the data.
+
+To understand their requirements, let's first execute a distinct count over the large `Sale_Heap` table to find the count of distinct customers.
+
+1. In the query window, replace the script with the following:
+
+    ```sql
+    SELECT COUNT(DISTINCT CustomerId) from wwi_perf.Sale_Heap
+    ```
+
+2. Select **Run** from the toolbar menu to execute the SQL command.
+
+    ![The run button is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-run.png "Run")
+
+    The query takes up to 20 seconds to execute. That is expected, since distinct counts are one of the most difficult to optimize types of queries.
+
+    The result should be `1,000,000`.
+
+3. In the query window, replace the script with the following to use the HyperLogLog approach:
+
+    ```sql
+    SELECT APPROX_COUNT_DISTINCT(CustomerId) from wwi_perf.Sale_Heap
+    ```
+
+4. Select **Run** from the toolbar menu to execute the SQL command.
+
+    ![The run button is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-run.png "Run")
+
+    The query takes about half the time to execute. The result isn't quite the same, for example, it may be `1,001,619`.
+
+    APPROX_COUNT_DISTINCT returns a result with a **2% accuracy** of true cardinality on average.
+
+    This means, if COUNT (DISTINCT) returns `1,000,000`, HyperLogLog will return a value in the range of `999,736` to `1,016,234`.
 
 ## Using data loading best practices in Azure Synapse Analytics
 
