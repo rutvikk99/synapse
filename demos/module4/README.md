@@ -423,3 +423,52 @@ Complete the steps below to create the following two datasets: `asal400_ecommerc
     ![Publish all is highlighted.](media/publish-all-1.png "Publish all")
 
 ## Orchestrate data movement and transformation in Azure Synapse Pipelines
+
+Tailwind Traders is familiar with Azure Data Factory (ADF) pipelines and wants to know if Azure Synapse Analytics can either integrate with ADF or has a similar capability. They want to orchestrate data ingest, transformation, and load activities across their entire data catalog, both internal and external to their data warehouse.
+
+You recommend using Synapse Pipelines, which includes over 90 built-in connectors, can load data by manual execution of the pipeline or by orchestration, supports common loading patterns, enables fully parallel loading into the data lake or SQL tables, and shares a code base with ADF.
+
+By using Synapse Pipelines, Tailwind Traders can experience the same familiar interface as ADF without having to use an orchestration service outside of Synapse Analytics.
+
+Let's start by executing our new Mapping Data Flow. In order to run the new data flow, we need to create a new pipeline and add a data flow activity to it.
+
+1. Navigate to the **Orchestrate** hub.
+
+    ![The Orchestrate hub is highlighted.](media/orchestrate-hub.png "Orchestrate hub")
+
+2. Select **+ (1)**, then **Pipeline (2)**.
+
+    ![The new pipeline menu item is highlighted.](media/new-pipeline.png "New pipeline")
+
+3. In the **General** section of the **Profiles** pane of the new data flow, update the **Name** to the following: `Write User Profile Data to ASA`.
+
+    ![The name is displayed.](media/pipeline-general.png "General properties")
+
+4. Select the **Properties** button to hide the pane.
+
+    ![The button is highlighted.](media/pipeline-properties-button.png "Properties button")
+
+5. Expand **Move & transform** within the Activities list, then drag the **Data flow** activity onto the pipeline canvas.
+
+    ![Drag the data flow activity onto the pipeline canvas.](media/pipeline-drag-data-flow.png "Pipeline canvas")
+
+6. In the `Adding data flow` blade, select **Use existing data flow (1)**, then select the `write_user_profile_to_asa` existing data flow **(2)** you created in the previous task.
+
+    ![The adding data flow form is displayed with the described configuration.](media/pipeline-user-profiles-adding-data-flow.png "Adding data flow")
+
+7. Select **OK (3)**.
+
+8. Select the mapping data flow activity on the canvas. Select the **Settings** tab **(1)**, then ensure `AutoResolveIntegrationRuntime` is selected for **Run on (Azure IR) (2)**. Choose the `Compute Optimized` **Compute type (3)** and select `64 (+ 16 cores)` for the **Core count (4)**.
+
+    ![The settings are configured as described.](media/data-flow-activity-settings1.png "Settings")
+
+9. Expand **PolyBase** and configure the following:
+
+    - **Staging linked service**: Select the `asadatalakeSUFFIX` linked service.
+    - **Staging storage folder**: Enter `staging/userprofiles`. The `userprofiles` folder will be automatically created for you during the first pipeline run.
+
+    > **Copy and paste** the `staging` and `userprofiles` folder names into the two fields.
+
+    ![The mapping data flow activity settings are configured as described.](media/pipeline-user-profiles-data-flow-settings.png "Mapping data flow activity settings")
+
+    The staging options under PolyBase is recommended when you have a large amount of data to move into or out of Azure Synapse Analytics. You will want to experiment with enabling and disabling staging on the data flow in a production environment to evaluate the difference in performance.
