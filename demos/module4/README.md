@@ -19,6 +19,8 @@
 
 Tailwind Traders would like code-free options for data engineering tasks. Their motivation is driven by the desire to allow junior-level data engineers who understand the data but do not have a lot of development experience build and maintain data transformation operations. The other driver for this requirement is to reduce fragility caused by complex code with reliance on libraries pinned to specific versions, remove code testing requirements, and improve ease of long-term maintenance.
 
+Their other requirement is to maintain transformed data in a data lake in addition to the SQL pool. This gives them the flexibility to retain more fields in their data sets than they otherwise store in fact and dimension tables, and doing this allows them to access the data when they have paused the SQL pool, as a cost optimization.
+
 Given these requirements, you recommend building Mapping Data Flows.
 
 Mapping Data flows are pipeline activities that provide a visual way of specifying how to transform data, through a code-free experience. This feature offers data cleansing, transformation, aggregation, conversion, joins, data copy operations, etc.
@@ -428,11 +430,56 @@ Complete the steps below to create the following two datasets: `asal400_ecommerc
 
     ![The mapping settings are configured as described.](media/data-flow-user-profiles-new-sink-settings-mapping.png "Mapping")
 
-33. Your completed data flow should look similar to the following:
+33. Select the **+** to the right of the `Filter1` step, then select the **Sink** destination from the context menu to add a second sink.
+
+    ![The new Sink destination is highlighted.](media/data-flow-user-profiles-new-sink2.png "New sink")
+
+34. Under **Sink**, configure the following:
+
+    - **Output stream name**: Enter `DataLake`.
+    - **Incoming stream**: Select `Filter1`.
+    - **Sink type**: select `Delta`.
+    - **Linked service**: Select the default workspace data lake storage account (example: `asaworkspaceinaday84-WorspaceDefaultStorage`).
+    - **Options**: Check `Allow schema drift` and uncheck `Validate schema`.
+
+    ![The sink settings are shown.](media/data-flow-user-profiles-new-sink-settings2.png "Sink settings")
+
+35. Select **Settings**, then configure the following:
+
+    - **Folder path**: Enter `wwi-02/top-products` (**copy and paste** these two values into the fields since the `top-products` folder does not yet exist).
+    - **Compression type**: Select `snappy`.
+    - **Compression level**: Select `Fastest`.
+    - **Vacuum**: Enter 0.
+    - **Truncate table**: Check.
+    - **Merge schema**: Unchecked.
+    - **Update method**: Check `Allow insert` and leave the rest unchecked.
+
+    ![The settings are shown.](media/data-flow-user-profiles-new-sink-settings-options2.png "Settings")
+
+36. Select **Mapping**, then configure the following:
+
+    - **Auto mapping**: `Uncheck` this option.
+    - **Columns**: Provide the following information:
+
+        | Input columns | Output columns |
+        | --- | --- |
+        | visitorId | visitorId |
+        | productId | ProductId |
+        | itemsPurchasedLast12Months | ItemsPurchasedLast12Months |
+        | preferredProductId | preferredProductId |
+        | userId | UserId |
+        | isTopProduct | IsTopProduct |
+        | isPreferredProduct | IsPreferredProduct |
+
+    ![The mapping settings are configured as described.](media/data-flow-user-profiles-new-sink-settings-mapping2.png "Mapping")
+
+    > Notice that we have chosen to keep more fields for the data lake sink vs. the SQL pool sink (`visitorId` and `preferredProductId`). This is because we aren't adhering to a fixed destination schema (like a SQL table), and because we want to retain the original data as much as possible in the data lake.
+
+37. Your completed data flow should look similar to the following:
 
     ![The completed data flow is displayed.](media/data-flow-user-profiles-complete.png "Completed data flow")
 
-34. Select **Publish all** to save your new data flow.
+38. Select **Publish all** to save your new data flow.
 
     ![Publish all is highlighted.](media/publish-all-1.png "Publish all")
 
@@ -523,11 +570,11 @@ You have decided to show Tailwind Traders how to manually trigger, monitor, then
 
     ![The data flow details icon is highlighted.](media/pipeline-user-profiles-activity-runs.png "Activity runs")
 
-7. The data flow details displays the data flow steps and processing details. In our example, processing time took around **45 seconds to process (1)** and output around **1 million rows (2)**. You can see which activities took the longest to complete. The cluster startup time contributed over **three minutes (3)** to the total pipeline run.
+7. The data flow details displays the data flow steps and processing details. In our example, processing time took around **44 seconds to process** the SQL pool sink **(1)**, and around **12 seconds to process** the Data Lake sink **(2)**. The Filter1 output was around **1 million rows (3)** for both. You can see which activities took the longest to complete. The cluster startup time contributed over **2.5 minutes (4)** to the total pipeline run.
 
     ![The data flow details are displayed.](media/pipeline-user-profiles-data-flow-details.png "Data flow details")
 
-8. Select the `UserTopProductPurchasesASA` sink **(1)** to view its details. We can see that **1,622,203 rows** were calculated **(2)** with a total of 30 partitions. It took around **five seconds** to stage the data **(3)** in ADLS Gen2 prior to writing the data to the SQL table. The total sink processing time in our case was around **45 seconds (4)**. It is also apparent that we have a **hot partition (5)** that is significantly larger than the others. If we need to squeeze extra performance out of this pipeline, we can re-evaluate data partitioning to more evenly spread the partitions to better facilitate parallel data loading and filtering. We could also experiment with disabling staging to see if there's a processing time difference. Finally, the size of the SQL Pool plays a factor in how long it takes to ingest data into the sink.
+8. Select the `UserTopProductPurchasesASA` sink **(1)** to view its details. We can see that **1,622,203 rows** were calculated **(2)** with a total of 30 partitions. It took around **eight seconds** to stage the data **(3)** in ADLS Gen2 prior to writing the data to the SQL table. The total sink processing time in our case was around **44 seconds (4)**. It is also apparent that we have a **hot partition (5)** that is significantly larger than the others. If we need to squeeze extra performance out of this pipeline, we can re-evaluate data partitioning to more evenly spread the partitions to better facilitate parallel data loading and filtering. We could also experiment with disabling staging to see if there's a processing time difference. Finally, the size of the SQL Pool plays a factor in how long it takes to ingest data into the sink.
 
     ![The sink details are displayed.](media/pipeline-user-profiles-data-flow-sink-details.png "Sink details")
 
@@ -535,66 +582,81 @@ You have decided to show Tailwind Traders how to manually trigger, monitor, then
 
 Now that we have processed, joined, and imported the user profile data, let's analyze it in greater detail. In this segment, we will execute code to find the top 5 products for each user, based on which ones are both preferred and top, and have the most purchases in past 12 months. Then, we will calculate the top 5 products overall.
 
+> We will access the data from the data lake that was added as a second sink in the data flow, removing the SQL pool dependency.
+
 1. Navigate to the **Data** hub.
 
     ![The Data menu item is highlighted.](media/data-hub.png "Data hub")
 
-2. Select the **Workspace** tab **(1)** and expand the `SqlPool01` database underneath the **Databases** section **(2)**. Right-click on the `wwi.UserTopProductPurchases` table **(3)**, then select the **Load to DataFrame** menu item **(5)** under the **New notebook** context menu **(4)**. If you don't see the table listed, select `Refresh` above.
+2. Select the **Linked** tab **(1)** and expand the **primary data lake storage account (2)** underneath the **Azure Data Lake Storage Gen2**. Select the **wwi-02** container **(3)** and open the **top-products** folder **(4)**. Right-click on any Parquet file **(5)**, then select the **New notebook** menu item **(6)**. If you don't see the folder, select `Refresh` above.
 
-    ![The load to DataFrame new notebook option is highlighted.](media/synapse-studio-usertopproductpurchases-new-notebook.png "New notebook")
+    ![The Parquet file and new notebook option are highlighted.](media/synapse-studio-top-products-folder.png "New notebook")
 
 3. Make sure the notebook is attached to your Spark pool.
 
     ![The attach to Spark pool menu item is highlighted.](media/notebook-top-products-attach-pool.png "Select Spark pool")
 
-4. Select **Run all** on the notebook toolbar to execute the notebook.
+4. Replace the Parquet file name with `*.parquet` **(1)** to select all Parquet files in the `top-products` folder. For example, the path should be similar to: `abfss://wwi-02@YOUR_DATALAKE_NAME.dfs.core.windows.net/top-products/*.parquet`.
+
+    ![The filename is highlighted.](media/notebook-top-products-filepath.png "Folder path")
+
+5. Select **Run all** on the notebook toolbar to execute the notebook.
+
+    ![The cell results are displayed.](media/notebook-top-products-cell1results.png "Cell 1 results")
 
     > **Note:** The first time you run a notebook in a Spark pool, Synapse creates a new session. This can take approximately 3-5 minutes.
 
     > **Note:** To run just the cell, either hover over the cell and select the _Run cell_ icon to the left of the cell, or select the cell then type **Ctrl+Enter** on your keyboard.
 
-5. Create a new cell underneath by selecting **{} Add code** when hovering over the blank space at the bottom of the notebook.
+6. Create a new cell underneath by selecting **{} Add code** when hovering over the blank space at the bottom of the notebook.
 
     ![The Add Code menu option is highlighted.](media/new-cell.png "Add code")
 
-6. Enter and execute the following in the new cell to show the first 10 rows and to create a new temporary view named `df`:
+7. Enter and execute the following in the new cell to populate a new dataframe called `topPurchases`, create a new temporary view named `top_purchases`, and show the first 100 rows:
 
     ```python
-    df.head(10)
+        topPurchases = data_path.select(
+        "UserId", "ProductId",
+        "ItemsPurchasedLast12Months", "IsTopProduct",
+        "IsPreferredProduct")
 
-    df.createTempView("df")
+    # Populate a temporary view so we can query from SQL
+    topPurchases.createOrReplaceTempView("top_purchases")
+
+    topPurchases.show(100)
     ```
 
     The output should look similar to the following:
 
     ```text
-    res4: Array[org.apache.spark.sql.Row] = Array([9065916,3020,null,false,true], [9065916,2735,null,false,true], [9065916,1149,null,false,true], [9065916,2594,null,false,true], [9065916,4591,null,false,true], [9065916,3012,null,false,true], [9065916,1985,null,false,true], [9065916,1773,null,false,true], [9065916,380,null,false,true], [9068349,4383,null,false,true])
+    +------+---------+--------------------------+------------+------------------+
+    |UserId|ProductId|ItemsPurchasedLast12Months|IsTopProduct|IsPreferredProduct|
+    +------+---------+--------------------------+------------+------------------+
+    |   148|     2717|                      null|       false|              true|
+    |   148|     4002|                      null|       false|              true|
+    |   148|     1716|                      null|       false|              true|
+    |   148|     4520|                      null|       false|              true|
+    |   148|      951|                      null|       false|              true|
+    |   148|     1817|                      null|       false|              true|
+    |   463|     2634|                      null|       false|              true|
+    |   463|     2795|                      null|       false|              true|
+    |   471|     1946|                      null|       false|              true|
+    |   471|     4431|                      null|       false|              true|
+    |   471|      566|                      null|       false|              true|
+    |   471|     2179|                      null|       false|              true|
+    |   471|     3758|                      null|       false|              true|
+    |   471|     2434|                      null|       false|              true|
+    |   471|     1793|                      null|       false|              true|
+    |   471|     1620|                      null|       false|              true|
+    |   471|     1572|                      null|       false|              true|
+    |   833|      957|                      null|       false|              true|
+    |   833|     3140|                      null|       false|              true|
+    |   833|     1087|                      null|       false|              true|
     ```
-
-7. Notice that the language for this notebook is Spark Scala. We want to use Python to explore the data. To do this, we load the data into a temporary view, then we can load the view's contents into a DataFrame in a new PySpark cell. To do this, execute the following in a new cell:
-
-    ```python
-    %%pyspark
-    # Calling the DataFrame df created in Scala to Python
-    df = sqlContext.table("df")
-    # *********************
-
-    topPurchases = df.select(
-        "UserId", "ProductId",
-        "ItemsPurchasedLast12Months", "IsTopProduct",
-        "IsPreferredProduct")
-
-    topPurchases.show(100)
-    ```
-
-    We set the language of the cell to PySpark with the `%%pyspark` magic. Then we loaded the `df` view into a new DataFrame. Finally, we created a new DataFrame named `topPurchases` and displayed its contents.
-
-    ![The cell code and output are displayed.](media/notebook-top-products-load-python-df.png "Load Python DataFrame")
 
 8. Execute the following in a new cell to create a new DataFrame to hold only top preferred products where both `IsTopProduct` and `IsPreferredProduct` are true:
 
     ```python
-    %%pyspark
     from pyspark.sql.functions import *
 
     topPreferredProducts = (topPurchases
@@ -617,19 +679,17 @@ Now that we have processed, joined, and imported the user profile data, let's an
         select UserId, ProductId, ItemsPurchasedLast12Months
         from (select *,
                     row_number() over (partition by UserId order by ItemsPurchasedLast12Months desc) as seqnum
-            from df
+            from top_purchases
             ) a
         where seqnum <= 5 and IsTopProduct == true and IsPreferredProduct = true
         order by a.UserId
     ```
 
-    *Note that there is no output for the above query.* The query uses the `df` temporary view as a source and applies a `row_number() over` method to apply a row number for the records for each user where `ItemsPurchasedLast12Months` is greatest. The `where` clause filters the results so we only retrieve up to five products where both `IsTopProduct` and `IsPreferredProduct` are set to true. This gives us the top five most purchased products for each user where those products are _also_ identified as their favorite products, according to their user profile stored in Azure Cosmos DB.
+    *Note that there is no output for the above query.* The query uses the `top_purchases` temporary view as a source and applies a `row_number() over` method to apply a row number for the records for each user where `ItemsPurchasedLast12Months` is greatest. The `where` clause filters the results so we only retrieve up to five products where both `IsTopProduct` and `IsPreferredProduct` are set to true. This gives us the top five most purchased products for each user where those products are _also_ identified as their favorite products, according to their user profile stored in Azure Cosmos DB.
 
 10. Execute the following in a new cell to create and display a new DataFrame that stores the results of the `top_5_products` temporary view you created in the previous cell:
 
     ```python
-    %%pyspark
-
     top5Products = sqlContext.table("top_5_products")
 
     top5Products.show(100)
@@ -642,17 +702,14 @@ Now that we have processed, joined, and imported the user profile data, let's an
 11. Execute the following in a new cell to compare the number of top preferred products to the top five preferred products per customer:
 
     ```python
-    %%pyspark
     print('before filter: ', topPreferredProducts.count(), ', after filter: ', top5Products.count())
     ```
 
     The output should be similar to `before filter:  997873 , after filter:  85020`.
 
-12. Finally, let's calculate the top five products overall, based on those that are both preferred by customers and purchased the most. To do this, execute the following in a new cell:
+12. Calculate the top five products overall, based on those that are both preferred by customers and purchased the most. To do this, execute the following in a new cell:
 
     ```python
-    %%pyspark
-
     top5ProductsOverall = (top5Products.select("ProductId","ItemsPurchasedLast12Months")
         .groupBy("ProductId")
         .agg( sum("ItemsPurchasedLast12Months").alias("Total") )
@@ -679,8 +736,6 @@ Now that we have processed, joined, and imported the user profile data, let's an
 13. We are going to execute this notebook from a pipeline. We want to pass in a parameter that sets a `runId` variable value that will be used to name the Parquet file. Execute the following in a new cell:
 
     ```python
-    %%pyspark
-
     import uuid
 
     # Generate random GUID
@@ -689,7 +744,7 @@ Now that we have processed, joined, and imported the user profile data, let's an
 
     We are using the `uuid` library that comes with Spark to generate a random GUID. We want to override the `runId` variable with a parameter passed in by the pipeline. To do this, we need to toggle this as a parameter cell.
 
-14. Select the actions ellipses (...) on the top-right corner of the cell **(1)**, then select **Toggle parameter cell (2)**.
+14. Select the actions ellipses **(...)** on the top-right corner of the cell **(1)**, then select **Toggle parameter cell (2)**.
 
     ![The menu item is highlighted.](media/toggle-parameter-cell.png "Toggle parameter cell")
 
@@ -697,17 +752,17 @@ Now that we have processed, joined, and imported the user profile data, let's an
 
     ![The cell is configured to accept parameters.](media/parameters-tag.png "Parameters")
 
-15. Paste the following code in a new cell to use the `runId` variable as the Parquet filename in the `/campaign-analytics/top5-products/` path in the primary data lake account. **Replace `YOUR_DATALAKE_NAME`** in the path with the name of your primary data lake account. To find this, navigate to the **Data** hub and select the **Linked** tab **(1)**. The data lake account name is shown on the ADLS Gen2 Primary linked service account **(2)**. Enter this value as a replacement for **`YOUR_DATALAKE_NAME`** in the path **(3)**, then execute the cell.
+15. Paste the following code in a new cell to use the `runId` variable as the Parquet filename in the `/top5-products/` path in the primary data lake account. **Replace `YOUR_DATALAKE_NAME`** in the path with the name of your primary data lake account. To find this, scroll up to **Cell 1** at the top of the page **(1)**. Copy the data lake storage account from the path **(2)**. Paste this value as a replacement for **`YOUR_DATALAKE_NAME`** in the path **(3)** inside the new cell, then execute the cell.
 
     ```python
     %%pyspark
 
-    top5ProductsOverall.write.parquet('abfss://wwi-02@YOUR_DATALAKE_NAME.dfs.core.windows.net/campaign-analytics/top5-products/' + str(runId) + '.parquet')
+    top5ProductsOverall.write.parquet('abfss://wwi-02@YOUR_DATALAKE_NAME.dfs.core.windows.net/top5-products/' + str(runId) + '.parquet')
     ```
 
     ![The path is updated with the name of the primary data lake account.](media/datalake-path-in-cell.png "Data lake name")
 
-16. Verify that the file was written to the data lake. Navigate to the **Data** hub and select the **Linked** tab **(1)**. Expand the primary data lake storage account and select the **wwi-02** container **(2)**. Navigate to the **campaign-analytics/top5-products** folder **(3)**. You should see a Parquet file in the directory with a GUID as the file name **(4)**.
+16. Verify that the file was written to the data lake. Navigate to the **Data** hub and select the **Linked** tab **(1)**. Expand the primary data lake storage account and select the **wwi-02** container **(2)**. Navigate to the **top5-products** folder **(3)**. You should see a folder for the Parquet file in the directory with a GUID as the file name **(4)**.
 
     ![The parquet file is highlighted.](media/top5-products-parquet.png "Top 5 products parquet")
 
@@ -756,3 +811,27 @@ Tailwind Traders wants to execute this notebook after the Mapping Data Flow runs
 9. Select **OK** to run the trigger.
 
     ![The OK button is highlighted.](media/pipeline-run-trigger.png "Pipeline run")
+
+10. Navigate to the **Monitor** hub.
+
+    ![The Monitor hub menu item is selected.](media/monitor-hub.png "Monitor hub")
+
+11. Select **Pipeline runs (1)** and wait for the pipeline run to successfully complete **(2)**. You may need to refresh **(3)** the view.
+
+    ![The pipeline run succeeded.](media/pipeline-user-profiles-run-complete.png "Pipeline runs")
+
+12. Select the name of the pipeline to view the pipeline's activity runs.
+
+    ![The pipeline name is selected.](media/select-pipeline.png "Pipeline runs")
+
+13. This time, we see both the **Data flow** activity, and the new **Notebook** activity **(1)**. Make note of the **Pipeline run ID** value **(2)**. We will compare this to the Parquet file name generated by the notebook. Select the **Calculate Top 5 Products** Notebook name to view its details **(3)**.
+
+    ![The pipeline run details are displayed.](media/pipeline-run-details2.png "Write User Profile Data to ASA details")
+
+14. Here we see the Notebook run details. You can select the **Playback** button **(1)** to watch a playback of the progress through the **jobs (2)**. At the bottom, you can view the **log output** with different filter options **(3)**. To the right, we can view the run details, such as the duration, Livy ID, Spark pool details, etc. Select a **job** to view its details **(5)**.
+
+    ![The run details are displayed.](media/notebook-run-details.png "Notebook run details")
+
+15. The Spark UI opens in a new tab where we can see the stage details. Expand the **DAG Visualization** to view the stage details.
+
+    ![The Spark stage details are displayed.](media/spark-stage-details.png "Stage details")
