@@ -8,6 +8,10 @@
     - [Create data sets](#create-data-sets)
     - [Create Mapping Data Flow](#create-mapping-data-flow)
   - [Orchestrate data movement and transformation in Azure Synapse Pipelines](#orchestrate-data-movement-and-transformation-in-azure-synapse-pipelines)
+    - [Create pipeline](#create-pipeline)
+    - [Trigger, monitor, and analyze the user profile data pipeline](#trigger-monitor-and-analyze-the-user-profile-data-pipeline)
+    - [Create Synapse Spark notebook to find top products](#create-synapse-spark-notebook-to-find-top-products)
+    - [Add the Notebook to the pipeline](#add-the-notebook-to-the-pipeline)
 
 ## Petabyte-scale ingestion with Azure Synapse Pipelines
 
@@ -440,6 +444,8 @@ You recommend using Synapse Pipelines, which includes over 90 built-in connector
 
 By using Synapse Pipelines, Tailwind Traders can experience the same familiar interface as ADF without having to use an orchestration service outside of Synapse Analytics.
 
+### Create pipeline
+
 Let's start by executing our new Mapping Data Flow. In order to run the new data flow, we need to create a new pipeline and add a data flow activity to it.
 
 1. Navigate to the **Orchestrate** hub.
@@ -486,3 +492,267 @@ Let's start by executing our new Mapping Data Flow. In order to run the new data
 10. Select **Publish all** then **Publish** to save your pipeline.
 
     ![Publish all is highlighted.](media/publish-all-1.png "Publish all")
+
+### Trigger, monitor, and analyze the user profile data pipeline
+
+Tailwind Traders wants to monitor all pipeline runs and view statistics for performance tuning and troubleshooting purposes.
+
+You have decided to show Tailwind Traders how to manually trigger, monitor, then analyze a pipeline run.
+
+1. At the top of the pipeline, select **Add trigger (1)**, then **Trigger now (2)**.
+
+    ![The pipeline trigger option is highlighted.](media/pipeline-user-profiles-trigger.png "Trigger now")
+
+2. There are no parameters for this pipeline, so select **OK** to run the trigger.
+
+    ![The OK button is highlighted.](media/pipeline-run-trigger.png "Pipeline run")
+
+3. Navigate to the **Monitor** hub.
+
+    ![The Monitor hub menu item is selected.](media/monitor-hub.png "Monitor hub")
+
+4. Select **Pipeline runs (1)** and wait for the pipeline run to successfully complete **(2)**. You may need to refresh **(3)** the view.
+
+    ![The pipeline run succeeded.](media/pipeline-user-profiles-run-complete.png "Pipeline runs")
+
+5. Select the name of the pipeline to view the pipeline's activity runs.
+
+    ![The pipeline name is selected.](media/select-pipeline.png "Pipeline runs")
+
+6. Hover over the data flow activity name in the `Activity runs` list, then select the **Data flow details** icon.
+
+    ![The data flow details icon is highlighted.](media/pipeline-user-profiles-activity-runs.png "Activity runs")
+
+7. The data flow details displays the data flow steps and processing details. In our example, processing time took around **45 seconds to process (1)** and output around **1 million rows (2)**. You can see which activities took the longest to complete. The cluster startup time contributed over **three minutes (3)** to the total pipeline run.
+
+    ![The data flow details are displayed.](media/pipeline-user-profiles-data-flow-details.png "Data flow details")
+
+8. Select the `UserTopProductPurchasesASA` sink **(1)** to view its details. We can see that **1,622,203 rows** were calculated **(2)** with a total of 30 partitions. It took around **five seconds** to stage the data **(3)** in ADLS Gen2 prior to writing the data to the SQL table. The total sink processing time in our case was around **45 seconds (4)**. It is also apparent that we have a **hot partition (5)** that is significantly larger than the others. If we need to squeeze extra performance out of this pipeline, we can re-evaluate data partitioning to more evenly spread the partitions to better facilitate parallel data loading and filtering. We could also experiment with disabling staging to see if there's a processing time difference. Finally, the size of the SQL Pool plays a factor in how long it takes to ingest data into the sink.
+
+    ![The sink details are displayed.](media/pipeline-user-profiles-data-flow-sink-details.png "Sink details")
+
+### Create Synapse Spark notebook to find top products
+
+Now that we have processed, joined, and imported the user profile data, let's analyze it in greater detail. In this segment, we will execute code to find the top 5 products for each user, based on which ones are both preferred and top, and have the most purchases in past 12 months. Then, we will calculate the top 5 products overall.
+
+1. Navigate to the **Data** hub.
+
+    ![The Data menu item is highlighted.](media/data-hub.png "Data hub")
+
+2. Select the **Workspace** tab **(1)** and expand the `SqlPool01` database underneath the **Databases** section **(2)**. Right-click on the `wwi.UserTopProductPurchases` table **(3)**, then select the **Load to DataFrame** menu item **(5)** under the **New notebook** context menu **(4)**. If you don't see the table listed, select `Refresh` above.
+
+    ![The load to DataFrame new notebook option is highlighted.](media/synapse-studio-usertopproductpurchases-new-notebook.png "New notebook")
+
+3. Make sure the notebook is attached to your Spark pool.
+
+    ![The attach to Spark pool menu item is highlighted.](media/notebook-top-products-attach-pool.png "Select Spark pool")
+
+4. Select **Run all** on the notebook toolbar to execute the notebook.
+
+    > **Note:** The first time you run a notebook in a Spark pool, Synapse creates a new session. This can take approximately 3-5 minutes.
+
+    > **Note:** To run just the cell, either hover over the cell and select the _Run cell_ icon to the left of the cell, or select the cell then type **Ctrl+Enter** on your keyboard.
+
+5. Create a new cell underneath by selecting **{} Add code** when hovering over the blank space at the bottom of the notebook.
+
+    ![The Add Code menu option is highlighted.](media/new-cell.png "Add code")
+
+6. Enter and execute the following in the new cell to show the first 10 rows and to create a new temporary view named `df`:
+
+    ```python
+    df.head(10)
+
+    df.createTempView("df")
+    ```
+
+    The output should look similar to the following:
+
+    ```text
+    res4: Array[org.apache.spark.sql.Row] = Array([9065916,3020,null,false,true], [9065916,2735,null,false,true], [9065916,1149,null,false,true], [9065916,2594,null,false,true], [9065916,4591,null,false,true], [9065916,3012,null,false,true], [9065916,1985,null,false,true], [9065916,1773,null,false,true], [9065916,380,null,false,true], [9068349,4383,null,false,true])
+    ```
+
+7. Notice that the language for this notebook is Spark Scala. We want to use Python to explore the data. To do this, we load the data into a temporary view, then we can load the view's contents into a DataFrame in a new PySpark cell. To do this, execute the following in a new cell:
+
+    ```python
+    %%pyspark
+    # Calling the DataFrame df created in Scala to Python
+    df = sqlContext.table("df")
+    # *********************
+
+    topPurchases = df.select(
+        "UserId", "ProductId",
+        "ItemsPurchasedLast12Months", "IsTopProduct",
+        "IsPreferredProduct")
+
+    topPurchases.show(100)
+    ```
+
+    We set the language of the cell to PySpark with the `%%pyspark` magic. Then we loaded the `df` view into a new DataFrame. Finally, we created a new DataFrame named `topPurchases` and displayed its contents.
+
+    ![The cell code and output are displayed.](media/notebook-top-products-load-python-df.png "Load Python DataFrame")
+
+8. Execute the following in a new cell to create a new DataFrame to hold only top preferred products where both `IsTopProduct` and `IsPreferredProduct` are true:
+
+    ```python
+    %%pyspark
+    from pyspark.sql.functions import *
+
+    topPreferredProducts = (topPurchases
+        .filter( col("IsTopProduct") == True)
+        .filter( col("IsPreferredProduct") == True)
+        .orderBy( col("ItemsPurchasedLast12Months").desc() ))
+
+    topPreferredProducts.show(100)
+    ```
+
+    ![The cell code and output are displayed.](media/notebook-top-products-top-preferred-df.png "Notebook cell")
+
+9. Execute the following in a new cell to create a new temporary view by using SQL:
+
+    ```sql
+    %%sql
+
+    CREATE OR REPLACE TEMPORARY VIEW top_5_products
+    AS
+        select UserId, ProductId, ItemsPurchasedLast12Months
+        from (select *,
+                    row_number() over (partition by UserId order by ItemsPurchasedLast12Months desc) as seqnum
+            from df
+            ) a
+        where seqnum <= 5 and IsTopProduct == true and IsPreferredProduct = true
+        order by a.UserId
+    ```
+
+    *Note that there is no output for the above query.* The query uses the `df` temporary view as a source and applies a `row_number() over` method to apply a row number for the records for each user where `ItemsPurchasedLast12Months` is greatest. The `where` clause filters the results so we only retrieve up to five products where both `IsTopProduct` and `IsPreferredProduct` are set to true. This gives us the top five most purchased products for each user where those products are _also_ identified as their favorite products, according to their user profile stored in Azure Cosmos DB.
+
+10. Execute the following in a new cell to create and display a new DataFrame that stores the results of the `top_5_products` temporary view you created in the previous cell:
+
+    ```python
+    %%pyspark
+
+    top5Products = sqlContext.table("top_5_products")
+
+    top5Products.show(100)
+    ```
+
+    You should see an output similar to the following, which displays the top five preferred products per user:
+
+    ![The top five preferred products are displayed per user.](media/notebook-top-products-top-5-preferred-output.png "Top 5 preferred products")
+
+11. Execute the following in a new cell to compare the number of top preferred products to the top five preferred products per customer:
+
+    ```python
+    %%pyspark
+    print('before filter: ', topPreferredProducts.count(), ', after filter: ', top5Products.count())
+    ```
+
+    The output should be similar to `before filter:  997873 , after filter:  85020`.
+
+12. Finally, let's calculate the top five products overall, based on those that are both preferred by customers and purchased the most. To do this, execute the following in a new cell:
+
+    ```python
+    %%pyspark
+
+    top5ProductsOverall = (top5Products.select("ProductId","ItemsPurchasedLast12Months")
+        .groupBy("ProductId")
+        .agg( sum("ItemsPurchasedLast12Months").alias("Total") )
+        .orderBy( col("Total").desc() )
+        .limit(5))
+
+    top5ProductsOverall.show()
+    ```
+
+    In this cell, we grouped the top five preferred products by product ID, summed up the total items purchased in the last 12 months, sorted that value in descending order, and returned the top five results. Your output should be similar to the following:
+
+    ```text
+    +---------+-----+
+    |ProductId|Total|
+    +---------+-----+
+    |     2107| 4538|
+    |     4833| 4533|
+    |      347| 4523|
+    |     3459| 4233|
+    |     4246| 4155|
+    +---------+-----+
+    ```
+
+13. We are going to execute this notebook from a pipeline. We want to pass in a parameter that sets a `runId` variable value that will be used to name the Parquet file. Execute the following in a new cell:
+
+    ```python
+    %%pyspark
+
+    import uuid
+
+    # Generate random GUID
+    runId = uuid.uuid4()
+    ```
+
+    We are using the `uuid` library that comes with Spark to generate a random GUID. We want to override the `runId` variable with a parameter passed in by the pipeline. To do this, we need to toggle this as a parameter cell.
+
+14. Select the actions ellipses (...) on the top-right corner of the cell **(1)**, then select **Toggle parameter cell (2)**.
+
+    ![The menu item is highlighted.](media/toggle-parameter-cell.png "Toggle parameter cell")
+
+    After toggling this option, you will see the **Parameters** tag on the cell.
+
+    ![The cell is configured to accept parameters.](media/parameters-tag.png "Parameters")
+
+15. Paste the following code in a new cell to use the `runId` variable as the Parquet filename in the `/campaign-analytics/top5-products/` path in the primary data lake account. **Replace `YOUR_DATALAKE_NAME`** in the path with the name of your primary data lake account. To find this, navigate to the **Data** hub and select the **Linked** tab **(1)**. The data lake account name is shown on the ADLS Gen2 Primary linked service account **(2)**. Enter this value as a replacement for **`YOUR_DATALAKE_NAME`** in the path **(3)**, then execute the cell.
+
+    ```python
+    %%pyspark
+
+    top5ProductsOverall.write.parquet('abfss://wwi-02@YOUR_DATALAKE_NAME.dfs.core.windows.net/campaign-analytics/top5-products/' + str(runId) + '.parquet')
+    ```
+
+    ![The path is updated with the name of the primary data lake account.](media/datalake-path-in-cell.png "Data lake name")
+
+16. Verify that the file was written to the data lake. Navigate to the **Data** hub and select the **Linked** tab **(1)**. Expand the primary data lake storage account and select the **wwi-02** container **(2)**. Navigate to the **campaign-analytics/top5-products** folder **(3)**. You should see a Parquet file in the directory with a GUID as the file name **(4)**.
+
+    ![The parquet file is highlighted.](media/top5-products-parquet.png "Top 5 products parquet")
+
+    The Parquet write method on the dataframe in the Notebook cell created this directory since it did not previously exist.
+
+### Add the Notebook to the pipeline
+
+Tailwind Traders wants to execute this notebook after the Mapping Data Flow runs as part of their orchestration process. To do this, we will add this notebook to our pipeline as a new Notebook activity.
+
+1. Return to the notebook. Select the **Properties** button **(1)** at the top-right corner of the notebook, then enter `Calculate Top 5 Products` for the **Name (2)**.
+
+    ![The properties blade is displayed.](media/notebook-top-products-top-5-preferred-properties.png "Properties")
+
+2. Select the **Add to pipeline** button **(1)** at the top-right corner of the notebook, then select **Existing pipeline (2)**.
+
+    ![The add to pipeline button is highlighted.](media/add-to-pipeline.png "Add to pipeline")
+
+3. Select the **Write User Profile Data to ASA** pipeline **(1)**, then select **Add *2)**.
+
+    ![The pipeline is selected.](media/add-to-pipeline-selection.png "Add to pipeline")
+
+4. Synapse Studio adds the Notebook activity to the pipeline. Rearrange the **Notebook activity** so it sits to the right of the **Data flow activity**. Select the **Data flow activity** and drag a **Success** activity pipeline connection **green box** to the **Notebook activity**.
+
+    ![The green arrow is highlighted.](media/success-activity.png "Success activity")
+
+    The Success activity arrow instructs the pipeline to execute the Notebook activity after the Data flow activity successfully runs.
+
+5. Select the **Notebook activity (1)**, select the **Settings** tab **(2)**, expand **Base parameters (3)**, and select **+ New (4)**. Enter **`runId`** in the **Name** field **(5)**. Select **String** for the **Type (6)**. For the **Value**, select **Add dynamic content (7)**.
+
+    ![The settings are displayed.](media/notebook-activity-settings.png "Settings")
+
+6. Select **Pipeline run ID** under **System variables (1)**. This adds `@pipeline().RunId` to the dynamic content box **(2)**. Select **Finish (3)** to close the dialog.
+
+    ![The dynamic content form is displayed.](media/add-dynamic-content.png "Add dynamic content")
+
+    The Pipeline run ID value is a unique GUID assigned to each pipeline run. We will use this value for the name of the Parquet file by passing this value in as the `runId` Notebook parameter. We can then look through the pipeline run history and find the specific Parquet file created for each pipeline run.
+
+7. Select **Publish all** then **Publish** to save your changes.
+
+    ![Publish all is highlighted.](media/publish-all-1.png "Publish all")
+
+8. After publishing is complete, select **Add trigger (1)**, then **Trigger now (2)** to run the updated pipeline.
+
+    ![The trigger menu item is highlighted.](media/trigger-updated-pipeline.png "Trigger pipeline")
+
+9. Select **OK** to run the trigger.
+
+    ![The OK button is highlighted.](media/pipeline-run-trigger.png "Pipeline run")
