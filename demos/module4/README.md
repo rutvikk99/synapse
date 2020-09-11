@@ -804,7 +804,7 @@ Tailwind Traders wants to execute this notebook after the Mapping Data Flow runs
 
     ![Publish all is highlighted.](media/publish-all-1.png "Publish all")
 
-8. **OPTIONAL - Pipeline run now takes ~10 minutes -** After publishing is complete, select **Add trigger (1)**, then **Trigger now (2)** to run the updated pipeline.
+8. **OPTIONAL - Pipeline run now takes >10 minutes -** After publishing is complete, select **Add trigger (1)**, then **Trigger now (2)** to run the updated pipeline.
 
     ![The trigger menu item is highlighted.](media/trigger-updated-pipeline.png "Trigger pipeline")
 
@@ -835,3 +835,17 @@ Tailwind Traders wants to execute this notebook after the Mapping Data Flow runs
 15. The Spark UI opens in a new tab where we can see the stage details. Expand the **DAG Visualization** to view the stage details.
 
     ![The Spark stage details are displayed.](media/spark-stage-details.png "Stage details")
+
+16. Navigate back to the **Data** hub.
+
+    ![Data hub.](media/data-hub.png "Data hub")
+
+17. Select the **Linked** tab **(1)**, select the **wwi-02** container **(2)** on the primary data lake storage account, navigate to the **top5-products** folder **(3)**, and verify that a folder exists for the Parquet file whose name matches the **Pipeline run ID**.
+
+    ![The file is highlighted.](media/parquet-from-pipeline-run.png "Parquet file from pipeline run")
+
+    As you can see, we have a file whose name matches the **Pipeline run ID** we noted earlier:
+
+    ![The Pipeline run ID is highlighted.](media/pipeline-run-id.png "Pipeline run ID")
+
+    These values match because we passed in the Pipeline run ID to the `runId` parameter on the Notebook activity.
