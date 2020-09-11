@@ -236,7 +236,7 @@ Complete the steps below to create the following two datasets: `asal400_ecommerc
 
     ![The flatten settings are configured as described.](media/data-flow-user-profiles-flatten-settings.png "Flatten settings")
 
-    These settings provide a flattened view of the data source with one or more rows per `visitorId`, similar to when you explored the data within the Spark notebook in lab 1. Using data preview requires you to enable Debug mode, which we are not enabling for this lab. *The following screenshot is for illustration only*:
+    These settings provide a flattened view of the data source with one or more rows per `visitorId`, similar to when we explored the data within the Spark notebook in the previous module. Using data preview requires you to enable Debug mode, which we are not enabling for this lab. *The following screenshot is for illustration only*:
 
     ![The data preview tab is displayed with a sample of the file contents.](media/data-flow-user-profiles-flatten-data-preview.png "Data preview")
 
@@ -306,8 +306,8 @@ Complete the steps below to create the following two datasets: `asal400_ecommerc
 
         | UserProfiles's column | Name as |
         | --- | --- |
-        | userId | `userId` |
         | [] preferredProducts | `preferredProductId` |
+        | userId | `userId` |
 
     ![The flatten settings are configured as described.](media/data-flow-user-profiles-flatten2-settings.png "Flatten settings")
 
@@ -362,7 +362,7 @@ Complete the steps below to create the following two datasets: `asal400_ecommerc
 
     - **Output stream name**: Enter `DerivedColumnsForMerge`.
     - **Incoming stream**: Select `JoinTopProductsWithPreferredProducts`.
-    - **Columns**: Provide the following information (_type in_ the _first two_ column names):
+    - **Columns**: Provide the following information (**_type in_ the _first two_ column names**):
 
         | Column | Expression | Description |
         | --- | --- | --- |
@@ -385,6 +385,7 @@ Complete the steps below to create the following two datasets: `asal400_ecommerc
 
     - **Output stream name**: Enter `UserTopProductPurchasesASA`.
     - **Incoming stream**: Select `DerivedColumnsForMerge`.
+    - **Sink type**: select `Dataset`.
     - **Dataset**: Select `asal400_wwi_usertopproductpurchases_asa`, which is the UserTopProductPurchases SQL table.
     - **Options**: Check `Allow schema drift` and uncheck `Validate schema`.
 
