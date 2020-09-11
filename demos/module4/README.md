@@ -26,17 +26,23 @@ Additional benefits
 
     ![The Develop menu item is highlighted.](media/develop-hub.png "Develop hub")
 
-2. Select + then **Data flow** to create a new data flow.
+2. Select **+** then **Data flow** to create a new data flow.
 
     ![The new data flow link is highlighted.](media/new-data-flow-link.png "New data flow")
 
-3. In the **General** section of the **Profiles** pane of the new data flow, update the **Name** to the following: `asal400_lab2_writeuserprofiledatatoasa`.
+3. In the **General** section of the **Profiles** pane of the new data flow, update the **Name** to the following: `write_user_profile_to_asa`.
 
-4. Select **Add Source** on the data flow canvas.
+    ![The name is displayed.](media/data-flow-general.png "General properties")
+
+4. Select the **Properties** button to hide the pane.
+
+    ![The button is highlighted.](media/data-flow-properties-button.png "Properties button")
+
+5. Select **Add Source** on the data flow canvas.
 
     ![Select Add Source on the data flow canvas.](media/data-flow-canvas-add-source.png "Add Source")
 
-5. Under **Source settings**, configure the following:
+6. Under **Source settings**, configure the following:
 
     - **Output stream name**: Enter `EcommerceUserProfiles`.
     - **Source type**: Select `Dataset`.
@@ -44,7 +50,7 @@ Additional benefits
 
     ![The source settings are configured as described.](media/data-flow-user-profiles-source-settings.png "Source settings")
 
-6. Select the **Source options** tab, then configure the following:
+7. Select the **Source options** tab, then configure the following:
 
     - **Wildcard paths**: Enter `online-user-profiles-02/*.json`.
     - **JSON Settings**: Expand this section, then select the **Single document** setting. This denotes that each file contains a single JSON document.
