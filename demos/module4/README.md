@@ -749,7 +749,7 @@ Tailwind Traders wants to execute this notebook after the Mapping Data Flow runs
 
     ![Publish all is highlighted.](media/publish-all-1.png "Publish all")
 
-8. After publishing is complete, select **Add trigger (1)**, then **Trigger now (2)** to run the updated pipeline.
+8. **OPTIONAL - Pipeline run now takes ~10 minutes -** After publishing is complete, select **Add trigger (1)**, then **Trigger now (2)** to run the updated pipeline.
 
     ![The trigger menu item is highlighted.](media/trigger-updated-pipeline.png "Trigger pipeline")
 
