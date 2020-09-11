@@ -328,7 +328,7 @@ Synapse Analytics enables you to ingest data from multiple data sources through 
 
     ![The Copy data activity is dragged on the canvas and the New button next to Source dataset under the Source tab is highlighted.](media/new-pipeline-new-source.png "New Source")
 
-14. Scroll through the list of dataset sources to show the large number of data connections at your disposal.
+14. Scroll through the list of dataset sources to show the large number of data connections at your disposal, and then click cancel.
 
     ![The list of dataset sources is displayed.](media/new-dataset.png "New dataset")
 
