@@ -114,6 +114,8 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
     ![The two Synapse Studio links are highlighted with an arrow pointing between them on the Overview blade of Synapse workspace.](media/synapse-workspace-studio-links.png "Synapse workspace")
 
+    > **Note to presenter**: Copy the Synapse Studio URL, then open a separate Edge window in-private mode to work around login challenges if using a different account for the demo.
+
     Synapse Studio is where you manage your workspace, explore data, create data movement pipelines, write T-SQL scripts, create and run Synapse Spark notebooks, build mapping data flows, create reports, and monitor your environment.
 
     Most of your work will be done here.
