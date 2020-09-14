@@ -120,6 +120,10 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
     Most of your work will be done here.
 
+2. On the Synapse Studio home screen, you will find a link to the **Knowledge center**, which contains useful samples, tutorials, and tips & tricks.
+
+    ![The home page is displayed.](media/synapse-home.png "Synapse Studio home")
+
 ### The Data hub
 
 1. Select the **Data** hub.
