@@ -196,6 +196,18 @@ You decide to create an external table that connects to the external data source
 
     ![The run button is highlighted.](media/sql-run.png "Run")
 
+    Please note that there are no data results for this query. You should see messages similar to the following:
+
+    ```text
+    Started executing query at Line 1
+
+    (Affected rows: 0)
+    (Affected rows: 0)
+    (Affected rows: 0)
+    (Affected rows: 0)
+    Total execution time: 00:00:00.240
+    ```
+
 3. Replace the SQL script with the following to select from the population external table, filtered by 2019 data where the population is greater than 100 million:
 
     ```sql
