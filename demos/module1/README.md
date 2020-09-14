@@ -77,7 +77,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
     The SQL pool refers to the enterprise data warehousing features formerly provided by SQL Data Warehouse. It represents a collection of analytic resources that are provisioned when using Synapse SQL, vs. on-demand, provided by SQL serverless. The size of SQL pool is determined by Data Warehousing Units (DWU).
 
-    You can access the SQL pool in the portal, as shown here, or from within Synapse Studio, as we'll show you in a bit. When you access SQL pool in the portal, you have configurations and controls not available to you from Synapse Studio. Here are some of the common features you'll access through the portal:
+    You can access the SQL pool in the portal, as shown here, or from within Synapse Studio, as we'll show you in a bit. When you access SQL pool in the portal, you have additional configurations and controls vs. what you find in Synapse Studio. Here are some of the common features you'll access through the portal:
 
     1. At the top of the window, we see **controls (1)** to pause, scale, restore, set a new restore point, and delete the pool.
     2. Below, **Transparent data encryption (2)** is prominently displayed, letting us quickly see whether it is enabled to encrypt our databases, backups, and logs.
