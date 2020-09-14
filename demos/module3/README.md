@@ -150,7 +150,7 @@ In addition to the sales data, Tailwind Traders has customer profile data from a
 
 You recommend using Synapse Notebooks to explore and apply data transformations on the JSON files.
 
-1. Create a new cell in the Spark notebook, enter the following code, replace `<asadatalakeNNNNNN>` with your data lake name (you can find this value in the first cell of the notebook), and execute the cell:
+1. Create a new cell in the Spark notebook, enter the following code and execute the cell:
 
     ```python
     df = (spark.read \
