@@ -1,14 +1,24 @@
 # Run interactive queries using Azure Synapse SQL Serverless
 
 - [Run interactive queries using Azure Synapse SQL Serverless](#run-interactive-queries-using-azure-synapse-sql-serverless)
+  - [Demo requirements](#demo-requirements)
   - [Querying a Data Lake Store using SQL Serverless in Azure Synapse Analytics](#querying-a-data-lake-store-using-sql-serverless-in-azure-synapse-analytics)
     - [Query sales Parquet data with Synapse SQL Serverless](#query-sales-parquet-data-with-synapse-sql-serverless)
     - [Create an external table for 2019 sales data](#create-an-external-table-for-2019-sales-data)
     - [Create an external table for CSV files](#create-an-external-table-for-csv-files)
     - [Create a SQL serverless view](#create-a-sql-serverless-view)
   - [Securing access to data through using SQL Serverless in Azure Synapse Analytics](#securing-access-to-data-through-using-sql-serverless-in-azure-synapse-analytics)
+    - [Create Azure Active Directory security groups](#create-azure-active-directory-security-groups)
+    - [Add group members](#add-group-members)
+    - [Configure data lake security - Role-Based Access Control (RBAC)](#configure-data-lake-security---role-based-access-control-rbac)
+    - [Configure data lake security - Access Control Lists (ACLs)](#configure-data-lake-security---access-control-lists-acls)
+    - [Test permissions](#test-permissions)
 
 Tailwind Trader's Data Engineers want a way to explore the data lake, transform and prepare data, and simplify their data transformation pipelines. In addition, they want their Data Analysts to explore data in the lake and Spark external tables created by Data Scientists or Data Engineers, using familiar T-SQL language or their favorite tools, which can connect to SQL endpoints.
+
+## Demo requirements
+
+Before you run this demo, you must add a second user to the Azure subscription.
 
 ## Querying a Data Lake Store using SQL Serverless in Azure Synapse Analytics
 
@@ -164,9 +174,11 @@ You decide to create an external table that connects to the external data source
     GO
     ```
 
-    At the top of the script, we create a `MASTER KEY` with a random password **(1)**. Next, we create a database-scoped credential for the containers in the external storage account **(2)**. This credential is used when we create the `SqlOnDemandDemo` external data source **(3)** that points to the location of the external storage account that contains the population data:
+    At the top of the script, we create a `MASTER KEY` with a random password **(1)**. Next, we create a database-scoped credential for the containers in the external storage account **(2)**, using a shared access signature (SAS) for delegated access. This credential is used when we create the `SqlOnDemandDemo` external data source **(3)** that points to the location of the external storage account that contains the population data:
 
     ![The script is displayed.](media/script1.png "Create master key and credential")
+
+    > Database-scoped credentials are used when any principal calls OPENROWSET function with DATA_SOURCE or selects data from external table that don't access public files. The database scoped credential doesn't need to match the name of storage account because it will be explicitly used in DATA SOURCE that defines the location of storage.
 
     In the next part of the script, we create an external file format called `QuotedCsvWithHeader`. Creating an external file format is a prerequisite for creating an External Table. By creating an External File Format, you specify the actual layout of the data referenced by an external table. Here we specify the CSV field terminator, string delimiter, and set the `FIRST_ROW` value to 2 since the file contains a header row:
 
@@ -272,3 +284,241 @@ Let's create a view to wrap a SQL serverless query. Views allow you to reuse que
     - **4) Views**: `CustomerInfo`. 
 
 ## Securing access to data through using SQL Serverless in Azure Synapse Analytics
+
+Tailwind Traders wants to enforce that any kind of modifications to sales data can happen in the current year only, while allowing all authorized users to query the entirety of data. They have a small group of admins who can modify historic data if needed.
+
+- Tailwind Traders should create a security group in AAD, for example called `tailwind-history-owners`, with the intent that all users who belong to this group will have permissions to modify data from previous years.
+- The `tailwind-history-owners` security group needs to be assigned to the Azure Storage built-in RBAC role `Storage Blob Data Owner` for the Azure Storage account containing the data lake. This allows AAD user and service principals that are added to this role to have the ability to modify all data.
+- They need to add the user security principals who will have have permissions to modify all historical data to the `tailwind-history-owners` security group.
+- Tailwind Traders should create another security group in AAD, for example called `tailwind-readers`, with the intent that all users who belong to this group will have permissions to read all contents of the file system (`prod` in this case), including all historical data.
+- The `tailwind-readers` security group needs to be assigned to the Azure Storage built-in RBAC role `Storage Blob Data Reader` for the Azure Storage account containing the data lake. This allows AAD user and service principals that are added to this security group to have the ability to read all data in the file system, but not to modify it.
+- Tailwind Traders should create another security group in AAD, for example called `tailwind-2020-writers`, with the intent that all users who belong to this group will have permissions to modify data only from the year 2020.
+- They would create a another security group, for example called `tailwind-current-writers`, with the intent that only security groups would be added to this group. This group will have permissions to modify data only from the current year, set using ACLs.
+- They need to add the `tailwind-readers` security group to the `tailwind-current-writers` security group.
+- At the start of the year 2020, Tailwind Traders would add `tailwind-current-writers` to the `tailwind-2020-writers` security group.
+- At the start of the year 2020, on the `2020` folder, Tailwind Traders would set the read, write and execute ACL permissions for the `tailwind-2020-writers` security group.
+- At the start of the year 2021, to revoke write access to the 2020 data they would remove the `tailwind-current-writers` security group from the `tailwind-2020-writers` group. Members of `tailwind-readers` would continue to be able to read the contents of the file system because they have been granted read and execute (list) permissions not by the ACLs but by the RBAC built in role at the level of the file system.
+- This approach takes into account that currently changes to ACLs do not inherit, so removing the write permission would require writing code that that traverses all of its content removing the permission at each folder and file object.
+- This approach is relatively fast. RBAC role assignments may take up to five minutes to propagate, regardless of the volume of data being secured.
+
+### Create Azure Active Directory security groups
+
+In this segment, we will create security groups as described above. However, our data set ends in 2019, so we will create a `tailwind-2019-writers` group instead of 2020.
+
+1. Switch back to the Azure portal (<https://portal.azure.com>) in a different browser tab, leaving Synapse Studio open.
+
+2. Select the Azure menu **(1)**, then select **Azure Active Directory (2)**.
+
+    ![The menu item is highlighted.](media/azure-ad-menu.png "Azure Active Directory")
+
+3. Select **Groups** in the left-hand menu.
+
+    ![Groups is highlighted.](media/aad-groups-link.png "Azure Active Directory")
+
+4. Select **+ New group**.
+
+    ![New group button.](media/new-group.png "New group")
+
+5. Select `Security` from **Group type**. Enter `tailwind-history-owners` for the **Group name**, then select **Create**.
+
+    ![The form is configured as described.](media/new-group-history-owners.png "New Group")
+
+6. Select **+ New group**.
+
+    ![New group button.](media/new-group.png "New group")
+
+7. Select `Security` from **Group type**. Enter `tailwind-readers` for the **Group name**, then select **Create**.
+
+    ![The form is configured as described.](media/new-group-readers.png "New Group")
+
+8. Select **+ New group**.
+
+    ![New group button.](media/new-group.png "New group")
+
+9. Select `Security` from **Group type**. Enter `tailwind-current-writers` for the **Group name**, then select **Create**.
+
+    ![The form is configured as described.](media/new-group-current-writers.png "New Group")
+
+10. Select **+ New group**.
+
+    ![New group button.](media/new-group.png "New group")
+
+11. Select `Security` from **Group type**. Enter `tailwind-2019-writers` for the **Group name**, then select **Create**.
+
+    ![The form is configured as described.](media/new-group-2019-writers.png "New Group")
+
+### Add group members
+
+To test out the permissions, we will add our own account to the `tailwind-readers` group.
+
+1. Open the newly created **`tailwind-readers`** group.
+
+2. Select **Members (1)** on the left, then select **+ Add members (2)**.
+
+    ![The group is displayed and add members is highlighted.](media/tailwind-readers.png "tailwind-readers group")
+
+3. Add your user account that you are signed into for the lab, then select **Select**.
+
+    ![The form is displayed.](media/add-members.png "Add members")
+
+4. Open the **`tailwind-2019-writers`** group.
+
+5. Select **Members (1)** on the left, then select **+ Add members (2)**.
+
+    ![The group is displayed and add members is highlighted.](media/tailwind-2019-writers.png "tailwind-2019-writers group")
+
+6. Search for `tailwind`, select the **`tailwind-current-writers`** group, then select **Select**.
+
+    ![The form is displayed as described.](media/add-members-writers.png "Add members")
+
+7. Select **Overview** in the left-hand menu, then **copy** the **Object Id**.
+
+    ![The group is displayed and the Object Id is highlighted.](media/tailwind-2019-writers-overview.png "tailwind-2019-writers group")
+
+    > **Note to presenter**: Save the **Object Id** value to Notepad or similar text editor. This will be used in a later step when you assign access control in the storage account.
+
+### Configure data lake security - Role-Based Access Control (RBAC)
+
+1. Open the `synapse-in-a-day-demos` Azure resource group.
+
+2. Open the default data lake storage account.
+
+    ![The storage account is selected.](media/resource-group-storage-account.png "Resource group")
+
+3. Select **Access Control (IAM)** in the left-hand menu.
+
+    ![Access Control is selected.](media/storage-access-control.png "Access Control")
+
+4. Select the **Role assignments** tab.
+
+    ![Role assignments is selected.](media/role-assignments-tab.png "Role assignments")
+
+5. Select **+ Add**, then **Add role assignment**.
+
+    ![Add role assignment is highlighted.](media/add-role-assignment.png "Add role assignment")
+
+6. For **Role**, select **`Storage Blob Data Reader`**. Search for **`tailwind-readers`** and select it from the results, then select **Save**.
+
+    ![The form is displayed as described.](media/add-tailwind-readers.png "Add role assignment")
+
+    Since our user account is added to this group, we will have read access to all files in the blob containers of this account. Tailwind Traders will need to add all users to the `tailwind-readers` security group.
+
+7. Select **+ Add**, then **Add role assignment**.
+
+    ![Add role assignment is highlighted.](media/add-role-assignment.png "Add role assignment")
+
+8. For **Role**, select **`Storage Blob Data Owner`**. Search for **`tailwind`** and select **`tailwind-history-owners`** from the results, then select **Save**.
+
+    ![The form is displayed as described.](media/add-tailwind-history-owners.png "Add role assignment")
+
+    The `tailwind-history-owners` security group is now assigned to the Azure Storage built-in RBAC role `Storage Blob Data Owner` for the Azure Storage account containing the data lake. This allows Azure AD user and service principals that are added to this role to have the ability to modify all data.
+
+    Tailwind Traders needs to add the user security principals who will have have permissions to modify all historical data to the `tailwind-history-owners` security group.
+
+9. In the **Access Control (IAM)** list for the storage account, select your Azure user account under the **Storage Blob Data Owner** role **(1)**, then select **Remove (2)**.
+
+    ![The Access Control settings are displayed.](media/storage-access-control-updated.png "Access Control updated")
+
+    Notice that the `tailwind-history-owners` group is assigned to the **Storage Blob Data Owner** group **(3)**, and `tailwind-readers` is assigned to the **Storage Blob Data Reader** group **(4)**.
+
+### Configure data lake security - Access Control Lists (ACLs)
+
+1. Select **Storage Explorer (preview)** on the left-hand menu **(1)**. Expand CONTAINERS and select the **wwi-02** container **(2)**. Open the **sale-small** folder **(3)**, right-click on the **Year=2019** folder **(4)**, then select **Manage Access.. (5)**.
+
+    ![The 2019 folder is highlighted and Manage Access is selected.](media/manage-access-2019.png "Storage Explorer")
+
+2. Paste the **Object Id** value you copied from the **`tailwind-2019-writers`** security group into the **Add user, group, or service principal** text box, then select **Add**.
+
+    ![The Object Id value is pasted in the field.](media/manage-access-2019-object-id.png "Manage Access")
+
+3. Now you should see that the `tailwind-2019-writers` group is selected in the Manage Access dialog **(1)**. Check the **Access** and **Default** check boxes and the **Read**, **Write**, and **Execute** checkboxes for each **(2)**, then select **Save**.
+
+    ![The permissions are configured as described.](media/manage-access-2019-permissions.png "Manage Access")
+
+    Now the security ACLs have been set to allow any users added to the `tailwind-current` security group to write to the `Year=2019` folder, by way of the `tailwind-2019-writers` group. These users can only manage current (2019 in this case) sales files.
+
+    At the start of the following year, to revoke write access to the 2019 data they would remove the `tailwind-current-writers` security group from the `tailwind-2019-writers` group. Members of `tailwind-readers` would continue to be able to read the contents of the file system because they have been granted read and execute (list) permissions not by the ACLs but by the RBAC built in role at the level of the file system.
+
+    Notice that we configured both the _access_ ACLs and _default_ ACLs in this configuration.
+
+    *Access* ACLs control access to an object. Files and directories both have access ACLs.
+
+    *Default* ACLs are templates of ACLs associated with a directory that determine the access ACLs for any child items that are created under that directory. Files do not have default ACLs.
+
+    Both access ACLs and default ACLs have the same structure.
+
+### Test permissions
+
+1. In Synapse Analytics Studio, navigate to the **Data** hub.
+
+    ![The Data menu item is highlighted.](media/data-hub.png "Data hub")
+
+2. Select the **Linked** tab **(1)** and expand **Azure Data Lake Storage Gen2**. Expand the `asaworkspaceXX` primary ADLS Gen2 account **(2)** and select the **`wwi-02`** container **(3)**. Navigate to the `sale-small/Year=2016/Quarter=Q4/Month=12/Day=20161231` folder **(4)**. Right-click on the `sale-small-20161231-snappy.parquet` file **(5)**, select **New SQL script (6)**, then **Select TOP 100 rows (7)**.
+
+    ![The Data hub is displayed with the options highlighted.](media/data-hub-parquet-select-rows.png "Select TOP 100 rows")
+
+3. Ensure **SQL on-demand** is selected **(1)** in the `Connect to` dropdown list above the query window, then run the query **(2)**. Data is loaded by the Synapse SQL Serverless endpoint and processed as if was coming from any regular relational database.
+
+    ![The SQL on-demand connection is highlighted.](media/sql-on-demand-selected.png "SQL on-demand")
+
+    The cell output shows the query results from the Parquet file.
+
+    ![The cell output is displayed.](media/sql-on-demand-output.png "SQL On-demand output")
+
+    The read permissions to the Parquet file assigned to us through the `tailwind-readers` security group, which then is granted RBAC permissions on the storage account through the **Storage Blob Data Reader** role assignment, is what enabled us to view the file contents.
+
+    However, since we removed our account from the **Storage Blob Data Owner** role, and we did not add our account to the `tailwind-history-owners` security group, what if we try to write to this directory?
+
+    Let's give it a try.
+
+4. In the **Data** hub, once again select the **Linked** tab **(1)** and expand **Azure Data Lake Storage Gen2**. Expand the `asaworkspaceXX` primary ADLS Gen2 account **(2)** and select the **`wwi-02`** container **(3)**. Navigate to the `sale-small/Year=2016/Quarter=Q4/Month=12/Day=20161231` folder **(4)**. Right-click on the `sale-small-20161231-snappy.parquet` file **(5)**, but this time select **New Notebook (6)**.
+
+    ![The Data hub is displayed with the options highlighted.](media/data-hub-parquet-new-notebook.png "New notebook")
+
+5. In the notebook, select **{} Add code** underneath Cell 1 **(1)**. Enter the following in the new cell, then **copy the Parquet path from cell 1** and paste the value to replace `REPLACE_WITH_PATH` **(2)**. Rename the Parquet file by adding `-test` to the end of the file name **(3)**:
+
+    ```python
+    data_path.write.parquet('REPLACE_WITH_PATH')
+    ```
+
+    ![The notebook is displayed with the new cell.](media/new-cell.png "New cell")
+
+6. Select **Run all** in the tool bar to run both cells. After a few minutes when the Spark pool starts and the cells run, you should see the file data in the output from cell 1 **(1)**. However, you should see a **403 error** in the output of cell 2 **(2)**.
+
+    ![The error is displayed in Cell 2's output.](media/notebook-error.png "Notebook error")
+
+    As expected, we do not have write permissions. The error returned by cell 2 is, `This request is not authorized to perform this operation using this permission.`, with a status code of 403.
+
+7. Leave the notebook open and switch back to the Azure portal (<https://portal.azure.com>) in another tab.
+
+8. Select the Azure menu **(1)**, then select **Azure Active Directory (2)**.
+
+    ![The menu item is highlighted.](media/azure-ad-menu.png "Azure Active Directory")
+
+9. Select **Groups** in the left-hand menu.
+
+    ![Groups is highlighted.](media/aad-groups-link.png "Azure Active Directory")
+
+10. Type **`tailwind`** in the search box **(1)**, then select **`tailwind-history-owners`** in the results **(2)**.
+
+    ![The tailwind groups are displayed.](media/tailwind-groups.png "All groups")
+
+11. Select **Members (1)** on the left, then select **+ Add members (2)**.
+
+    ![The group is displayed and add members is highlighted.](media/tailwind-history-owners.png "tailwind-history-owners group")
+
+12. Add your user account that you are signed into for the lab, then select **Select**.
+
+    ![The form is displayed.](media/add-members.png "Add members")
+
+13. Switch back to the open Synapse Notebook in Synapse Studio, then **Run** cell 2 once more **(1)**. You should see a status of **Succeeded (2)** after a few moments.
+
+    ![Cell 2 succeeded.](media/notebook-succeeded.png "Notebook")
+
+    The cell succeeded this time because we added our account to the `tailwind-history-owners` group, which is assigned the **Storage Blob Data Owner** role.
+
+    Now let's verify that the file was written to the data lake.
+
+14. Navigate back to the `sale-small/Year=2016/Quarter=Q4/Month=12/Day=20161231` folder. You should now see a folder for the new `sale-small-20161231-snappy-test.parquet` file we wrote from the notebook **(1)**. If you don't see it listed here, select **... More** in the toolbar **(2)**, then select **Refresh (3)**.
+
+    ![The test Parquet file is displayed.](media/test-parquet-file.png "Test parquet file")
