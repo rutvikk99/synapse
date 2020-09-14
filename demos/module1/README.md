@@ -85,7 +85,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
     4. At the bottom of the Overview blade, we see metrics showing the **Data Warehousing Units (DWU) usage** and **Active and queued queries (4)**, allowing us to filter within different time ranges.
     5. The left-hand menu includes some of these options, as well. It is here where you find the **Access control (IAM) (5)** settings to control access to the SQL pool, granted to users and services.
 
-4. Close the SQL pool and open the **Spark pool**.
+4. Go back to the Synapse Workspace overview blade in the portal, then open the **Spark pool**.
 
     ![The Spark pool link is highlighted.](media/spark-pool-link.png "Spark pool")
 
