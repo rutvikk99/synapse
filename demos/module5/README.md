@@ -18,7 +18,7 @@ Tailwind Trader's Data Engineers want a way to explore the data lake, transform 
 
 ## Demo requirements
 
-Before you run this demo, you must add a second user to the Azure subscription.
+You must have permissions to create new Azure Active Directory security groups and assign members to them.
 
 ## Querying a Data Lake Store using SQL Serverless in Azure Synapse Analytics
 
