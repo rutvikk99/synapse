@@ -1,5 +1,7 @@
 # Build automated data integration pipelines with Azure Synapse Pipelines
 
+In this demo, we show how Synapse Analytics enables you to ingest and transform data, using Synapse pipelines and code-free mapping data flows. We build on these concepts by adding a Notebook activity that uses Apache Spark to read data from a data lake, perform data engineering tasks, and write to a new location in the data lake. The following table of contents describes and links to the elements of the demo:
+
 - [Build automated data integration pipelines with Azure Synapse Pipelines](#build-automated-data-integration-pipelines-with-azure-synapse-pipelines)
   - [Petabyte-scale ingestion with Azure Synapse Pipelines](#petabyte-scale-ingestion-with-azure-synapse-pipelines)
   - [Code-free transformation at scale with Azure Synapse Pipelines](#code-free-transformation-at-scale-with-azure-synapse-pipelines)

@@ -1,5 +1,7 @@
 # Run interactive queries using Azure Synapse SQL Serverless
 
+In this demo, we show how Synapse Analytics enables you to use Synapse SQL Serverless (SQL On-demand) to query data stored in the data lake, as well as an external data source. We also cover security and how to control access to the files through RBAC and ACLs applied to the ADLS Gen2 data store. The following table of contents describes and links to the elements of the demo:
+
 - [Run interactive queries using Azure Synapse SQL Serverless](#run-interactive-queries-using-azure-synapse-sql-serverless)
   - [Demo requirements](#demo-requirements)
   - [Querying a Data Lake Store using SQL Serverless in Azure Synapse Analytics](#querying-a-data-lake-store-using-sql-serverless-in-azure-synapse-analytics)
