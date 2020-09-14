@@ -326,6 +326,10 @@ Synapse Analytics enables you to ingest data from multiple data sources through 
 
     ![The New and Pipeline menu items are highlighted.](media/new-pipeline.png "New pipeline")
 
+    When the new pipeline opens, the **Properties** blade appears **(1)**, allowing you to name the pipeline **(2)**.
+
+    ![The properties blade is displayed.](media/new-pipeline-properties.png "Properties")
+
 13. Expand the `Move & transform` activity group, then drag the **Copy data** activity onto the design canvas **(1)**. With the Copy data activity selected, select the **Source** tab **(2)**, then select **+ New (3)** next to the source dataset.
 
     ![The Copy data activity is dragged on the canvas and the New button next to Source dataset under the Source tab is highlighted.](media/new-pipeline-new-source.png "New Source")
