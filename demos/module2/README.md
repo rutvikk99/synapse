@@ -3,6 +3,7 @@
 In this demo, we show ways you can optimize data warehouse workloads that use the provisioned SQL pools. We cover useful developer features, how to define and use workload management and classification to control data loading, and methods to optimize query performance. The following table of contents describes and links to the elements of the demo:
 
 - [Optimize a Data Warehouse with Azure Synapse SQL Pools](#optimize-a-data-warehouse-with-azure-synapse-sql-pools)
+  - [Demo prerequisites](#demo-prerequisites)
   - [Understanding developer features of Azure Synapse Analytics](#understanding-developer-features-of-azure-synapse-analytics)
     - [Using window functions](#using-window-functions)
       - [OVER clause](#over-clause)
@@ -22,6 +23,10 @@ In this demo, we show ways you can optimize data warehouse workloads that use th
       - [Indexes](#indexes)
       - [Partitioning](#partitioning)
     - [Use result set caching](#use-result-set-caching)
+
+## Demo prerequisites
+
+All demos use the same environment. If you have not done so already, Complete the [environment setup instructions](https://github.com/solliancenet/synapse-in-a-day-deployment) (external link).
 
 ## Understanding developer features of Azure Synapse Analytics
 

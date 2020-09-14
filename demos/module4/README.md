@@ -3,6 +3,7 @@
 In this demo, we show how Synapse Analytics enables you to ingest and transform data, using Synapse pipelines and code-free mapping data flows. We build on these concepts by adding a Notebook activity that uses Apache Spark to read data from a data lake, perform data engineering tasks, and write to a new location in the data lake. The following table of contents describes and links to the elements of the demo:
 
 - [Build automated data integration pipelines with Azure Synapse Pipelines](#build-automated-data-integration-pipelines-with-azure-synapse-pipelines)
+  - [Demo prerequisites](#demo-prerequisites)
   - [Petabyte-scale ingestion with Azure Synapse Pipelines](#petabyte-scale-ingestion-with-azure-synapse-pipelines)
   - [Code-free transformation at scale with Azure Synapse Pipelines](#code-free-transformation-at-scale-with-azure-synapse-pipelines)
     - [Create SQL table](#create-sql-table)
@@ -14,6 +15,10 @@ In this demo, we show how Synapse Analytics enables you to ingest and transform 
     - [Trigger, monitor, and analyze the user profile data pipeline](#trigger-monitor-and-analyze-the-user-profile-data-pipeline)
     - [Create Synapse Spark notebook to find top products](#create-synapse-spark-notebook-to-find-top-products)
     - [Add the Notebook to the pipeline](#add-the-notebook-to-the-pipeline)
+
+## Demo prerequisites
+
+All demos use the same environment. If you have not done so already, Complete the [environment setup instructions](https://github.com/solliancenet/synapse-in-a-day-deployment) (external link).
 
 ## Petabyte-scale ingestion with Azure Synapse Pipelines
 

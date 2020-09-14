@@ -3,7 +3,7 @@
 In this demo, we show how Synapse Analytics enables you to use Synapse SQL Serverless (SQL On-demand) to query data stored in the data lake, as well as an external data source. We also cover security and how to control access to the files through RBAC and ACLs applied to the ADLS Gen2 data store. The following table of contents describes and links to the elements of the demo:
 
 - [Run interactive queries using Azure Synapse SQL Serverless](#run-interactive-queries-using-azure-synapse-sql-serverless)
-  - [Demo requirements](#demo-requirements)
+  - [Demo prerequisites](#demo-prerequisites)
   - [Querying a Data Lake Store using SQL Serverless in Azure Synapse Analytics](#querying-a-data-lake-store-using-sql-serverless-in-azure-synapse-analytics)
     - [Query sales Parquet data with Synapse SQL Serverless](#query-sales-parquet-data-with-synapse-sql-serverless)
     - [Create an external table for 2019 sales data](#create-an-external-table-for-2019-sales-data)
@@ -18,9 +18,11 @@ In this demo, we show how Synapse Analytics enables you to use Synapse SQL Serve
 
 Tailwind Trader's Data Engineers want a way to explore the data lake, transform and prepare data, and simplify their data transformation pipelines. In addition, they want their Data Analysts to explore data in the lake and Spark external tables created by Data Scientists or Data Engineers, using familiar T-SQL language or their favorite tools, which can connect to SQL endpoints.
 
-## Demo requirements
+## Demo prerequisites
 
-You must have permissions to create new Azure Active Directory security groups and assign members to them.
+1. All demos use the same environment. If you have not done so already, Complete the [environment setup instructions](https://github.com/solliancenet/synapse-in-a-day-deployment) (external link).
+
+2. You must have permissions to create new Azure Active Directory security groups and assign members to them.
 
 ## Querying a Data Lake Store using SQL Serverless in Azure Synapse Analytics
 

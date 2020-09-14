@@ -3,6 +3,7 @@
 In this demo, we show how Synapse Analytics enables you to perform data engineering tasks using the power of Apache Spark. The following table of contents describes and links to the elements of the demo:
 
 - [Perform Data Engineering with Azure Synapse Spark Pools](#perform-data-engineering-with-azure-synapse-spark-pools)
+  - [Demo prerequisites](#demo-prerequisites)
   - [Ingesting data with Apache Spark notebooks in Azure Synapse Analytics](#ingesting-data-with-apache-spark-notebooks-in-azure-synapse-analytics)
     - [Ingest and explore Parquet files from a data lake with Synapse Spark](#ingest-and-explore-parquet-files-from-a-data-lake-with-synapse-spark)
   - [Transforming data with DataFrames in Spark Pools in Azure Synapse Analytics](#transforming-data-with-dataframes-in-spark-pools-in-azure-synapse-analytics)
@@ -12,6 +13,10 @@ In this demo, we show how Synapse Analytics enables you to perform data engineer
 Tailwind Traders has unstructured and semi-structured files from various data sources. Their data engineers want to use their Spark expertise to explore, ingest, and transform these files.
 
 You recommend using Synapse Notebooks, which are integrated in the Synapse Analytics workspace and used from within Synapse Studio.
+
+## Demo prerequisites
+
+All demos use the same environment. If you have not done so already, Complete the [environment setup instructions](https://github.com/solliancenet/synapse-in-a-day-deployment) (external link).
 
 ## Ingesting data with Apache Spark notebooks in Azure Synapse Analytics
 
