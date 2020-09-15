@@ -95,7 +95,7 @@ Rather than creating a script with `OPENROWSET` and a path to the root 2019 fold
 
 2. Select the **Linked** tab **(1)** and expand **Azure Data Lake Storage Gen2**. Expand the `asaworkspaceXX` primary ADLS Gen2 account **(2)** and select the **`wwi-02`** container **(3)**. Navigate to the `sale-small/Year=2019/Quarter=Q1/Month=1/Day=20190101` folder **(4)**. Right-click on the `sale-small-20190101-snappy.parquet` file **(5)**, select **New SQL script (6)**, then **Create external table (7)**.
 
-    [The create external link is highlighted.](media/create-external-table.png "Create external table")
+    ![The create external link is highlighted.](media/create-external-table.png "Create external table")
 
 3. Make sure **`SQL on-demand`** is selected for the **SQL pool (1)**. Under **Select a database**, select **+ New** and enter `demo` **(2)**. For **External table name**, enter `All2019Sales` **(3)**. Under **Create external table**, select **Using SQL script (4)**, then select **Create (5)**.
 
