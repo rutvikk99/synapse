@@ -782,7 +782,7 @@ Now that we have processed, joined, and imported the user profile data, let's an
 7. Enter and execute the following in the new cell to populate a new dataframe called `topPurchases`, create a new temporary view named `top_purchases`, and show the first 100 rows:
 
     ```python
-        topPurchases = data_path.select(
+    topPurchases = data_path.select(
         "UserId", "ProductId",
         "ItemsPurchasedLast12Months", "IsTopProduct",
         "IsPreferredProduct")
