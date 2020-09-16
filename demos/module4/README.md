@@ -339,6 +339,19 @@ Complete the steps below to create the following two datasets: `asal400_ecommerc
 
 ### Create Mapping Data Flow
 
+Tailwind Traders needs to combine top product purchases imported as JSON files from their eCommerce system with user preferred products from profile data stored as JSON documents in Azure Cosmos DB. They want to store the combined data in a SQL pool as well as their data lake for further analysis and reporting.
+
+To do this, you will build a mapping data flow that performs the following tasks:
+
+- Adds two ADLS Gen2 data sources for the JSON data
+- Flattens the hierarchical structure of both sets of files
+- Performs data transformations and type conversions
+- Joins both data sources
+- Creates new fields on the joined data set based on conditional logic
+- Filters null records for required fields
+- Writes to the SQL pool
+- Simultaneously writes to the data lake
+
 1. Navigate to the **Develop** hub.
 
     ![The Develop menu item is highlighted.](media/develop-hub.png "Develop hub")
