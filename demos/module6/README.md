@@ -9,7 +9,6 @@ In this demo, we show how Azure Synapse Link enables you to seamlessly connect a
     - [Create a new Azure Cosmos DB container](#create-a-new-azure-cosmos-db-container)
     - [Create and run a copy pipeline](#create-and-run-a-copy-pipeline)
   - [Querying Azure Cosmos DB with Apache Spark for Synapse Analytics](#querying-azure-cosmos-db-with-apache-spark-for-synapse-analytics)
-  - [Querying Azure Cosmos DB with SQL Serverless for Synapse Analytics](#querying-azure-cosmos-db-with-sql-serverless-for-synapse-analytics)
 
 ## Demo prerequisites
 
@@ -71,6 +70,18 @@ After creating the container, we will create a new Synapse Pipeline to copy data
 4. Expand the `OnlineUserProfile01` container underneath the **CustomerProfile** database, then select **Items (1)**. Select one of the documents **(2)** and view its contents **(3)**. The documents are stored in JSON format.
 
     ![The container items are displayed.](media/existing-items.png "Container items")
+
+5. Select **Overview** in the left-hand menu **(1)**. Make note of the **Read Locations** value **(2)** and save it to Notepad or similar for later reference.
+
+    ![The read locations value is highlighted.](media/cosmos-overview.png "Overview blade")
+
+    > **Note to presenter**: Take note of this value. You will need this information when creating the SQL view toward the end of the demo.
+
+6. Select **Keys** in the left-hand menu **(1)**, then copy the **Primary Key** value **(2)** and save it to Notepad or similar for later reference.
+
+    ![The primary key is highlighted.](media/cosmos-keys.png "Keys")
+
+    > **Note to presenter**: Take note of this value. You will need this information when creating the SQL view toward the end of the demo.
 
 ### Create and run a copy pipeline
 
@@ -237,4 +248,20 @@ Tailwind Traders is trying to solve how they can use the list of preferred produ
 
     ![Cell output.](media/cell7.png "Cell 7 results")
 
-## Querying Azure Cosmos DB with SQL Serverless for Synapse Analytics
+<!-- ## Querying Azure Cosmos DB with SQL Serverless for Synapse Analytics
+
+Tailwind Traders wants to explore the Azure Cosmos DB analytical store with T-SQL. Ideally, they can create views that can then be used for joins with other analytical store containers, files from the data lake, or accessed by external tools, like Power BI.
+
+1. Navigate to the **Develop** hub.
+
+    ![Develop hub.](media/develop-hub.png "Develop hub")
+
+2. Select **+ (1)**, then **SQL script (2)**.
+
+    ![The SQL script button is highlighted.](media/new-script.png "SQL script")
+
+3. Verify that the Synapse SQL Serverless pool (**SQL on-demand**) is selected.
+
+    ![The serverless pool is selected.](media/sql-on-demand.png "SQL on-demand")
+
+4.  -->
