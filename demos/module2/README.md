@@ -628,6 +628,8 @@ Let's start by experimenting with different parameters.
     )
     ```
 
+    > **Note to presenter**: *Do not* run this script! It is just for demonstration purposes to review the schema.
+
     You can immediately spot at least two reasons for the performance hit:
 
     - The `ROUND_ROBIN` distribution
