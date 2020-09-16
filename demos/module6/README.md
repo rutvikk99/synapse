@@ -128,4 +128,113 @@ Now that we have the new Azure Cosmos DB container with the analytical store ena
 
 ## Querying Azure Cosmos DB with Apache Spark for Synapse Analytics
 
+Tailwind Traders wants to use Apache Spark to run analytical queries against the new Azure Cosmos DB container. In this segment, we will use built-in gestures in Synapse Studio to quickly create a Synapse Notebook that loads data from the analytical store of the HTAP-enabled container, without impacting the transactional store.
+
+Tailwind Traders is trying to solve how they can use the list of preferred products identified with each user, coupled with any matching product IDs in their review history, to show a list of all preferred product reviews.
+
+1. Navigate to the **Data** hub.
+
+    ![Data hub.](media/data-hub.png "Data hub")
+
+2. Select the **Linked** tab **(1)** and expand the **Azure Cosmos DB** section, then the **asacosmosdb01 (CustomerProfile)** linked service **(2)**. Right-click on the **UserProfileHTAP** container **(3)**, select the **New notebook** gesture **(4)**, then select **Load to DataFrame (5)**.
+
+    ![The new notebook gesture is highlighted.](media/new-notebook.png "New notebook")
+
+    Notice that the `UserProfileHTAP` container that we created has a slightly different icon than the other two containers. This indicates that the analytical store is enabled.
+
+3. Select **Run all (1)**.
+
+    ![Thew new notebook is shown with the cell 1 output.](media/notebook-cell1.png "Cell 1")
+
+    > It will take a few minutes to start the Spark session the first time.
+
+    In the generated code within Cell 1, notice that the `spark.read` format is set to **`cosmos.olap` (2)**. This instructs Synapse Link to use the container's analytical store. If we wanted to connect to the transactional store instead, like to read from the change feed or write to the container, we'd use `cosmos.oltp` instead.
+
+    > **Note:** You cannot write to the analytical store, only read from it. If you want to load data into the container, you need to connect to the transactional store.
+
+    The first `option` configures the name of the Azure Cosmos DB linked service **(3)**. The second `option` defines the Azure Cosmos DB container from which we want to read **(4)**.
+
+4. Hover your mouse underneath the cell, then select **{} Add code**.
+
+    ![The add code button is highlighted.](media/add-code.png "Add code")
+
+5. The DataFrame contains extra columns that we don't need. Let's remove the unwanted columns and create a clean version of the DataFrame. To do this, enter the following in the new cell and **run** it:
+
+    ```python
+    unwanted_cols = {'_attachments','_etag','_rid','_self','_ts','collectionType','id'}
+
+    # Remove unwanted columns from the columns collection
+    cols = list(set(df.columns) - unwanted_cols)
+
+    profiles = df.select(cols)
+
+    display(profiles.limit(10))
+    ```
+
+    The output now only contains the columns that we want. Notice that the `preferredProducts` **(1)** and `productReviews` **2** columns contain child elements. Expand the values on a row to view them. You may recall seeing the raw JSON format in the `UserProfiles01` container within the Azure Cosmos DB Data Explorer.
+
+    ![The cell's output is displayed.](media/cell2.png "Cell 2 output")
+
+6. We should know how many records we're dealing with. To do this, enter the following in a new cell and **run** it:
+
+    ```python
+    profiles.count()
+    ```
+
+    You should see a count result of 100,000.
+
+7. We want to use the `preferredProducts` column array and `productReviews` column array for each user and create a graph of products that are from their preferred list that match with products that they have reviewed. To do this, we need to create two new DataFrames that contain flattened values from those two columns so we can join them in a later step. Enter the following in a new cell and **run** it:
+
+    ```python
+    from pyspark.sql.functions import udf, explode
+
+    preferredProductsFlat=profiles.select('userId',explode('preferredProducts').alias('productId'))
+    productReviewsFlat=profiles.select('userId',explode('productReviews').alias('productReviews'))
+    display(productReviewsFlat.limit(10))
+    ```
+
+    In this cell, we imported the special PySpark [`explode` function](https://spark.apache.org/docs/latest/api/python/pyspark.sql.html?highlight=explode#pyspark.sql.functions.explode), which returns a new row for each element of the array. This function helps flatten the `preferredProducts` and `productReviews` columns for better readability or for easier querying.
+
+    ![Cell output.](media/cell4.png "Cell 4 output")
+
+    Observe the cell output where we display the `productReviewFlat` DataFrame contents. We see a new `productReviews` column that contains the `productId` we want to match to the preferred products list for the user, as well as the `reviewText` that we want to display or save.
+
+8. Let's look at the `preferredProductsFlat` DataFrame contents. To do this, enter the following in a new cell and **run** it:
+
+    ```python
+    display(preferredProductsFlat.limit(20))
+    ```
+
+    ![Cell output.](media/cell5.png "Cell 5 results")
+
+    Since we used the `explode` function on the preferred products array, we have flattened the column values to `userId` and `productId` rows, ordered by user.
+
+9. Now we need to further flatten the `productReviewFlat` DataFrame contents to extract the `productReviews.productId` and `productReviews.reviewText` fields and create new rows for each data combination. To do this, enter the following in a new cell and **run** it:
+
+    ```python
+    productReviews = (productReviewsFlat.select('userId','productReviews.productId','productReviews.reviewText')
+        .orderBy('userId'))
+
+    display(productReviews.limit(10))
+    ```
+
+    In the output, notice that we now have multiple rows for each `userId`.
+
+    ![Cell output.](media/cell6.png "Cell 6 results")
+
+10. The final step is to join the `preferredProductsFlat` and `productReviews` DataFrames on the `userId` and `productId` values to build our graph of preferred product reviews. To do this, enter the following in a new cell and **run** it:
+
+    ```python
+    preferredProductReviews = (preferredProductsFlat.join(productReviews,
+        (preferredProductsFlat.userId == productReviews.userId) &
+        (preferredProductsFlat.productId == productReviews.productId))
+    )
+
+    display(preferredProductReviews.limit(100))
+    ```
+
+    > **Note to presenter**: Feel free to click on the column headers in the Table view to sort the result set.
+
+    ![Cell output.](media/cell7.png "Cell 7 results")
+
 ## Querying Azure Cosmos DB with SQL Serverless for Synapse Analytics
