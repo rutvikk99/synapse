@@ -13,9 +13,10 @@ In this demo, we show the primary features of Azure Synapse Analytics, and how t
     - [The Monitor hub](#the-monitor-hub)
     - [The Manage hub](#the-manage-hub)
   - [Designing a Modern Data Warehouse using Azure Synapse Analytics](#designing-a-modern-data-warehouse-using-azure-synapse-analytics)
-    - [One place for all your data](#one-place-for-all-your-data)
-    - [Unlimited data scale](#unlimited-data-scale)
-    - [Familiar tools and ecosystem](#familiar-tools-and-ecosystem)
+    - [The Modern Data Warehouse value proposition](#the-modern-data-warehouse-value-proposition)
+      - [One place for all your data](#one-place-for-all-your-data)
+      - [Unlimited data scale](#unlimited-data-scale)
+      - [Familiar tools and ecosystem](#familiar-tools-and-ecosystem)
     - [Modern data warehouse processes](#modern-data-warehouse-processes)
       - [Stage 1: Data ingest and preparation](#stage-1-data-ingest-and-preparation)
       - [Stage 2: Model & serve](#stage-2-model--serve)
@@ -262,7 +263,15 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
 ## Designing a Modern Data Warehouse using Azure Synapse Analytics
 
-### One place for all your data
+### The Modern Data Warehouse value proposition
+
+There is more to a data warehouse than simply storing business data. Data grows at an exponential rate, year over year. Not just the *volume* of data, but the *variety* of data, from structured, to semi-structured, and to a greater degree, unstructured. The velocity and variety of data lead to data engineering challenges when it comes to ingesting, transforming, and preparing the data for machine learning, reporting, and other purposes.
+
+The modern data warehouse serves to address these challenges. A good data warehouse adds value, such as acting as a central location for all your data, scale with the data as it grows over time, and providing familiar tools and ecosystem for your data engineers, data analysts, data scientists, and developers.
+
+Let's look at each of these elements in detail.
+
+#### One place for all your data
 
 With a modern data warehouse, we have one hub for all data when using Synapse Analytics.
 
@@ -342,7 +351,7 @@ Synapse Analytics enables you to ingest data from multiple data sources through 
 
     ![The list of dataset sources is displayed.](media/new-dataset.png "New dataset")
 
-### Unlimited data scale
+#### Unlimited data scale
 
 1. Select the **Manage** hub.
 
@@ -384,7 +393,7 @@ Synapse Analytics enables you to ingest data from multiple data sources through 
 
     > ADLS Gen2 provides virtually limitless scale for your data lake. You can attach additional ADLS Gen2 accounts for greater scale and flexibility as needed.
 
-### Familiar tools and ecosystem
+#### Familiar tools and ecosystem
 
 1. Select the **Develop** hub.
 
