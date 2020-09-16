@@ -32,7 +32,7 @@ You recommend using the Data hub to view the Parquet files in the connected stor
 
     ![The data hub is highlighted.](media/data-hub.png "Data hub")
 
-3. Select the **Linked** tab **(1)** and expand the primary data lake storage account. Select the **wwi-02** container **(2)** and browser to the `sale-small/Year=2010/Quarter=Q4/Month=12/Day=20101231` folder **(3)**. Right-click the Parquet file **(4)** and select **New notebook (5)**.
+3. Select the **Linked** tab **(1)** and expand the primary data lake storage account (*the name may differ from what you see here; it is the first storage account listed*). Select the **wwi-02** container **(2)** and browser to the `sale-small/Year=2010/Quarter=Q4/Month=12/Day=20101231` folder **(3)**. Right-click the Parquet file **(4)** and select **New notebook (5)**.
 
     ![The Parquet file is displayed as described.](media/2010-sale-parquet-new-notebook.png "New notebook")
 
