@@ -9,6 +9,7 @@ In this demo, we show how Azure Synapse Link enables you to seamlessly connect a
     - [Create a new Azure Cosmos DB container](#create-a-new-azure-cosmos-db-container)
     - [Create and run a copy pipeline](#create-and-run-a-copy-pipeline)
   - [Querying Azure Cosmos DB with Apache Spark for Synapse Analytics](#querying-azure-cosmos-db-with-apache-spark-for-synapse-analytics)
+  - [Querying Azure Cosmos DB with SQL Serverless for Synapse Analytics](#querying-azure-cosmos-db-with-sql-serverless-for-synapse-analytics)
 
 ## Demo prerequisites
 
@@ -71,17 +72,11 @@ After creating the container, we will create a new Synapse Pipeline to copy data
 
     ![The container items are displayed.](media/existing-items.png "Container items")
 
-5. Select **Overview** in the left-hand menu **(1)**. Make note of the **Read Locations** value **(2)** and save it to Notepad or similar for later reference.
-
-    ![The read locations value is highlighted.](media/cosmos-overview.png "Overview blade")
-
-    > **Note to presenter**: Take note of this value. You will need this information when creating the SQL view toward the end of the demo.
-
-6. Select **Keys** in the left-hand menu **(1)**, then copy the **Primary Key** value **(2)** and save it to Notepad or similar for later reference.
+5. Select **Keys** in the left-hand menu **(1)**, then copy the **Primary Key** value **(2)** and save it to Notepad or similar for later reference. Copy the Azure Cosmos DB **account name** in the upper-left corner **(3)** and also save it to Notepad or similar text editor for later.
 
     ![The primary key is highlighted.](media/cosmos-keys.png "Keys")
 
-    > **Note to presenter**: Take note of this value. You will need this information when creating the SQL view toward the end of the demo.
+    > **Note to presenter**: Take note of these values. You will need this information when creating the SQL view toward the end of the demo.
 
 ### Create and run a copy pipeline
 
@@ -248,7 +243,7 @@ Tailwind Traders is trying to solve how they can use the list of preferred produ
 
     ![Cell output.](media/cell7.png "Cell 7 results")
 
-<!-- ## Querying Azure Cosmos DB with SQL Serverless for Synapse Analytics
+## Querying Azure Cosmos DB with SQL Serverless for Synapse Analytics
 
 Tailwind Traders wants to explore the Azure Cosmos DB analytical store with T-SQL. Ideally, they can create views that can then be used for joins with other analytical store containers, files from the data lake, or accessed by external tools, like Power BI.
 
@@ -260,8 +255,77 @@ Tailwind Traders wants to explore the Azure Cosmos DB analytical store with T-SQ
 
     ![The SQL script button is highlighted.](media/new-script.png "SQL script")
 
-3. Verify that the Synapse SQL Serverless pool (**SQL on-demand**) is selected.
+3. When the script opens, you will see the **Properties** pane to the right **(1)**. Enter **`User Profile HTAP`** for the **Name (2)**, then select the **Properties** button to close the pane **(1)**.
 
-    ![The serverless pool is selected.](media/sql-on-demand.png "SQL on-demand")
+    ![The properties pane is displayed.](media/new-script-properties.png "Properties")
 
-4.  -->
+4. Verify that the Synapse SQL Serverless pool (**SQL on-demand**) is selected.
+
+    ![The serverless pool is selected.](media/sql-on-demand-htap.png "SQL on-demand")
+
+5. Paste the following SQL query. In the OPENROWSET statement, replace **`YOUR_ACCOUNT_NAME`** with the Azure Cosmos DB account name and **`YOUR_ACCOUNT_KEY`** with the Azure Cosmos DB Primary Key value you copied in step 5 above after you created the container.
+
+    ```sql
+    USE master
+    GO
+
+    IF DB_ID (N'Profiles') IS NULL
+    BEGIN
+        CREATE DATABASE Profiles;
+    END
+    GO
+
+    USE Profiles
+    GO
+
+    DROP VIEW IF EXISTS UserProfileHTAP;
+    GO
+
+    CREATE VIEW UserProfileHTAP
+    AS
+    SELECT
+        *
+    FROM OPENROWSET(
+        'CosmosDB',
+        N'account=YOUR_ACCOUNT_NAME;database=CustomerProfile;key=YOUR_ACCOUNT_KEY',
+        UserProfileHTAP
+    )
+    WITH (
+        userId bigint,
+        cartId varchar(50),
+        preferredProducts varchar(max),
+        productReviews varchar(max)
+    ) AS profiles
+    CROSS APPLY OPENJSON (productReviews)
+    WITH (
+        productId bigint,
+        reviewText varchar(1000)
+    ) AS reviews
+    GO
+    ```
+
+    Your completed query should look similar to the following:
+
+    ![The create view portion of the query and the results are displayed.](media/htap-view.png "SQL query")
+
+    The query starts out by creating a new Synapse SQL Serverless database named `Profiles` if it does not exist, then executes `USE Profiles` to run the rest of the script contents against the `Profiles` database. Next, it drops the `UserProfileHTAP` view if it exists. Finally, it performs the following:
+
+    - **1.** Creates a SQL view named `UserProfileHTAP`.
+    - **2.** Uses the `OPENROWSET` statement to set the data source type to `CosmosDB`, sets the account details, and specifies that we want to create the view over the Azure Cosmos DB analytical store container named `UserProfileHTAP`.
+    - **3.** The `WITH` clause matches the property names in the JSON documents and applies the appropriate SQL data types. Notice that we set the `preferredProducts` and `productReviews` fields to `varchar(max)`. This is because both of these properties contain JSON-formatted data within.
+    - **4.** Since the `productReviews` property in the JSON documents contain nested subarrays, we want to "join" the properties from the document with all elements of the array. Synapse SQL enables us to flatten the nested structure by applying the `OPENJSON` function on the nested array. We flatten the values within `productReviews` like we did using the Python `explode` function earlier in the Synapse Notebook.
+    - **5.** The output shows that the five statements successfully executed.
+
+6. Navigate to the **Data** hub.
+
+    ![Data hub.](media/data-hub.png "Data hub")
+
+7. Select the **Workspace** tab **(1)** and expand the Databases group. Expand the **Profiles** SQL on-demand database **(2)**. If you do not see this on the list, refresh the Databases list. Expand Views, then right-click on the **`UserProfileHTAP`** view **(3)**. Select **New SQL script (4)**, then **Select TOP 100 rows (5)**.
+
+    ![The select top 100 rows query option is highlighted.](media/new-select-query.png "New select query")
+
+8. **Run** the query and take note of the results.
+
+    ![The view results are displayed.](media/select-htap-view.png "Select HTAP view")
+
+    The `preferredProducts` **(1)** and `productReviews` **(2)** fields are included in the query, which both contain JSON-formatted values. Notice how the CROSS APPLY OPENJSON statement in the view successfully flattened the nested subarray values in the `productReviews` **(2)** field by extracting the `productId` and `reviewText` values into new fields.
