@@ -20,7 +20,7 @@ Tailwind Trader's Data Engineers want a way to explore the data lake, transform 
 
 ## Demo prerequisites
 
-1. All demos use the same environment. If you have not done so already, Complete the [environment setup instructions](https://github.com/solliancenet/synapse-in-a-day-deployment) (external link).
+1. All demos use the same environment. If you have not done so already, Complete the [environment setup instructions](https://github.com/ctesta-oneillmsft/asa-vtd) (external link).
 
 2. You must have permissions to create new Azure Active Directory security groups and assign members to them.
 

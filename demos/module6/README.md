@@ -13,7 +13,7 @@ In this demo, we show how Azure Synapse Link enables you to seamlessly connect a
 
 ## Demo prerequisites
 
-- All demos use the same environment. If you have not done so already, Complete the [environment setup instructions](https://github.com/solliancenet/synapse-in-a-day-deployment) (external link).
+- All demos use the same environment. If you have not done so already, Complete the [environment setup instructions](https://github.com/ctesta-oneillmsft/asa-vtd) (external link).
 - You need to have completed [Module 4](../module4/README.md).
   - You have created the Azure Cosmos DB linked service.
   - You have created the `asal400_customerprofile_cosmosdb` integration data set.

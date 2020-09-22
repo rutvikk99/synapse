@@ -26,7 +26,7 @@ In this demo, we show ways you can optimize data warehouse workloads that use th
 
 ## Demo prerequisites
 
-All demos use the same environment. If you have not done so already, Complete the [environment setup instructions](https://github.com/solliancenet/synapse-in-a-day-deployment) (external link).
+All demos use the same environment. If you have not done so already, Complete the [environment setup instructions](https://github.com/ctesta-oneillmsft/asa-vtd) (external link).
 
 ## Understanding developer features of Azure Synapse Analytics
 

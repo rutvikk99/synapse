@@ -16,7 +16,7 @@ You recommend using Synapse Notebooks, which are integrated in the Synapse Analy
 
 ## Demo prerequisites
 
-All demos use the same environment. If you have not done so already, Complete the [environment setup instructions](https://github.com/solliancenet/synapse-in-a-day-deployment) (external link).
+All demos use the same environment. If you have not done so already, Complete the [environment setup instructions](https://github.com/ctesta-oneillmsft/asa-vtd) (external link).
 
 ## Ingesting data with Apache Spark notebooks in Azure Synapse Analytics
 

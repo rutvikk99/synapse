@@ -9,7 +9,7 @@ Demos and labs for Synapse in a Day content.
 
 ## Setup
 
-Follow the [demo setup instructions](https://github.com/solliancenet/synapse-in-a-day-deployment) (external link).
+Follow the [demo setup instructions](https://github.com/ctesta-oneillmsft/asa-vtd) (external link).
 
 ## Demos
 
