@@ -265,7 +265,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
 ### The Modern Data Warehouse value proposition
 
-There is more to a data warehouse than simply storing business data. Data grows at an exponential rate, year over year. Not just the *volume* of data, but the *variety* of data, from structured, to semi-structured, and to a greater degree, unstructured. The velocity and variety of data lead to data engineering challenges when it comes to ingesting, transforming, and preparing the data for machine learning, reporting, and other purposes.
+There is more to a data warehouse than simply storing business data. Data grows at an exponential rate, year over year. Not just the *volume* of data, but the *variety* of data, from structured, to semi-structured, and to a greater degree, unstructured that must be managed. The velocity and variety of data lead to data engineering challenges when it comes to ingesting, transforming, and preparing the data for machine learning, reporting, and other purposes.
 
 The modern data warehouse serves to address these challenges. A good data warehouse adds value, such as acting as a central location for all your data, scale with the data as it grows over time, and providing familiar tools and ecosystem for your data engineers, data analysts, data scientists, and developers.
 
