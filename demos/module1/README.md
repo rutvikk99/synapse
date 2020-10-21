@@ -216,7 +216,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
     ![The monitor hub is highlighted.](media/monitor-hub.png "Monitor hub")
 
-    Use the Monitor hub to view pipeline and trigger runs, integration runtime status, Apache Spark jobs, SQL requests, and data flow debug activities. If you want to see the status of a job or activity, this is where you want to go.
+    Use the Monitor hub to view pipeline and trigger runs, view the status of the various integration runtimes that are running, view Apache Spark jobs, SQL requests, and data flow debug activities. If you want to see the status of a job or activity, this is where you want to go.
 
     The Monitor hub is your first stop for debugging issues and gaining insight on resource usage. You can see a history of all the activities taking place in the workspace and which ones are active now.
 
