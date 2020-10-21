@@ -127,7 +127,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
 ### The Data hub
 
-1. Select the **Data** hub.
+1. On the left hand side of Azure Synapse Studio, click the **Data** hub.
 
     ![The data hub is highlighted.](media/data-hub.png "Data hub")
 
