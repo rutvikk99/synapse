@@ -64,7 +64,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
     The Synapse workspace portal resource contains links to configure your workspace, manage access through Access control (IAM), firewalls, managed identities, and private endpoint connections, and view metrics. It also contains important information about your Synapse Analytics environment, such as:
 
     1. The **Primary ADLS Gen2 account URL (1)**, which identifies the primary data lake storage account.
-    2. The **SQL endpoint** and **SQL on-demand endpoint (2)**, which are used to integrate with external tools, such as SQL Server Management Studio (SSMS), Azure Data Studio, and Power BI.
+    2. The **Dedicated SQL endpoint** and **Serverless SQL endpoint (2)**, which are used to integrate with external tools, such as SQL Server Management Studio (SSMS), Azure Data Studio, and Power BI.
     3. The **Workspace web URL (3)**, a direct link to Synapse Studio for the workspace.
     4. Available resources, such as **SQL pools** and **Apache Spark pools (4)**.
 
@@ -76,7 +76,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
     ![SQL pool.](media/sql-pool.png "SQL pool")
 
-    The SQL pool refers to the enterprise data warehousing features formerly provided by SQL Data Warehouse. It represents a collection of analytic resources that are provisioned when using Synapse SQL, vs. on-demand, provided by SQL serverless. The size of SQL pool is determined by Data Warehousing Units (DWU).
+    The dedicated SQL pool refers to the enterprise data warehousing features formerly provided by SQL Data Warehouse. It represents a collection of analytic resources that are provisioned when using Synapse SQL, vs. the serverless consumption model, provided by serverless SQL pools. The size of SQL pool is determined by Data Warehousing Units (DWU).
 
     You can access the SQL pool in the portal, as shown here, or from within Synapse Studio, as we'll show you in a bit. When you access SQL pool in the portal, you have additional configurations and controls vs. what you find in Synapse Studio. Here are some of the common features you'll access through the portal:
 
@@ -131,7 +131,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
     ![The data hub is highlighted.](media/data-hub.png "Data hub")
 
-    The Data hub is where you access your provisioned SQL pool databases and SQL serverless databases in your workspace, as well as external data sources, such as storage accounts and other linked services.
+    The Data hub is where you access your SQL databases created by either dedicated SQL pools or serveless SQL pools in your workspace, as well as external data sources, such as storage accounts and other linked services.
 
 2. Under the **Workspace (2)** tab of the Data hub (1), expand the **SQLPool01 (3)** SQL pool underneath **Databases**.
 
@@ -187,7 +187,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
     The Develop hub in our sample environment contains examples of the following artifacts:
 
-    1. **SQL scripts** contains T-SQL scripts that you publish to your workspace. Within the scripts, you can execute commands against any of the provisioned SQL pools or on-demand SQL serverless pools to which you have access.
+    1. **SQL scripts** contains T-SQL scripts that you publish to your workspace. Within the scripts, you can execute commands against any of the dedicated SQL pools or serverless SQL pools to which you have access.
     2. **Notebooks** contains Synapse Spark notebooks used for data engineering and data science tasks. When you execute a notebook, you select a Spark pool as its compute target.
     3. **Data flows** are powerful data transformation workflows that use the power of Apache Spark, but are authored using a code-free GUI.
     4. **Power BI** reports can be embedded here, giving you access to the advanced visualizations they provide without ever leaving the Synapse workspace.
@@ -253,7 +253,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
     ![The categories are highlighted.](media/manage-categories.png "Manage categories")
 
-    1. **SQL pools** lists the provisioned SQL pools and on-demand SQL serverless pools for the workspace. You can can add new pools or hover over a SQL pool to **pause** or **scale** it. You should pause a SQL pool when it's not being used in order to save costs.
+    1. **SQL pools** lists the dedicated SQL pools and serverless SQL pools for the workspace. You can can add new pools or hover over a SQL pool to **pause** or **scale** it. You should pause a SQL pool when it's not being used in order to save costs.
     2. **Apache Spark pools** lets you manage your Spark pools by configuring the auto-pause and auto-scale settings. You can provision a new Apache Spark pool from this blade.
     3. **Linked services** enables you to manage connections to external resources. Here you can see linked services for our data lake storage account, Azure Key Vault, Power BI, and Synapse Analytics. **Task**: Select **+ New** to show how many types of linked services you can add.
     4. **Triggers** provides you a central location to create or remove pipeline triggers. Alternatively, you can add triggers from the pipeline.
@@ -283,7 +283,7 @@ Synapse Analytics enables you to ingest data from multiple data sources through 
 
     Manage orchestration pipelines within the Orchestrate hub. If you are familiar with Azure Data Factory, then you will feel at home in this hub. The pipeline creation experience is the same as in ADF, which gives you another powerful integration built in to Synapse Analytics, removing the need to use Azure Data Factory for data movement and transformation pipelines.
 
-2. Expand Pipelines and select **Customize EMail Analytics (1)**. Select the **Copy data** activity on the canvas **(2)**, select the **Source** tab **(3)**, then select **Preview data (4)**.
+2. Expand Pipelines and select **Customize Email Analytics (1)**. Select the **Copy data** activity on the canvas **(2)**, select the **Source** tab **(3)**, then select **Preview data (4)**.
 
     ![The pipeline is selected and the source is displayed.](media/pipeline-email-analytics.png "Customize EMail Analytics")
 
