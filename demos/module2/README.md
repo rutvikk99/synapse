@@ -1,8 +1,8 @@
-# Optimize a Data Warehouse with Azure Synapse SQL Pools
+# Optimize a Data Warehouse with dedicated SQL Pools in Azure Synapse 
 
-In this demo, we show ways you can optimize data warehouse workloads that use the provisioned SQL pools. We cover useful developer features, how to define and use workload management and classification to control data loading, and methods to optimize query performance. The following table of contents describes and links to the elements of the demo:
+In this demo, we show ways you can optimize data warehouse workloads that use the dedicated SQL pools. We cover useful developer features, how to define and use workload management and classification to control data loading, and methods to optimize query performance. The following table of contents describes and links to the elements of the demo:
 
-- [Optimize a Data Warehouse with Azure Synapse SQL Pools](#optimize-a-data-warehouse-with-azure-synapse-sql-pools)
+- [Optimize a Data Warehouse with dedicated SQL Pools in Azure Synapse](#optimize-a-data-warehouse-with-azure-synapse-sql-pools)
   - [Demo prerequisites](#demo-prerequisites)
   - [Understanding developer features of Azure Synapse Analytics](#understanding-developer-features-of-azure-synapse-analytics)
     - [Using window functions](#using-window-functions)
@@ -50,7 +50,7 @@ One of the key components of window functions is the **`OVER`** clause. This cla
 
     ![The SQL script context menu item is highlighted.](media/synapse-studio-new-sql-script.png "New SQL script")
 
-4. In the toolbar menu, connect to the **SQL Pool** database to execute the query.
+4. In the toolbar menu, connect to the **SQL** database to execute the query.
 
     ![The connect to option is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-connect.png "Query toolbar")
 
@@ -248,7 +248,7 @@ To understand their requirements, let's first execute a distinct count over the 
 
 Running mixed workloads can pose resource challenges on busy systems. Solution Architects seek ways to separate classic data warehousing activities (such as loading, transforming, and querying data) to ensure that enough resources exist to hit SLAs.
 
-Synapse SQL pool workload management in Azure Synapse consists of three high-level concepts: Workload Classification, Workload Importance and Workload Isolation. These capabilities give you more control over how your workload utilizes system resources.
+Workload management for dedicated SQL pools in Azure Synapse consists of three high-level concepts: Workload Classification, Workload Importance and Workload Isolation. These capabilities give you more control over how your workload utilizes system resources.
 
 Workload importance influences the order in which a request gets access to resources. On a busy system, a request with higher importance has first access to resources. Importance can also ensure ordered access to locks.
 
@@ -266,7 +266,7 @@ Tailwind Traders has asked you if there is a way to mark queries executed by the
 
     ![The SQL script context menu item is highlighted.](media/synapse-studio-new-sql-script.png "New SQL script")
 
-3. In the toolbar menu, connect to the **SQL Pool** database to execute the query.
+3. In the toolbar menu, connect to the **SQL** database to execute the query.
 
     ![The connect to option is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-connect.png "Query toolbar")
 
@@ -537,7 +537,7 @@ Let's start by experimenting with different parameters.
 
     ![The SQL script context menu item is highlighted.](media/synapse-studio-new-sql-script.png "New SQL script")
 
-3. In the toolbar menu, connect to the **SQL Pool** database to execute the query.
+3. In the toolbar menu, connect to the **SQL** database to execute the query.
 
     ![The connect to option is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-connect.png "Query toolbar")
 
@@ -637,7 +637,7 @@ Let's start by experimenting with different parameters.
 
     > **NOTE**
     >
-    > In this case, when we are looking for fast query response times, the heap structure is not a good choice as we will see in a moment. Still, there are cases where using a heap table can help performance rather than hurting it. One such example is when we're looking to ingest large amounts of data into the SQL pool.
+    > In this case, when we are looking for fast query response times, the heap structure is not a good choice as we will see in a moment. Still, there are cases where using a heap table can help performance rather than hurting it. One such example is when we're looking to ingest large amounts of data into the SQL database associated with the dedicated SQL pool.
 
     If we were to review the query plan in detail, we would clearly see the root cause of the performance problem: inter-distribution data movements.
 
@@ -657,7 +657,7 @@ Let's start by experimenting with different parameters.
 
     ![The SQL script context menu item is highlighted.](media/synapse-studio-new-sql-script.png "New SQL script")
 
-3. In the toolbar menu, connect to the **SQL Pool** database to execute the query.
+3. In the toolbar menu, connect to the **SQL** database to execute the query.
 
     ![The connect to option is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-connect.png "Query toolbar")
 
@@ -833,15 +833,15 @@ Tailwind Trader's downstream reports are used by many users, which often means t
 
 They should consider result-set caching.
 
-Cache the results of a query in the provisioned Azure Synapse SQL pool storage. This enables interactive response times for repetitive queries against tables with infrequent data changes.
+Cache the results of a query in the dedicated Azure Synapse SQL pool storage. This enables interactive response times for repetitive queries against tables with infrequent data changes.
 
-> The result-set cache persists even if SQL pool is paused and resumed later.
+> The result-set cache persists even if dedicated SQL pool is paused and resumed later.
 
 Query cache is invalidated and refreshed when the underlying table data or query code changes.
 
 Result cache is evicted regularly based on a time-aware least recently used algorithm (TLRU).
 
-1. In the query window, replace the script with the following to check if result set caching is on in the current SQL pool:
+1. In the query window, replace the script with the following to check if result set caching is on in the current dedicated SQL pool:
 
     ```sql
     SELECT
@@ -874,7 +874,7 @@ Result cache is evicted regularly based on a time-aware least recently used algo
 
     > **Important**
     >
-    > The operations to create a result set cache and retrieve data from the cache happen on the control node of a Synapse SQL pool instance. When result set caching is turned ON, running queries that return a large result set (for example, >1GB) can cause high throttling on the control node and slow down the overall query response on the instance. Those queries are commonly used during data exploration or ETL operations. To avoid stressing the control node and cause performance issue, users should turn OFF result set caching on the database before running those types of queries.
+    > The operations to create a result set cache and retrieve data from the cache happen on the control node of a dedicated SQL pool. When result set caching is turned ON, running queries that return a large result set (for example, >1GB) can cause high throttling on the control node and slow down the overall query response on the instance. Those queries are commonly used during data exploration or ETL operations. To avoid stressing the control node and cause performance issue, users should turn OFF result set caching on the database before running those types of queries.
 
 5. In the toolbar menu, connect to the **SQL Pool** database for the next query.
 
