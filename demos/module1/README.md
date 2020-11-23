@@ -76,7 +76,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
     ![SQL pool.](media/sql-pool.png "SQL pool")
 
-    The dedicated SQL pool refers to the enterprise data warehousing features formerly provided by SQL Data Warehouse. It represents a collection of analytic resources that are provisioned vs. serverless SQL pool which is an on demand resource. The size of the dedicated SQL pool is determined by Data Warehousing Units (DWU).
+    The dedicated SQL pool refers to the enterprise data warehousing features formerly provided by SQL Data Warehouse. It represents a collection of analytic resources that are provisioned when using Synapse SQL, vs. the serverless consumption model, provided by serverless SQL pools. The size of SQL pool is determined by Data Warehousing Units (DWU).
 
     You can access the dedicated SQL pool in the portal, as shown here, or from within Synapse Studio, as we'll show you in a bit. When you access a dedicated SQL pool in the portal, you have additional configurations and controls vs. what you find in Synapse Studio. Here are some of the common features you'll access through the portal:
 
@@ -131,7 +131,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
     ![The data hub is highlighted.](media/data-hub.png "Data hub")
 
-    The Data hub is where you access your dedicated and serverless SQL pool databases in your workspace, as well as external data sources, such as storage accounts and other linked services.
+    The Data hub is where you access your SQL databases created by either dedicated SQL pools or serveless SQL pools in your workspace, as well as external data sources, such as storage accounts and other linked services.
 
 2. Under the **Workspace (2)** tab of the Data hub (1), expand the **SQLPool01 (3)** SQL pool underneath **Databases**.
 
@@ -283,7 +283,7 @@ Azure Synapse enables you to ingest data from multiple data sources through its 
 
     Manage orchestration pipelines within the Orchestrate hub. If you are familiar with Azure Data Factory, then you will feel at home in this hub. The pipeline creation experience is the same as in ADF, which gives you another powerful integration built in to Azure Synapse, removing the need to use Azure Data Factory for data movement and transformation pipelines.
 
-2. Expand Pipelines and select **Customize EMail Analytics (1)**. Select the **Copy data** activity on the canvas **(2)**, select the **Source** tab **(3)**, then select **Preview data (4)**.
+2. Expand Pipelines and select **Customize Email Analytics (1)**. Select the **Copy data** activity on the canvas **(2)**, select the **Source** tab **(3)**, then select **Preview data (4)**.
 
     ![The pipeline is selected and the source is displayed.](media/pipeline-email-analytics.png "Customize EMail Analytics")
 
