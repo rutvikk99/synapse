@@ -50,7 +50,7 @@ One of the key components of window functions is the **`OVER`** clause. This cla
 
     ![The SQL script context menu item is highlighted.](media/synapse-studio-new-sql-script.png "New SQL script")
 
-4. In the toolbar menu, connect to the **SQL** database to execute the query.
+4. In the toolbar menu, connect to the **SQLPool01** database to execute the query.
 
     ![The connect to option is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-connect.png "Query toolbar")
 
@@ -206,7 +206,7 @@ To achieve this, you use ROWS in combination with UNBOUNDED PRECEDING to limit t
 
 ### Approximate execution using HyperLogLog functions
 
-As Tailwind Traders starts to work with very large data sets, they struggle with slow running queries that typically run quickly. For instance, obtaining a distinct count of all customers in the early stages of data exploration slows down the process. How can they speed up these queries?
+As Tailwind Traders starts to work with very large data sets, they struggle with slow running queries. For instance, obtaining a distinct count of all customers in the early stages of data exploration slows down the process. How can they speed up these queries?
 
 You decide to use approximate execution using HyperLogLog accuracy to reduce query latency in exchange for a small reduction in accuracy. This tradeoff works for Tailwind Trader's situation where they just need to get a feel for the data.
 
@@ -222,7 +222,7 @@ To understand their requirements, let's first execute a distinct count over the 
 
     ![The run button is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-run.png "Run")
 
-    The query takes up to 20 seconds to execute. That is expected, since distinct counts are one of the most difficult to optimize types of queries.
+    The query takes up to 20 seconds to execute. That is expected, as distinct counts are one of the most difficult types of queries to optimize.
 
     The result should be `1,000,000`.
 
@@ -266,7 +266,7 @@ Tailwind Traders has asked you if there is a way to mark queries executed by the
 
     ![The SQL script context menu item is highlighted.](media/synapse-studio-new-sql-script.png "New SQL script")
 
-3. In the toolbar menu, connect to the **SQL** database to execute the query.
+3. In the toolbar menu, connect to the **SQLPool01** database to execute the query.
 
     ![The connect to option is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-connect.png "Query toolbar")
 
@@ -288,13 +288,13 @@ Tailwind Traders has asked you if there is a way to mark queries executed by the
 
     ![The run button is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-run.png "Run")
 
-    Now that we have confirmed that there are no running queries, we need to flood the system with queries and see what happens for `asa.sql.workload01` and `asa.sql.workload02`. To do this, we'll run a Azure Synapse Pipeline which triggers queries.
+    Now that we have confirmed that there are no running queries, we need to flood the system with queries and see what happens for `asa.sql.workload01` and `asa.sql.workload02`. To do this, we'll run a Synapse Pipeline which triggers queries.
 
 6. Select the **Orchestrate** hub.
 
     ![The orchestrate hub is highlighted.](media/orchestrate-hub.png "Orchestrate hub")
 
-7. Select the **Lab 08 - Execute Data Analyst and CEO Queries** Pipeline **(1)**, which will run / trigger the `asa.sql.workload01` and `asa.sql.workload02` queries. Select **Add trigger (2)**, then **Trigger now (3)**. In the dialog that appears, select **OK**.
+7. Select the **Lab 08 - Execute Data Analyst and CEO Queries** pipeline **(1)**, which will run / trigger the `asa.sql.workload01` and `asa.sql.workload02` queries. Select **Add trigger (2)**, then **Trigger now (3)**. In the dialog that appears, select **OK**.
 
     ![The add trigger and trigger now menu items are highlighted.](media/trigger-data-analyst-and-ceo-queries-pipeline.png "Add trigger")
 
@@ -340,7 +340,7 @@ Tailwind Traders has asked you if there is a way to mark queries executed by the
 
     ![The run button is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-run.png "Run")
 
-12. Let's flood the system again with queries and see what happens this time for `asa.sql.workload01` and `asa.sql.workload02` queries. To do this, we'll run an Azure Synapse Pipeline which triggers queries. **Select** the `Orchestrate` Tab, **run** the **Lab 08 - Execute Data Analyst and CEO Queries** Pipeline, which will run / trigger the `asa.sql.workload01` and `asa.sql.workload02` queries.
+12. Let's flood the system again with queries and see what happens this time for `asa.sql.workload01` and `asa.sql.workload02` queries. To do this, we'll run a Synapse Pipeline which triggers queries. **Select** the `Orchestrate` Tab, **run** the **Lab 08 - Execute Data Analyst and CEO Queries** pipeline, which will run / trigger the `asa.sql.workload01` and `asa.sql.workload02` queries.
 
 13. In the query window, replace the script with the following to see what happens to the `asa.sql.workload01` queries this time:
 
@@ -537,7 +537,7 @@ Let's start by experimenting with different parameters.
 
     ![The SQL script context menu item is highlighted.](media/synapse-studio-new-sql-script.png "New SQL script")
 
-3. In the toolbar menu, connect to the **SQL** database to execute the query.
+3. In the toolbar menu, connect to the **SQLPool01** database to execute the query.
 
     ![The connect to option is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-connect.png "Query toolbar")
 
@@ -657,7 +657,7 @@ Let's start by experimenting with different parameters.
 
     ![The SQL script context menu item is highlighted.](media/synapse-studio-new-sql-script.png "New SQL script")
 
-3. In the toolbar menu, connect to the **SQL** database to execute the query.
+3. In the toolbar menu, connect to the **SQLPool01** database to execute the query.
 
     ![The connect to option is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-connect.png "Query toolbar")
 
@@ -719,7 +719,7 @@ Table partitions enable you to divide your data into smaller groups of data. Par
 
 Date columns are usually good candidates for partitioning tables at the distributions level. In the case of Tailwind Trader's sales data, partitioning based on the `TransactionDateId` column seems to be a good choice.
 
-The SQL pool already contains two versions of the `Sale` table that have been partitioned using `TransactionDateId`. These tables are `[wwi_perf].[Sale_Partition01]` and `[wwi_perf].[Sale_Partition02]`. Below are the CTAS queries that have been used to create these tables.
+The dedicated SQL pool already contains two versions of the `Sale` table that have been partitioned using `TransactionDateId`. These tables are `[wwi_perf].[Sale_Partition01]` and `[wwi_perf].[Sale_Partition02]`. Below are the CTAS queries that have been used to create these tables.
 
 1. In the query window, replace the script with the following CTAS queries that create the partition tables:
 
@@ -762,7 +762,7 @@ The SQL pool already contains two versions of the `Sale` table that have been pa
 
     > **Note to presenter**
     >
-    > These queries have already been run on the SQL pool. **Do not** execute the script.
+    > These queries have already been run on the dedicated SQL pool. **Do not** execute the script.
 
 Notice the two partitioning strategies we've used here. The first partitioning scheme is month-based and the second is quarter-based **(3)**.
 
@@ -782,7 +782,7 @@ A hash-distributed table distributes table rows across the Compute nodes by usin
 
 Since identical values always hash to the same distribution, the data warehouse has built-in knowledge of the row locations.
 
-Azure Synapse Analytics uses this knowledge to minimize data movement during queries, which improves query performance. Hash-distributed tables work well for large fact tables in a star schema. They can have very large numbers of rows and still achieve high performance. There are, of course, some design considerations that help you to get the performance the distributed system is designed to provide.
+Dedicated SQL pool uses this knowledge to minimize data movement during queries, which improves query performance. Hash-distributed tables work well for large fact tables in a star schema. They can have very large numbers of rows and still achieve high performance. There are, of course, some design considerations that help you to get the performance the distributed system is designed to provide.
 
 *Consider using a hash-distributed table when:*
 
@@ -791,14 +791,14 @@ Azure Synapse Analytics uses this knowledge to minimize data movement during que
 
 #### Indexes
 
-Looking at the query, also notice that both partitioned tables are configured with a **clustered columnstore index (2)**. There are different types of indexes you can use in Azure Synapse Analytics:
+Looking at the query, also notice that both partitioned tables are configured with a **clustered columnstore index (2)**. There are different types of indexes you can use in dedicated SQL pool:
 
 - **Clustered Columnstore index (Default Primary)**: Offers the highest level of data compression and best overall query performance.
 - **Clustered index (Primary)**: Is performant for looking up a single to few rows.
 - **Heap (Primary)**: Benefits from faster loading and landing temporary data. It is best for small lookup tables.
 - **Nonclustered indexes (Secondary)**: Enable ordering of multiple columns in a table and allows multiple nonclustered on a single table. These can be created on any of the above primary indexes and offer more performant lookup queries.
 
-By default, Azure Synapse Analytics creates a clustered columnstore index when no index options are specified on a table. Clustered columnstore tables offer both the highest level of data compression as well as the best overall query performance. They will generally outperform clustered index or heap tables and are usually the best choice for large tables. For these reasons, clustered columnstore is the best place to start when you are unsure of how to index your table.
+By default, dedicated SQL pool creates a clustered columnstore index when no index options are specified on a table. Clustered columnstore tables offer both the highest level of data compression as well as the best overall query performance. They will generally outperform clustered index or heap tables and are usually the best choice for large tables. For these reasons, clustered columnstore is the best place to start when you are unsure of how to index your table.
 
 There are a few scenarios where clustered columnstore may not be a good option:
 
@@ -821,15 +821,15 @@ The primary benefits to partitioning is that it:
 
 The reason we have created two tables with different partition strategies **(3)** is to experiment with proper sizing.
 
-While partitioning can be used to improve performance, creating a table with too many partitions can hurt performance under some circumstances. These concerns are especially true for clustered columnstore tables, like we created here. For partitioning to be helpful, it is important to understand when to use partitioning and the number of partitions to create. There is no hard fast rule as to how many partitions are too many, it depends on your data and how many partitions you loading simultaneously. A successful partitioning scheme usually has tens to hundreds of partitions, not thousands.
+While partitioning can be used to improve performance, creating a table with too many partitions can hurt performance under some circumstances. These concerns are especially true for clustered columnstore tables, like we created here. For partitioning to be helpful, it is important to understand when to use partitioning and the number of partitions to create. There is no hard and fast rule as to how many partitions are too many, it depends on your data and how many partitions you are loading simultaneously. A successful partitioning scheme usually has tens to hundreds of partitions, not thousands.
 
 *Supplemental information*:
 
-When creating partitions on clustered columnstore tables, it is important to consider how many rows belong to each partition. For optimal compression and performance of clustered columnstore tables, a minimum of 1 million rows per distribution and partition is needed. Before partitions are created, Azure Synapse Analytics already divides each table into 60 distributed databases. Any partitioning added to a table is in addition to the distributions created behind the scenes. Using this example, if the sales fact table contained 36 monthly partitions, and given that Azure Synapse Analytics has 60 distributions, then the sales fact table should contain 60 million rows per month, or 2.1 billion rows when all months are populated. If a table contains fewer than the recommended minimum number of rows per partition, consider using fewer partitions in order to increase the number of rows per partition.
+When creating partitions on clustered columnstore tables, it is important to consider how many rows belong to each partition. For optimal compression and performance of clustered columnstore tables, a minimum of 1 million rows per distribution and partition is needed. Before partitions are created, dedicated SQL pools already divides each table into 60 distributed databases. Any partitioning added to a table is in addition to the distributions created behind the scenes. Using this example, if the sales fact table contained 36 monthly partitions, and given that dedicated SQL pool has 60 distributions, then the sales fact table should contain 60 million rows per month, or 2.1 billion rows when all months are populated. If a table contains fewer than the recommended minimum number of rows per partition, consider using fewer partitions in order to increase the number of rows per partition.
 
 ### Use result set caching
 
-Tailwind Trader's downstream reports are used by many users, which often means the same query is being executed repeatedly against data that does not change that often. What can they do to improve the performance of these types of queries? How does this approach work when the underlying data changes?
+Tailwind Trader's downstream reports are used by many users, which often means the same query is being executed repeatedly against data that does not change often. What can they do to improve the performance of these types of queries? How does this approach work when the underlying data changes?
 
 They should consider result-set caching.
 
@@ -874,9 +874,9 @@ Result cache is evicted regularly based on a time-aware least recently used algo
 
     > **Important**
     >
-    > The operations to create a result set cache and retrieve data from the cache happen on the control node of a dedicated SQL pool. When result set caching is turned ON, running queries that return a large result set (for example, >1GB) can cause high throttling on the control node and slow down the overall query response on the instance. Those queries are commonly used during data exploration or ETL operations. To avoid stressing the control node and cause performance issue, users should turn OFF result set caching on the database before running those types of queries.
+    > The operations to create a result set cache and retrieve data from the cache happen on the control node of a dedicated SQL pool instance. When result set caching is turned ON, running queries that return a large result set (for example, >1GB) can cause high throttling on the control node and slow down the overall query response on the instance. Those queries are commonly used during data exploration or ETL operations. To avoid stressing the control node and cause performance issue, users should turn OFF result set caching on the database before running those types of queries.
 
-5. In the toolbar menu, connect to the **SQL Pool** database for the next query.
+5. In the toolbar menu, connect to the **SQLPool01** database for the next query.
 
     ![The connect to option is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-connect.png "Query toolbar")
 
@@ -925,7 +925,7 @@ Result cache is evicted regularly based on a time-aware least recently used algo
 
     ![The returned value is false.](media/result-cache-hit1.png "Result set cache hit")
 
-    Still, you can identify that, while running the query, Synapse has also cached the result set.
+    Still, you can identify that, while running the query, dedicated SQL pool has also cached the result set.
 
 8. In the query window, replace the script with the following to get the execution steps:
 
@@ -1061,11 +1061,11 @@ Result cache is evicted regularly based on a time-aware least recently used algo
 
     > **Note to presenter**
     >
-    > Make sure you disable result set caching on the SQL pool. Failing to do so will have a negative impact on the remainder of the demos, as it will skew execution times and defeat the purpose of several upcoming exercises.
+    > Make sure you disable result set caching on the dedicated SQL pool. Failing to do so will have a negative impact on the remainder of the demos, as it will skew execution times and defeat the purpose of several upcoming exercises.
 
     The maximum size of result set cache is 1 TB per database. The cached results are automatically invalidated when the underlying query data change.
 
-    The cache eviction is managed by SQL Analytics automatically following this schedule:
+    The cache eviction is managed by dedicated SQL pool automatically following this schedule:
 
     - Every 48 hours if the result set hasn't been used or has been invalidated.
     - When the result set cache approaches the maximum size.

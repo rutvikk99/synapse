@@ -1,14 +1,14 @@
-# Run interactive queries using Azure Synapse SQL Serverless
+# Run interactive queries using serverless SQL pools with Azure Synapse
 
-In this demo, we show how Synapse Analytics enables you to use Synapse SQL Serverless (SQL On-demand) to query data stored in the data lake, as well as an external data source. We also cover security and how to control access to the files through RBAC and ACLs applied to the ADLS Gen2 data store. The following table of contents describes and links to the elements of the demo:
+In this demo, we show how Azure Synapse enables you to use serverless SQL pools to query data stored in the data lake, as well as an external data source. We also cover security and how to control access to the files through RBAC and ACLs applied to the ADLS Gen2 data store. The following table of contents describes and links to the elements of the demo:
 
-- [Run interactive queries using Azure Synapse SQL Serverless](#run-interactive-queries-using-azure-synapse-sql-serverless)
+- [Run interactive queries using serverless SQL pools with Azure Synapse](#run-interactive-queries-using-azure-synapse-sql-serverless)
   - [Demo prerequisites](#demo-prerequisites)
-  - [Querying a Data Lake Store using SQL Serverless in Azure Synapse Analytics](#querying-a-data-lake-store-using-sql-serverless-in-azure-synapse-analytics)
-    - [Query sales Parquet data with Synapse SQL Serverless](#query-sales-parquet-data-with-synapse-sql-serverless)
+  - [Querying a Data Lake Store using serverless SQL pools in Azure Synapse Analytics](#querying-a-data-lake-store-using-sql-serverless-in-azure-synapse-analytics)
+    - [Query sales Parquet data with serverless SQL pools](#query-sales-parquet-data-with-synapse-sql-serverless)
     - [Create an external table for 2019 sales data](#create-an-external-table-for-2019-sales-data)
     - [Create an external table for CSV files](#create-an-external-table-for-csv-files)
-    - [Create a SQL serverless view](#create-a-sql-serverless-view)
+    - [Create a view using a serverless SQL pool](#create-a-sql-serverless-view)
   - [Securing access to data through using SQL Serverless in Azure Synapse Analytics](#securing-access-to-data-through-using-sql-serverless-in-azure-synapse-analytics)
     - [Create Azure Active Directory security groups](#create-azure-active-directory-security-groups)
     - [Add group members](#add-group-members)
@@ -24,19 +24,19 @@ Tailwind Trader's Data Engineers want a way to explore the data lake, transform 
 
 2. You must have permissions to create new Azure Active Directory security groups and assign members to them.
 
-## Querying a Data Lake Store using SQL Serverless in Azure Synapse Analytics
+## Querying a Data Lake Store using serverless SQL pools in Azure Synapse Analytics
 
 Understanding data through data exploration is one of the core challenges faced today by data engineers and data scientists as well. Depending on the underlying structure of the data as well as the specific requirements of the exploration process, different data processing engines will offer varying degrees of performance, complexity, and flexibility.
 
-In Azure Synapse Analytics, you have the possibility of using either the Synapse SQL Serverless engine, the big-data Spark engine, or both. Which service you use mostly depends on your personal preference and expertise. When conducting data engineering tasks, both options can be equally valid in many cases. However, there are certain situations where harnessing the power of Apache Spark can help you overcome problems with the source data. This is because in a Synapse Notebook, you can import from a large number of free libraries that add functionality to your environment when working with data. There are other situations where it is much more convenient and faster using Synapse SQL Serverless to explore the data, or to expose data in the data lake through a SQL view that can be accessed from external tools, like Power BI.
+In Azure Synapse Analytics, you have the possibility of using either the SQL, Apache Spark for Synapse, or both. Which service you use mostly depends on your personal preference and expertise. When conducting data engineering tasks, both options can be equally valid in many cases. However, there are certain situations where harnessing the power of Apache Spark can help you overcome problems with the source data. This is because in a Synapse Notebook, you can import from a large number of free libraries that add functionality to your environment when working with data. There are other situations where it is much more convenient and faster using serveless SQL pools to explore the data, or to expose data in the data lake through a SQL view that can be accessed from external tools, like Power BI.
 
 In this exercise, you will explore the data lake using both options.
 
-### Query sales Parquet data with Synapse SQL Serverless
+### Query sales Parquet data with serverless SQL pools
 
-When you query Parquet files using Synapse SQL Serverless, you can explore the data with T-SQL syntax.
+When you query Parquet files using serverless SQL pools, you can explore the data with T-SQL syntax.
 
-1. In Synapse Analytics Studio, navigate to the **Data** hub.
+1. In Synapse Studio, navigate to the **Data** hub.
 
     ![The Data menu item is highlighted.](media/data-hub.png "Data hub")
 
@@ -44,13 +44,13 @@ When you query Parquet files using Synapse SQL Serverless, you can explore the d
 
     ![The Data hub is displayed with the options highlighted.](media/data-hub-parquet-select-rows.png "Select TOP 100 rows")
 
-3. Ensure **SQL on-demand** is selected **(1)** in the `Connect to` dropdown list above the query window, then run the query **(2)**. Data is loaded by the Synapse SQL Serverless endpoint and processed as if was coming from any regular relational database.
+3. Ensure **Built-in** is selected **(1)** in the `Connect to` dropdown list above the query window, then run the query **(2)**. Data is loaded by the serverless SQL endpoint and processed as if was coming from any regular relational database.
 
-    ![The SQL on-demand connection is highlighted.](media/sql-on-demand-selected.png "SQL on-demand")
+    ![The Built-in connection is highlighted.](media/sql-on-demand-selected.png "SQL Built-in")
 
     The cell output shows the query results from the Parquet file.
 
-    ![The cell output is displayed.](media/sql-on-demand-output.png "SQL On-demand output")
+    ![The cell output is displayed.](media/sql-on-demand-output.png "SQL output")
 
 4. Modify the SQL query to perform aggregates and grouping operations to better understand the data. Replace the query with the following, making sure that the file path in `OPENROWSET` matches the current file path:
 
@@ -89,7 +89,7 @@ When you query Parquet files using Synapse SQL Serverless, you can explore the d
 
 Rather than creating a script with `OPENROWSET` and a path to the root 2019 folder every time we want to query the Parquet files, we can create an external table.
 
-1. In Synapse Analytics Studio, navigate to the **Data** hub.
+1. In Synapse Studio, navigate to the **Data** hub.
 
     ![The Data menu item is highlighted.](media/data-hub.png "Data hub")
 
@@ -97,13 +97,13 @@ Rather than creating a script with `OPENROWSET` and a path to the root 2019 fold
 
     ![The create external link is highlighted.](media/create-external-table.png "Create external table")
 
-3. Make sure **`SQL on-demand`** is selected for the **SQL pool (1)**. Under **Select a database**, select **+ New** and enter `demo` **(2)**. For **External table name**, enter `All2019Sales` **(3)**. Under **Create external table**, select **Using SQL script (4)**, then select **Create (5)**.
+3. Make sure **`Built-in`** is selected for the **SQL pool (1)**. Under **Select a database**, select **+ New** and enter `demo` **(2)**. For **External table name**, enter `All2019Sales` **(3)**. Under **Create external table**, select **Using SQL script (4)**, then select **Create (5)**.
 
     ![The create external table form is displayed.](media/create-external-table-form.png "Create external table")
 
-    > **Note to presenter**: Make sure the script is connected to the SQL serverless pool (`SQL on-demand`) **(1)** and the database is set to `demo` **(2)**.
+    > **Note to presenter**: Make sure the script is connected to the serverless SQL pool (`Built-in`) **(1)** and the database is set to `demo` **(2)**.
 
-    ![The SQL on-demand pool and demo database are selected.](media/on-demand-and-demo.png "Script toolbar")
+    ![The Built-in pool and demo database are selected.](media/on-demand-and-demo.png "Script toolbar")
 
     The generated script contains the following components:
 
@@ -232,11 +232,11 @@ You decide to create an external table that connects to the external data source
 
     ![The chart is displayed.](media/population-chart.png "Population chart")
 
-### Create a SQL serverless view
+### Create a view with a serverless SQL pool
 
-Let's create a view to wrap a SQL serverless query. Views allow you to reuse queries and are needed if you want to use tools, such as Power BI, in conjunction with SQL serverless.
+Let's create a view to wrap a SQL query. Views allow you to reuse queries and are needed if you want to use tools, such as Power BI, in conjunction with serverless SQL pools.
 
-1. In Synapse Analytics Studio, navigate to the **Data** hub.
+1. In Synapse Studio, navigate to the **Data** hub.
 
     ![The Data menu item is highlighted.](media/data-hub.png "Data hub")
 
@@ -278,7 +278,7 @@ Let's create a view to wrap a SQL serverless query. Views allow you to reuse que
 
     ![The run button is highlighted.](media/sql-run.png "Run")
 
-    We just created the view to wrap the SQL serverless query that selects data from the CSV file and selected from the view:
+    We just created the view to wrap the SQL query that selects data from the CSV file and selected from the view:
 
     ![The query results are displayed.](media/create-view-script-results.png "Query results")
 
@@ -288,7 +288,7 @@ Let's create a view to wrap a SQL serverless query. Views allow you to reuse que
 
     ![The refresh button is highlighted.](media/refresh-databases.png "Refresh databases")
 
-7. Expand the `demo` SQL on-demand database.
+7. Expand the `demo` SQL database.
 
     ![The demo database is displayed.](media/demo-database.png "Demo database")
 
@@ -299,7 +299,7 @@ Let's create a view to wrap a SQL serverless query. Views allow you to reuse que
     - **3) External file formats**: `QuotedCsvWithHeader` and `SynapseParquetFormat`.
     - **4) Views**: `CustomerInfo`. 
 
-## Securing access to data through using SQL Serverless in Azure Synapse Analytics
+## Securing access to data through using a serverless SQL pool in Azure Synapse Analytics
 
 Tailwind Traders wants to enforce that any kind of modifications to sales data can happen in the current year only, while allowing all authorized users to query the entirety of data. They have a small group of admins who can modify historic data if needed.
 
@@ -465,7 +465,7 @@ To test out the permissions, we will add our own account to the `tailwind-reader
 
 ### Test permissions
 
-1. In Synapse Analytics Studio, navigate to the **Data** hub.
+1. In Synapse Studio, navigate to the **Data** hub.
 
     ![The Data menu item is highlighted.](media/data-hub.png "Data hub")
 
@@ -473,13 +473,13 @@ To test out the permissions, we will add our own account to the `tailwind-reader
 
     ![The Data hub is displayed with the options highlighted.](media/data-hub-parquet-select-rows.png "Select TOP 100 rows")
 
-3. Ensure **SQL on-demand** is selected **(1)** in the `Connect to` dropdown list above the query window, then run the query **(2)**. Data is loaded by the Synapse SQL Serverless endpoint and processed as if was coming from any regular relational database.
+3. Ensure **Built-in** is selected **(1)** in the `Connect to` dropdown list above the query window, then run the query **(2)**. Data is loaded by the serverless SQL pool endpoint and processed as if was coming from any regular relational database.
 
-    ![The SQL on-demand connection is highlighted.](media/sql-on-demand-selected.png "SQL on-demand")
+    ![The Built-in connection is highlighted.](media/sql-on-demand-selected.png "Built-in SQL pool")
 
     The cell output shows the query results from the Parquet file.
 
-    ![The cell output is displayed.](media/sql-on-demand-output.png "SQL On-demand output")
+    ![The cell output is displayed.](media/sql-on-demand-output.png "SQL output")
 
     The read permissions to the Parquet file assigned to us through the `tailwind-readers` security group, which then is granted RBAC permissions on the storage account through the **Storage Blob Data Reader** role assignment, is what enabled us to view the file contents.
 
