@@ -1,8 +1,8 @@
-# Optimize a dedicated SQL pool in Azure Synapse Analytics
+# Optimize a Data Warehouse with dedicated SQL Pools in Azure Synapse 
 
-In this demo, we show ways you can optimize data warehouse workloads that use dedicated SQL pools. We cover useful developer features, how to define and use workload management and classification to control data loading, and methods to optimize query performance. The following table of contents describes and links to the elements of the demo:
+In this demo, we show ways you can optimize data warehouse workloads that use the dedicated SQL pools. We cover useful developer features, how to define and use workload management and classification to control data loading, and methods to optimize query performance. The following table of contents describes and links to the elements of the demo:
 
-- [Optimize a Data Warehouse with Azure Synapse SQL Pools](#optimize-a-data-warehouse-with-azure-synapse-sql-pools)
+- [Optimize a Data Warehouse with dedicated SQL Pools in Azure Synapse](#optimize-a-data-warehouse-with-azure-synapse-sql-pools)
   - [Demo prerequisites](#demo-prerequisites)
   - [Understanding developer features of Azure Synapse Analytics](#understanding-developer-features-of-azure-synapse-analytics)
     - [Using window functions](#using-window-functions)
@@ -248,7 +248,7 @@ To understand their requirements, let's first execute a distinct count over the 
 
 Running mixed workloads can pose resource challenges on busy systems. Solution Architects seek ways to separate classic data warehousing activities (such as loading, transforming, and querying data) to ensure that enough resources exist to hit SLAs.
 
-Dedicated SQL pool workload management in Azure Synapse consists of three high-level concepts: Workload Classification, Workload Importance and Workload Isolation. These capabilities give you more control over how your workload utilizes system resources.
+Workload management for dedicated SQL pools in Azure Synapse consists of three high-level concepts: Workload Classification, Workload Importance and Workload Isolation. These capabilities give you more control over how your workload utilizes system resources.
 
 Workload importance influences the order in which a request gets access to resources. On a busy system, a request with higher importance has first access to resources. Importance can also ensure ordered access to locks.
 
@@ -637,7 +637,7 @@ Let's start by experimenting with different parameters.
 
     > **NOTE**
     >
-    > In this case, when we are looking for fast query response times, the heap structure is not a good choice as we will see in a moment. Still, there are cases where using a heap table can help performance rather than hurting it. One such example is when we're looking to ingest large amounts of data into a dedicated SQL pool.
+    > In this case, when we are looking for fast query response times, the heap structure is not a good choice as we will see in a moment. Still, there are cases where using a heap table can help performance rather than hurting it. One such example is when we're looking to ingest large amounts of data into the SQL database associated with the dedicated SQL pool.
 
     If we were to review the query plan in detail, we would clearly see the root cause of the performance problem: inter-distribution data movements.
 
@@ -833,7 +833,7 @@ Tailwind Trader's downstream reports are used by many users, which often means t
 
 They should consider result-set caching.
 
-Cache the results of a query in the provisioned dedicated SQL pool storage. This enables interactive response times for repetitive queries against tables with infrequent data changes.
+Cache the results of a query in the dedicated Azure Synapse SQL pool storage. This enables interactive response times for repetitive queries against tables with infrequent data changes.
 
 > The result-set cache persists even if dedicated SQL pool is paused and resumed later.
 
