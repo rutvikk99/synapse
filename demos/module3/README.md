@@ -1,8 +1,8 @@
-# Perform Data Engineering with Azure Synapse Spark Pools
+# Perform Data Engineering with Serverless Spark Pools in Azure Synapse
 
 In this demo, we show how Synapse Analytics enables you to perform data engineering tasks using the power of Apache Spark. The following table of contents describes and links to the elements of the demo:
 
-- [Perform Data Engineering with Azure Synapse Spark Pools](#perform-data-engineering-with-azure-synapse-spark-pools)
+- [Perform Data Engineering with Serverless Spark Pools in Azure Synapse](#perform-data-engineering-with-azure-synapse-spark-pools)
   - [Demo prerequisites](#demo-prerequisites)
   - [Ingesting data with Apache Spark notebooks in Azure Synapse Analytics](#ingesting-data-with-apache-spark-notebooks-in-azure-synapse-analytics)
     - [Ingest and explore Parquet files from a data lake with Synapse Spark](#ingest-and-explore-parquet-files-from-a-data-lake-with-synapse-spark)
@@ -18,7 +18,7 @@ You recommend using Synapse Notebooks, which are integrated in the Synapse Analy
 
 All demos use the same environment. If you have not done so already, Complete the [environment setup instructions](https://github.com/ctesta-oneillmsft/asa-vtd) (external link).
 
-## Ingesting data with Apache Spark notebooks in Azure Synapse Analytics
+## Ingesting data with Spark notebooks in Azure Synapse Analytics
 
 ### Ingest and explore Parquet files from a data lake with Synapse Spark
 
@@ -123,7 +123,7 @@ You recommend using the Data hub to view the Parquet files in the connected stor
         |-- StoreId: short (nullable = true)
     ```
 
-    Spark evaluates the file contents to infer the schema. This automatic inference is usually sufficient for data exploration and most transformation tasks. However, when you load data to an external resource like a SQL pool table, sometimes you need to declare your own schema and apply that to the dataset. For now, the schema looks good.
+    Spark evaluates the file contents to infer the schema. This automatic inference is usually sufficient for data exploration and most transformation tasks. However, when you load data to an external resource like a SQL table, sometimes you need to declare your own schema and apply that to the dataset. For now, the schema looks good.
 
 15. Now let's use the dataframe to use aggregates and grouping operations to better understand the data. Create a new cell and enter the following, then **run** the cell:
 
@@ -363,13 +363,13 @@ You recommend using Synapse Notebooks to explore and apply data transformations 
 
 ## Integrating SQL and Spark pools in Azure Synapse Analytics
 
-Tailwind Traders wants to write to the SQL pool after performing data engineering tasks in Spark, then reference the SQL pool data as a source for joining with Spark dataframes that contain data from other files.
+Tailwind Traders wants to write to the SQL database assodicated with dedicated SQL pool after performing data engineering tasks in Spark, then reference that SQL database as a source for joining with Spark dataframes that contain data from other files.
 
-You decide to use the Azure Synapse Apache Spark to Synapse SQL connector to efficiently transfer data between Spark pools and SQL pools in Azure Synapse.
+You decide to use the Azure Synapse Apache Spark to Synapse SQL connector to efficiently transfer data between Spark databases and SQL databases in Azure Synapse.
 
-Transferring data between Spark pools and SQL pools can be done using JDBC. However, given two distributed systems such as Spark and SQL pools, JDBC tends to be a bottleneck with serial data transfer.
+Transferring data between Spark databases and SQL databases can be done using JDBC. However, given two distributed systems such as Spark pools and SQL pools, JDBC tends to be a bottleneck with serial data transfer.
 
-The Azure Synapse Apache Spark pool to Synapse SQL connector is a data source implementation for Apache Spark. It uses the Azure Data Lake Storage Gen2 and PolyBase in SQL pools to efficiently transfer data between the Spark cluster and the Synapse SQL instance.
+The Azure Synapse Apache Spark pool to Synapse SQL connector is a data source implementation for Apache Spark. It uses the Azure Data Lake Storage Gen2 and PolyBase in dedicated SQL pools to efficiently transfer data between the Spark cluster and the Synapse SQL instance.
 
 1. We have been using Python code in these cells up to this point. If we want to use the Apache Spark pool to Synapse SQL connector (`sqlanalytics`), one option is to create a temporary view of the data within the dataframe. Execute the following in a new cell to create a view named `top_purchases`:
 
@@ -384,20 +384,20 @@ The Azure Synapse Apache Spark pool to Synapse SQL connector is a data source im
 
     ```java
     %%spark
-    // Make sure the name of the SQL pool (SQLPool01 below) matches the name of your SQL pool.
+    // Make sure the name of the dedcated SQL pool (SQLPool01 below) matches the name of your SQL pool.
     val df = spark.sqlContext.sql("select * from top_purchases")
     df.write.sqlanalytics("SQLPool01.wwi.TopPurchases", Constants.INTERNAL)
     ```
 
     > **Note to presenter**: The cell may take over a minute to execute. If you have run this command before, you will receive an error stating that "There is already and object named.." because the table already exists.
 
-    After the cell finishes executing, let's take a look at the list of SQL pool tables to verify that the table was successfully created for us.
+    After the cell finishes executing, let's take a look at the list of SQL tables to verify that the table was successfully created for us.
 
 3. **Leave the notebook open**, then navigate to the **Data** hub (if not already selected).
 
     ![The data hub is highlighted.](media/data-hub.png "Data hub")
 
-4. Select the **Workspace** tab **(1)**, expand the SQL pool, select the **ellipses (...)** on Tables **(2)** and select **Refresh (3)**. Expand the **`wwi.TopPurchases`** table and columns **(4)**.
+4. Select the **Workspace** tab **(1)**, expand the SQL database, select the **ellipses (...)** on Tables **(2)** and select **Refresh (3)**. Expand the **`wwi.TopPurchases`** table and columns **(4)**.
 
     ![The table is displayed.](media/toppurchases-table.png "TopPurchases table")
 
@@ -418,9 +418,9 @@ The Azure Synapse Apache Spark pool to Synapse SQL connector is a data source im
 
     Compare the file path in the cell above to the file path in the first cell. Here we are using a relative path to load **all December 2019 sales** data from the Parquet files located in `sale-small`, vs. just December 31, 2010 sales data.
 
-    Next, let's load the `TopSales` data from the SQL pool table we created earlier into a new Spark dataframe, then join it with this new `dfsales` dataframe. To do this, we must once again use the `%%spark` magic on a new cell since we'll use the Apache Spark pool to Synapse SQL connector to retrieve data from the SQL pool. Then we need to add the dataframe contents to a new temporary view so we can access the data from Python.
+    Next, let's load the `TopSales` data from the SQL table we created earlier into a new Spark dataframe, then join it with this new `dfsales` dataframe. To do this, we must once again use the `%%spark` magic on a new cell since we'll use the Apache Spark pool to Synapse SQL connector to retrieve data from the SQL database. Then we need to add the dataframe contents to a new temporary view so we can access the data from Python.
 
-6. Execute the following in a new cell to read from the `TopSales` SQL pool table and save it to a temporary view:
+6. Execute the following in a new cell to read from the `TopSales` SQL table and save it to a temporary view:
 
     ```java
     %%spark
@@ -433,7 +433,7 @@ The Azure Synapse Apache Spark pool to Synapse SQL connector is a data source im
 
     ![The cell and its output are displayed as described.](media/read-sql-pool.png "Read SQL pool")
 
-    The cell's language is set to `Scala` by using the `%%spark` magic **(1)** at the top of the cell. We declared a new variable named `df2` as a new DataFrame created by the `spark.read.sqlanalytics` method, which reads from the `TopPurchases` table **(2)** in the SQL pool. Then we populated a new temporary view named `top_purchases_sql` **(3)**. Finally, we showed the first 10 records with the `df2.head(10))` line **(4)**. The cell output displays the dataframe values **(5)**.
+    The cell's language is set to `Scala` by using the `%%spark` magic **(1)** at the top of the cell. We declared a new variable named `df2` as a new DataFrame created by the `spark.read.sqlanalytics` method, which reads from the `TopPurchases` table **(2)** in the SQL database. Then we populated a new temporary view named `top_purchases_sql` **(3)**. Finally, we showed the first 10 records with the `df2.head(10))` line **(4)**. The cell output displays the dataframe values **(5)**.
 
 7. Execute the following in a new cell to create a new dataframe in Python from the `top_purchases_sql` temporary view, then display the first 10 results:
 
@@ -445,7 +445,7 @@ The Azure Synapse Apache Spark pool to Synapse SQL connector is a data source im
 
     ![The dataframe code and output are displayed.](media/df-top-purchases.png "dfTopPurchases dataframe")
 
-8. Execute the following in a new cell to join the data from the sales Parquet files and the `TopPurchases` SQL pool:
+8. Execute the following in a new cell to join the data from the sales Parquet files and the `TopPurchases` SQL database:
 
     ```python
     inner_join = dfsales.join(dfTopPurchasesFromSql,
@@ -462,7 +462,7 @@ The Azure Synapse Apache Spark pool to Synapse SQL connector is a data source im
     display(inner_join_agg.limit(100))
     ```
 
-    In the query, we joined the `dfsales` and `dfTopPurchasesFromSql` dataframes, matching on `CustomerId` and `ProductId`. This join combined the `TopPurchases` SQL pool table data with the December 2019 sales Parquet data **(1)**.
+    In the query, we joined the `dfsales` and `dfTopPurchasesFromSql` dataframes, matching on `CustomerId` and `ProductId`. This join combined the `TopPurchases` SQL table data with the December 2019 sales Parquet data **(1)**.
 
     We grouped by the `CustomerId` and `ProductId` fields. Since the `ProductId` field name is ambiguous (it exists in both dataframes), we had to fully-qualify the `ProductId` name to refer to the one in the `TopPurchases` dataframe **(2)**.
 
