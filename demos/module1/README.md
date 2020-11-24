@@ -9,7 +9,7 @@ In this demo, we show the primary features of Azure Synapse Analytics, and how t
   - [Exploring Azure Synapse Studio](#exploring-azure-synapse-studio)
     - [The Data hub](#the-data-hub)
     - [The Develop hub](#the-develop-hub)
-    - [The Orchestrate hub](#the-orchestrate-hub)
+    - [The Integrate hub](#the-integrate-hub)
     - [The Monitor hub](#the-monitor-hub)
     - [The Manage hub](#the-manage-hub)
   - [Designing a Modern Data Warehouse using Azure Synapse Analytics](#designing-a-modern-data-warehouse-using-azure-synapse-analytics)
@@ -68,7 +68,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
     3. The **Workspace web URL (3)**, a direct link to Synapse Studio for the workspace.
     4. Available resources, such as **SQL pools** and **Apache Spark pools (4)**.
 
-3. Select the **SQL pool**.
+3. Select **SQLPool01**.
 
     ![The SQL pool link is highlighted.](media/sql-pool-link.png "SQL pool")
 
@@ -81,10 +81,9 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
     You can access the dedicated SQL pool in the portal, as shown here, or from within Synapse Studio, as we'll show you in a bit. When you access a dedicated SQL pool in the portal, you have additional configurations and controls vs. what you find in Synapse Studio. Here are some of the common features you'll access through the portal:
 
     1. At the top of the window, we see **controls (1)** to pause, scale, restore, set a new restore point, and delete the pool.
-    2. Below, **Transparent data encryption (2)** is prominently displayed, letting us quickly see whether it is enabled to encrypt our databases, backups, and logs.
-    3. Next to that, we see the **Geo-backup (3)** option and whether it is enabled to backup once per day to a paired data center.
-    4. At the bottom of the Overview blade, we see metrics showing the **Data Warehousing Units (DWU) usage** and **Active and queued queries (4)**, allowing us to filter within different time ranges.
-    5. The left-hand menu includes some of these options, as well. It is here where you find the **Access control (IAM) (5)** settings to control access to the SQL pool, granted to users and services.
+    2. Below, with the **Features** tab **(2)** selected, we see the status of the security and recovery features **(3)** for the dedicated SQL pool. `Transparent data encryption` is prominently displayed, letting us quickly see whether it is enabled to encrypt our databases, backups, and logs. Next to that, we see the `Auditing` feature to track SQL pool events and write them to an audit log. `Azure Defender for SQL`, if enabled, helps detect potential security threats and anomalous activity. Finally, the `Geo-backup` feature enables backups once per day to a paired data center.
+    3. At the bottom of the Overview blade, we see metrics showing the **Data Warehousing Units (DWU) usage** and **Active and queued queries (4)**, allowing us to filter within different time ranges.
+    4. The left-hand menu includes some of these options, as well. It is here where you find the **Access control (IAM) (5)** settings to control access to the SQL pool, granted to users and services.
 
 4. Go back to the Synapse Workspace overview blade in the portal, then open the **Apache Spark pool**.
 
@@ -100,8 +99,9 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
     1. Configuring **auto-pause settings**, based on cluster idle time, and **auto-scale settings (1)** based on the amount of activity.
     2. The **Packages (2)** option allows you to upload an environment configuration file (output from the `pip freeze` command) that defines the Python packages to load on the cluster. The packages listed in this file for install or upgrade are downloaded from PyPi at the time of pool startup. This requirements file is used every time a Spark instance is created from that Spark pool.
+    3. The **Spark configuration (3)** option lets you upload a Spark configuration file to specify additional properties on the Spark pool. This will be referenced to configure Spark applications upon job submission.
 
-    On the left-hand menu, you can also find the **Access control (IAM) (3)** settings to control access to the Spark pool, granted to users and services.
+    On the left-hand menu, you can also find the **Access control (IAM) (4)** settings to control access to the Spark pool, granted to users and services.
 
 5. Select **Packages** on the left-hand menu of the Spark pool.
 
@@ -111,7 +111,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
 ## Exploring Azure Synapse Studio
 
-1. Open Synapse workspace in the resource group, then select either **Launch Synapse Studio** or the **Workspace web URL**.
+1. Open Synapse workspace in the resource group, then select either **Open Synapse Studio** or the **Workspace web URL**.
 
     ![The two Synapse Studio links are highlighted with an arrow pointing between them on the Overview blade of Synapse workspace.](media/synapse-workspace-studio-links.png "Synapse workspace")
 
@@ -192,13 +192,13 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
     3. **Data flows** are powerful data transformation workflows that use the power of Apache Spark, but are authored using a code-free GUI.
     4. **Power BI** reports can be embedded here, giving you access to the advanced visualizations they provide without ever leaving the Synapse workspace.
 
-### The Orchestrate hub
+### The Integrate hub
 
-1. Select the **Orchestrate** hub.
+1. Select the **Integrate** hub.
 
-    ![The orchestrate hub is highlighted.](media/orchestrate-hub.png "Orchestrate hub")
+    ![The integrate hub is highlighted.](media/integrate-hub.png "Integrate hub")
 
-    Manage orchestration pipelines within the Orchestrate hub. If you are familiar with Azure Data Factory, then you will feel at home in this hub. The pipeline creation experience is the same as in ADF, which gives you another powerful integration built in to Azure Synapse, removing the need to use Azure Data Factory for data movement and transformation pipelines.
+    Manage orchestration pipelines within the Integrate hub. If you are familiar with Azure Data Factory, then you will feel at home in this hub. The pipeline creation experience is the same as in ADF, which gives you another powerful integration built in to Azure Synapse, removing the need to use Azure Data Factory for data movement and transformation pipelines.
 
 2. Expand Pipelines and select **1 Master Pipeline (1)**. Point out the **Activities (2)** that can be added to the pipeline, and show the **pipeline canvas (3)** on the right.
 
@@ -277,11 +277,11 @@ With a modern data warehouse, we have one hub for all data when using Azure Syna
 
 Azure Synapse enables you to ingest data from multiple data sources through its orchestration pipelines.
 
-1. Select the **Orchestrate** hub.
+1. Select the **Integrate** hub.
 
-    ![The orchestrate hub is highlighted.](media/orchestrate-hub.png "Orchestrate hub")
+    ![The integrate hub is highlighted.](media/integrate-hub.png "Integrate hub")
 
-    Manage orchestration pipelines within the Orchestrate hub. If you are familiar with Azure Data Factory, then you will feel at home in this hub. The pipeline creation experience is the same as in ADF, which gives you another powerful integration built in to Azure Synapse, removing the need to use Azure Data Factory for data movement and transformation pipelines.
+    Manage orchestration pipelines within the Integrate hub. If you are familiar with Azure Data Factory, then you will feel at home in this hub. The pipeline creation experience is the same as in ADF, which gives you another powerful integration built in to Azure Synapse, removing the need to use Azure Data Factory for data movement and transformation pipelines.
 
 2. Expand Pipelines and select **Customize Email Analytics (1)**. Select the **Copy data** activity on the canvas **(2)**, select the **Source** tab **(3)**, then select **Preview data (4)**.
 
@@ -463,9 +463,9 @@ Azure Synapse enables you to ingest data from multiple data sources through its 
 
 #### Stage 1: Data ingest and preparation
 
-1. Select the **Orchestrate** hub.
+1. Select the **Integrate** hub.
 
-    ![The orchestrate hub is highlighted.](media/orchestrate-hub.png "Orchestrate hub")
+    ![The integrate hub is highlighted.](media/integrate-hub.png "Integrate hub")
 
 2. Expand Pipelines and select **1 Master Pipeline (1)**. Point out the **Activities (2)** that can be added to the pipeline, and show the **pipeline canvas (3)** on the right.
 
