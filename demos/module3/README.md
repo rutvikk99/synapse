@@ -1,26 +1,26 @@
 # Perform Data Engineering with Serverless Spark Pools in Azure Synapse
 
-In this demo, we show how Synapse Analytics enables you to perform data engineering tasks using the power of Apache Spark. The following table of contents describes and links to the elements of the demo:
+In this demo, we show how Azure Synapse Analytics enables you to perform data engineering tasks using the power of Apache Spark. The following table of contents describes and links to the elements of the demo:
 
-- [Perform Data Engineering with Serverless Spark Pools in Azure Synapse](#perform-data-engineering-with-azure-synapse-spark-pools)
+- [Perform Data Engineering with serverless Spark pools in Azure Synapse Analytics](#perform-data-engineering-with-azure-synapse-spark-pools)
   - [Demo prerequisites](#demo-prerequisites)
   - [Ingesting data with Apache Spark notebooks in Azure Synapse Analytics](#ingesting-data-with-apache-spark-notebooks-in-azure-synapse-analytics)
-    - [Ingest and explore Parquet files from a data lake with Synapse Spark](#ingest-and-explore-parquet-files-from-a-data-lake-with-synapse-spark)
+    - [Ingest and explore Parquet files from a data lake with Apache Spark for Azure Synapse Analytics](#ingest-and-explore-parquet-files-from-a-data-lake-with-synapse-spark)
   - [Transforming data with DataFrames in Spark Pools in Azure Synapse Analytics](#transforming-data-with-dataframes-in-spark-pools-in-azure-synapse-analytics)
     - [Query and transform JSON data with Synapse Spark](#query-and-transform-json-data-with-synapse-spark)
   - [Integrating SQL and Spark pools in Azure Synapse Analytics](#integrating-sql-and-spark-pools-in-azure-synapse-analytics)
 
 Tailwind Traders has unstructured and semi-structured files from various data sources. Their data engineers want to use their Spark expertise to explore, ingest, and transform these files.
 
-You recommend using Synapse Notebooks, which are integrated in the Synapse Analytics workspace and used from within Synapse Studio.
+You recommend using Synapse Notebooks, which are integrated in the Azure Synapse Analytics workspace and used from within Synapse Studio.
 
 ## Demo prerequisites
 
-All demos use the same environment. If you have not done so already, Complete the [environment setup instructions](https://github.com/ctesta-oneillmsft/asa-vtd) (external link).
+All demos use the same environment. If you have not done so already, complete the [environment setup instructions](https://github.com/ctesta-oneillmsft/asa-vtd) (external link).
 
 ## Ingesting data with Spark notebooks in Azure Synapse Analytics
 
-### Ingest and explore Parquet files from a data lake with Synapse Spark
+### Ingest and explore Parquet files from a data lake with Apache Spark for Azure Synapse
 
 Tailwind Traders has Parquet files stored in their data lake. They want to know how they can quickly access the files and explore them using Apache Spark.
 
@@ -74,7 +74,7 @@ You recommend using the Data hub to view the Parquet files in the connected stor
 
     ![Run all is highlighted.](media/notebook-run-all.png "Run all")
 
-    > **Note:** The first time you run a notebook in a Spark pool, Synapse creates a new session. This can take approximately 3-5 minutes.
+    > **Note:** The first time you run a notebook in a Spark pool, Azure Synapse creates a new session. This can take approximately 3-5 minutes.
 
     > **Note:** To run just the cell, either hover over the cell and select the _Run cell_ icon to the left of the cell, or select the cell then type **Ctrl+Enter** on your keyboard.
 
@@ -88,7 +88,7 @@ You recommend using the Data hub to view the Parquet files in the connected stor
 
     ![The button is highlighted.](media/2010-sale-parquet-chart-options-button.png "View options")
 
-11. Set Key to **`ProductId`** and Values to **`TotalAmount` (1)**, then select **Apply**.
+11. Set Key to **`ProductId`** and Values to **`TotalAmount` (1)**, then select **Apply (2)**.
 
     ![The options are configured as described.](media/2010-sale-parquet-chart-options.png "View options")
 
@@ -147,9 +147,9 @@ You recommend using the Data hub to view the Parquet files in the connected stor
 
     ![The aggregates output is displayed.](media/2010-sale-parquet-aggregates.png "Aggregates output")
 
-## Transforming data with DataFrames in Spark Pools in Azure Synapse Analytics
+## Transforming data with DataFrames in Spark pools in Azure Synapse Analytics
 
-### Query and transform JSON data with Synapse Spark
+### Query and transform JSON data with Apache Spark for Azure Synapse
 
 In addition to the sales data, Tailwind Traders has customer profile data from an e-commerce system that provides top product purchases for each visitor of the site (customer) over the past 12 months. This data is stored within JSON files in the data lake. They have struggled with ingesting, exploring, and transforming these JSON files and want your guidance. The files have a hierarchical structure that they want to flatten before loading into relational data stores. They also wish to apply grouping and aggregate operations as part of the data engineering process.
 
@@ -365,11 +365,11 @@ You recommend using Synapse Notebooks to explore and apply data transformations 
 
 Tailwind Traders wants to write to the SQL database assodicated with dedicated SQL pool after performing data engineering tasks in Spark, then reference that SQL database as a source for joining with Spark dataframes that contain data from other files.
 
-You decide to use the Azure Synapse Apache Spark to Synapse SQL connector to efficiently transfer data between Spark databases and SQL databases in Azure Synapse.
+You decide to use the Apache Spark to Synapse SQL connector to efficiently transfer data between Spark databases and SQL databases in Azure Synapse.
 
 Transferring data between Spark databases and SQL databases can be done using JDBC. However, given two distributed systems such as Spark pools and SQL pools, JDBC tends to be a bottleneck with serial data transfer.
 
-The Azure Synapse Apache Spark pool to Synapse SQL connector is a data source implementation for Apache Spark. It uses the Azure Data Lake Storage Gen2 and PolyBase in dedicated SQL pools to efficiently transfer data between the Spark cluster and the Synapse SQL instance.
+The Apache Spark pool to Synapse SQL connector is a data source implementation for Apache Spark. It uses the Azure Data Lake Storage Gen2 and PolyBase in dedicated SQL pools to efficiently transfer data between the Spark cluster and the Synapse SQL instance.
 
 1. We have been using Python code in these cells up to this point. If we want to use the Apache Spark pool to Synapse SQL connector (`sqlanalytics`), one option is to create a temporary view of the data within the dataframe. Execute the following in a new cell to create a view named `top_purchases`:
 
