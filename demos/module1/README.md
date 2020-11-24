@@ -72,7 +72,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
     ![The SQL pool link is highlighted.](media/sql-pool-link.png "SQL pool")
 
-    The SQL pool is shown below with the `Essentials` portion of the Overview blade collapsed.
+    The SQL pool is shown below with the `Essentials` portion of the Overview pane collapsed.
 
     ![SQL pool.](media/sql-pool.png "SQL pool")
 
@@ -82,10 +82,10 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
     1. At the top of the window, we see **controls (1)** to pause, scale, restore, set a new restore point, and delete the pool.
     2. Below, with the **Features** tab **(2)** selected, we see the status of the security and recovery features **(3)** for the dedicated SQL pool. `Transparent data encryption` is prominently displayed, letting us quickly see whether it is enabled to encrypt our databases, backups, and logs. Next to that, we see the `Auditing` feature to track SQL pool events and write them to an audit log. `Azure Defender for SQL`, if enabled, helps detect potential security threats and anomalous activity. Finally, the `Geo-backup` feature enables backups once per day to a paired data center.
-    3. At the bottom of the Overview blade, we see metrics showing the **Data Warehousing Units (DWU) usage** and **Active and queued queries (4)**, allowing us to filter within different time ranges.
+    3. At the bottom of the Overview pane, we see metrics showing the **Data Warehousing Units (DWU) usage** and **Active and queued queries (4)**, allowing us to filter within different time ranges.
     4. The left-hand menu includes some of these options, as well. It is here where you find the **Access control (IAM) (5)** settings to control access to the SQL pool, granted to users and services.
 
-4. Go back to the Synapse Workspace overview blade in the portal, then open the **Apache Spark pool**.
+4. Go back to the Synapse Workspace overview pane in the portal, then open the **Apache Spark pool**.
 
     ![The Spark pool link is highlighted.](media/spark-pool-link.png "Spark pool")
 
@@ -105,7 +105,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
 5. Select **Packages** on the left-hand menu of the Spark pool.
 
-    ![The Packages blade of the Spark pool is displayed.](media/spark-pool-packages.png "Packages")
+    ![The Packages pane of the Spark pool is displayed.](media/spark-pool-packages.png "Packages")
 
     When you select **Packages (1)** on the left-hand menu, you can view whether a `requirements.txt` file has been added to manage Python packages for Spark instances. You can **upload an environment config file (2)**, or select the ellipses (...) to the **right-hand side of a package file (3)** to access options to re-upload, download, or delete the file.
 
@@ -113,7 +113,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
 1. Open Synapse workspace in the resource group, then select either **Open Synapse Studio** or the **Workspace web URL**.
 
-    ![The two Synapse Studio links are highlighted with an arrow pointing between them on the Overview blade of Synapse workspace.](media/synapse-workspace-studio-links.png "Synapse workspace")
+    ![The two Synapse Studio links are highlighted with an arrow pointing between them on the Overview pane of Synapse workspace.](media/synapse-workspace-studio-links.png "Synapse workspace")
 
     > **Note to presenter**: Copy the Synapse Studio URL, then open a separate Edge window in-private mode to work around login challenges if using a different account for the demo.
 
@@ -202,7 +202,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
 2. Expand Pipelines and select **1 Master Pipeline (1)**. Point out the **Activities (2)** that can be added to the pipeline, and show the **pipeline canvas (3)** on the right.
 
-    ![The pipelines group is expanded within the Orchestrate hub.](media/orchestrate-pipelines.png "Orchestrate - Pipelines")
+    ![The pipelines group is expanded within the Integrate hub.](media/integrate-pipelines.png "Integrate - Pipelines")
 
     Our Synapse workspace contains 16 pipelines that enable us to orchestrate data movement and transformation steps over data from several sources.
 
@@ -220,7 +220,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
     The Monitor hub is your first stop for debugging issues and gaining insight on resource usage. You can see a history of all the activities taking place in the workspace and which ones are active now.
 
-2. Show each of the monitoring categories grouped under Orchestration and Activities.
+2. Show each of the monitoring categories grouped under Integration and Activities.
 
     ![The categories are highlighted.](media/monitoring-categories.png "Monitoring categories")
 
@@ -233,7 +233,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
 3. Select **SQL requests (1)**, then switch to the **SQLPool01 (2)** pool to see the list of SQL requests.
 
-    ![The SQL requests blade is shown with the SQL pool selected.](media/monitoring-sql-requests.png "SQL requests")
+    ![The SQL requests pane is shown with the SQL pool selected.](media/monitoring-sql-requests.png "SQL requests")
 
 4. Hover over a SQL request, then select the **Request content** icon to view the SQL request that was sent to the SQL pool. *You may need to try a few before you find one with interesting content*.
 
@@ -249,17 +249,18 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
     The Manage hub enables you to perform some of the same actions we saw in the Azure portal, such as managing SQL and Spark pools. However, there is a lot more you can do in this hub that you cannot do anywhere else, such as managing Linked Services and integration runtimes, and creating pipeline triggers.
 
-2. Show each of the management categories grouped under Analytics pools, External connections, Orchestration, and Security.
+2. Show each of the management categories grouped under Analytics pools, External connections, Integration, and Security.
 
     ![The categories are highlighted.](media/manage-categories.png "Manage categories")
 
-    1. **SQL pools** lists the dedicated SQL pools and the serverless SQL pools for the workspace. You can can add new pools or hover over a dedicated SQL pool to **pause** or **scale** it. You should pause a dedicated SQL pool when it's not being used in order to save costs.
-    2. **Apache Spark pools** lets you manage your Spark pools by configuring the auto-pause and auto-scale settings. You can provision a new Apache Spark pool from this blade.
+    1. **SQL pools** lists the dedicated SQL pools and the serverless SQL pools for the workspace. You can add new pools or hover over a dedicated SQL pool to **pause** or **scale** it. You should pause a dedicated SQL pool when it's not being used in order to save costs.
+    2. **Apache Spark pools** lets you manage your Spark pools by configuring the auto-pause and auto-scale settings. You can provision a new Apache Spark pool from this pane.
     3. **Linked services** enables you to manage connections to external resources. Here you can see linked services for our data lake storage account, Azure Key Vault, Power BI, and Azure Synapse. **Task**: Select **+ New** to show how many types of linked services you can add.
     4. **Triggers** provides you a central location to create or remove pipeline triggers. Alternatively, you can add triggers from the pipeline.
     5. **Integration runtimes** lists the IR for the workspace, which serve as the compute infrastructure for data integration capabilities, like those provided by pipelines. **Task**: Hover over the integration runtimes to show the monitoring, code, and delete (if applicable) links. Click on a **code link** to show how you can modify the parameters in JSON format, including the TTL (time to live) setting for the IR.
     6. **Access control** is where you go to add and remove users to one of three security groups: workspace admin, SQL admin, and Apache Spark for Azure Synapse Analytics admin.
-    7. **Managed private endpoints** is where you manage private endpoints, which use a private IP address from within a virtual network to connect to an Azure service or your own private link service. Connections using private endpoints listed here provide access to Synapse workspace endpoints (SQL, SqlOndemand and Dev).
+    7. **Credentials** lets you manage Service Principal credentials used by the workspace, including the workspace system identity account.
+    8. **Managed private endpoints** is where you manage private endpoints, which use a private IP address from within a virtual network to connect to an Azure service or your own private link service. Connections using private endpoints listed here provide access to Synapse workspace endpoints (dedicated SQL, serverless SQL, and Dev).
 
 ## Designing a Modern Data Warehouse using Azure Synapse Analytics
 
@@ -335,13 +336,13 @@ Azure Synapse enables you to ingest data from multiple data sources through its 
 
 11. Select the **SAP HANA TO ADLS** pipeline. This pipeline copies data from a financial SAP HANA data source into the dedicated SQL pool.
 
-12. Select the **+** button at the top of the **Orchestrate** blade, then select **Pipeline** to create a new pipeline.
+12. Select the **+** button at the top of the **Integrate** pane, then select **Pipeline** to create a new pipeline.
 
     ![The New and Pipeline menu items are highlighted.](media/new-pipeline.png "New pipeline")
 
-    When the new pipeline opens, the **Properties** blade appears **(1)**, allowing you to name the pipeline **(2)**.
+    When the new pipeline opens, the **Properties** pane appears **(1)**, allowing you to name the pipeline **(2)**.
 
-    ![The properties blade is displayed.](media/new-pipeline-properties.png "Properties")
+    ![The properties pane is displayed.](media/new-pipeline-properties.png "Properties")
 
 13. Expand the `Move & transform` activity group, then drag the **Copy data** activity onto the design canvas **(1)**. With the Copy data activity selected, select the **Source** tab **(2)**, then select **+ New (3)** next to the source dataset.
 
@@ -445,11 +446,11 @@ Azure Synapse enables you to ingest data from multiple data sources through its 
 
     ![The data hub is highlighted](media/data-hub.png "Data hub")
 
-9. Select the **Linked** tab **(1)**, expand the `Azure Data Lake Storage Gen2` group, expand the Primary storage account, then select the **twitterdata** container **(2)**. Right-click on the **dbo.TwitterAnalytics.parquet** file **(3)**, then select **New notebook (4)**.
+9. Select the **Linked** tab **(1)**, expand the `Azure Data Lake Storage Gen2` group, expand the Primary storage account, then select the **twitterdata** container **(2)**. Right-click on the **dbo.TwitterAnalytics.parquet** file **(3)**, select **New notebook (4)**, then **Load to DataFrame (5)**.
 
     ![The TwitterAnalytics Parquet file and New notebook menu item are highlighted.](media/new-twitteranalytics-notebook.png "New notebook")
 
-    Synapse Studio provides several options to work with files stored in attached storage accounts, such as creating a new SQL script, a notebook, data flow, or new dataset.
+    Synapse Studio provides several options to work with files stored in attached storage accounts, such as creating a new SQL script, a notebook, data flow, or a new dataset.
 
     Synapse Notebooks enable you to harness the power of Apache Spark to explore and analyze data, conduct data engineering tasks, and do data science. Authentication and authorization with linked services, such as the primary data lake storage account, are fully integrated, allowing you to immediately start working with files without dealing with account credentials.
 
@@ -469,7 +470,7 @@ Azure Synapse enables you to ingest data from multiple data sources through its 
 
 2. Expand Pipelines and select **1 Master Pipeline (1)**. Point out the **Activities (2)** that can be added to the pipeline, and show the **pipeline canvas (3)** on the right.
 
-    ![The pipelines group is expanded within the Orchestrate hub.](media/orchestrate-pipelines.png "Orchestrate - Pipelines")
+    ![The pipelines group is expanded within the Integrate hub.](media/orchestrate-pipelines.png "Integrate - Pipelines")
 
     Our Synapse workspace contains 16 pipelines that enable us to orchestrate data movement and transformation steps over data from several sources.
 
@@ -510,10 +511,10 @@ Azure Synapse enables you to ingest data from multiple data sources through its 
     1. Extracts data from the SAP HANA data source (**Select `DatafromSAPHANA` step**).
     2. Retrieves only those rows for an upsert activity, where the `ShipDate` value is greater than `2014-01-01` (**Select `Last5YearsData` step**).
     3. Performs data type transformations on the source columns, using a Derived Column activity (**Select the top `DerivedColumn` activity**).
-    4. In the top path of the data flow, we select all columns, then load the data into the `AggregatedSales_SAPHANANew` Synapse pool table (**Select the `Selectallcolumns` activity and the `LoadtoAzureSynapse` activity**).
+    4. In the top path of the data flow, we select all columns, then load the data into the `AggregatedSales_SAPHANANew` dedicated SQL pool table (**Select the `Selectallcolumns` activity and the `LoadtoAzureSynapse` activity**).
     5. In the bottom path of the data flow, we select a subset of the columns (**Select the `SelectRequiredColumns` activity**).
     6. Then we group by four of the columns (**Select the `TotalSalesByYearMonthDay` activity**) and create sum and average aggregates on the `SalesAmount` column (**Select the Aggregates option**).
-    7. Finally, the aggregated data is loaded into the `AggregatedSales_SAPHANA` Synapse pool table (**Select the `LoadtoSynapse` activity**).
+    7. Finally, the aggregated data is loaded into the `AggregatedSales_SAPHANA` dedicated SQL pool table (**Select the `LoadtoSynapse` activity**).
 
 #### Stage 2: Model & serve
 
