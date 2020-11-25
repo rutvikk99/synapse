@@ -8,7 +8,7 @@ In this demo, we show how Azure Synapse Link enables you to seamlessly connect a
     - [Enable Azure Synapse Link](#enable-azure-synapse-link)
     - [Create a new Azure Cosmos DB container](#create-a-new-azure-cosmos-db-container)
     - [Create and run a copy pipeline](#create-and-run-a-copy-pipeline)
-  - [Querying Azure Cosmos DB with Apache Spark for Azure Synapse (#querying-azure-cosmos-db-with-apache-spark-for-synapse-analytics)
+  - [Querying Azure Cosmos DB with Apache Spark for Azure Synapse](#querying-azure-cosmos-db-with-apache-spark-for-synapse-analytics)
   - [Querying Azure Cosmos DB with serverless SQL pool for Azure Synapse](#querying-azure-cosmos-db-with-sql-serverless-for-synapse-analytics)
 
 ## Demo prerequisites
