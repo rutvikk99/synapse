@@ -1,6 +1,6 @@
-# Run interactive queries using serverless SQL pools with Azure Synapse
+# Run interactive queries using serverless SQL pool with Azure Synapse Analytics
 
-In this demo, we show how Azure Synapse enables you to use serverless SQL pools to query data stored in the data lake, as well as an external data source. We also cover security and how to control access to the files through RBAC and ACLs applied to the ADLS Gen2 data store. The following table of contents describes and links to the elements of the demo:
+In this demo, we show how Azure Synapse enables you to use serverless SQL pool to query data stored in the data lake, as well as an external data source. We also cover security and how to control access to the files through RBAC and ACLs applied to the ADLS Gen2 data store. The following table of contents describes and links to the elements of the demo:
 
 - [Run interactive queries using serverless SQL pools with Azure Synapse](#run-interactive-queries-using-azure-synapse-sql-serverless)
   - [Demo prerequisites](#demo-prerequisites)
@@ -28,7 +28,7 @@ Tailwind Trader's Data Engineers want a way to explore the data lake, transform 
 
 Understanding data through data exploration is one of the core challenges faced today by data engineers and data scientists as well. Depending on the underlying structure of the data as well as the specific requirements of the exploration process, different data processing engines will offer varying degrees of performance, complexity, and flexibility.
 
-In Azure Synapse Analytics, you have the possibility of using either the SQL, Apache Spark for Synapse, or both. Which service you use mostly depends on your personal preference and expertise. When conducting data engineering tasks, both options can be equally valid in many cases. However, there are certain situations where harnessing the power of Apache Spark can help you overcome problems with the source data. This is because in a Synapse Notebook, you can import from a large number of free libraries that add functionality to your environment when working with data. There are other situations where it is much more convenient and faster using serveless SQL pools to explore the data, or to expose data in the data lake through a SQL view that can be accessed from external tools, like Power BI.
+In Azure Synapse Analytics, you can use either SQL, Apache Spark for Synapse, or both. Which service you use mostly depends on your personal preference and expertise. When conducting data engineering tasks, both options can be equally valid in many cases. However, there are certain situations where harnessing the power of Apache Spark can help you overcome problems with the source data. This is because in a Synapse Notebook, you can import from a large number of free libraries that add functionality to your environment when working with data. There are other situations where it is much more convenient and faster using serveless SQL pool to explore the data, or to expose data in the data lake through a SQL view that can be accessed from external tools, like Power BI.
 
 In this exercise, you will explore the data lake using both options.
 
@@ -69,7 +69,7 @@ When you query Parquet files using serverless SQL pools, you can explore the dat
 
     ![The T-SQL query above is displayed within the query window.](media/sql-serverless-aggregates.png "Query window")
 
-5. Let's move on from this single file from 2016 and transition to a newer data set. We want to figure out how many records are contained within the Parquet files for all 2019 data. This information is important for planning how we optimize for importing the data into Azure Synapse Analytics. To do this, we'll replace the query with the following (be sure to update the name of your data lake in BULK statement, by replacing `[asadatalakeSUFFIX]`):
+5. Let's move on from this single file from 2016 and transition to a newer data set. We want to figure out how many records are contained within the Parquet files for all 2019 data. This information is important for planning how we optimize for importing the data into Azure Synapse Analytics. To do this, we'll replace the query with the following (be sure to update the name of your data lake in the BULK statement, by replacing `[asadatalakeSUFFIX]`):
 
     ```sql
     SELECT
@@ -182,7 +182,7 @@ You decide to create an external table that connects to the external data source
 
     ![The script is displayed.](media/script1.png "Create master key and credential")
 
-    > Database-scoped credentials are used when any principal calls OPENROWSET function with DATA_SOURCE or selects data from external table that don't access public files. The database scoped credential doesn't need to match the name of storage account because it will be explicitly used in DATA SOURCE that defines the location of storage.
+    > Database-scoped credentials are used when any principal calls the OPENROWSET function with a DATA_SOURCE or selects data from an external table that doesn't access public files. The database scoped credential doesn't need to match the name of storage account because it will be explicitly used in the DATA SOURCE that defines the storage location.
 
     In the next part of the script, we create an external file format called `QuotedCsvWithHeader`. Creating an external file format is a prerequisite for creating an External Table. By creating an External File Format, you specify the actual layout of the data referenced by an external table. Here we specify the CSV field terminator, string delimiter, and set the `FIRST_ROW` value to 2 since the file contains a header row:
 
@@ -282,7 +282,7 @@ Let's create a view to wrap a SQL query. Views allow you to reuse queries and ar
 
     ![The query results are displayed.](media/create-view-script-results.png "Query results")
 
-    Notice that the first no longer contains the column headers. This is because we used the `FIRSTROW=2` setting in the `OPENROWSET` statement when we created the view.
+    Notice that the first row no longer contains the column headers. This is because we used the `FIRSTROW=2` setting in the `OPENROWSET` statement when we created the view.
 
 6. Within the **Data** hub, select the **Workspace** tab **(1)**. Select the actions ellipses **(...)** to the right of the Databases group **(2)**, then select **Refresh (3)**.
 
@@ -304,7 +304,7 @@ Let's create a view to wrap a SQL query. Views allow you to reuse queries and ar
 Tailwind Traders wants to enforce that any kind of modifications to sales data can happen in the current year only, while allowing all authorized users to query the entirety of data. They have a small group of admins who can modify historic data if needed.
 
 - Tailwind Traders should create a security group in AAD, for example called `tailwind-history-owners`, with the intent that all users who belong to this group will have permissions to modify data from previous years.
-- The `tailwind-history-owners` security group needs to be assigned to the Azure Storage built-in RBAC role `Storage Blob Data Owner` for the Azure Storage account containing the data lake. This allows AAD user and service principals that are added to this role to have the ability to modify all data.
+- The `tailwind-history-owners` security group needs to be assigned to the Azure Storage built-in RBAC role `Storage Blob Data Owner` for the Azure Storage account containing the data lake. This allows AAD user and service principals that are added to this role to have the ability to modify all data from previous years.
 - They need to add the user security principals who will have have permissions to modify all historical data to the `tailwind-history-owners` security group.
 - Tailwind Traders should create another security group in AAD, for example called `tailwind-readers`, with the intent that all users who belong to this group will have permissions to read all contents of the file system (`prod` in this case), including all historical data.
 - The `tailwind-readers` security group needs to be assigned to the Azure Storage built-in RBAC role `Storage Blob Data Reader` for the Azure Storage account containing the data lake. This allows AAD user and service principals that are added to this security group to have the ability to read all data in the file system, but not to modify it.
@@ -314,7 +314,7 @@ Tailwind Traders wants to enforce that any kind of modifications to sales data c
 - At the start of the year 2020, Tailwind Traders would add `tailwind-current-writers` to the `tailwind-2020-writers` security group.
 - At the start of the year 2020, on the `2020` folder, Tailwind Traders would set the read, write and execute ACL permissions for the `tailwind-2020-writers` security group.
 - At the start of the year 2021, to revoke write access to the 2020 data they would remove the `tailwind-current-writers` security group from the `tailwind-2020-writers` group. Members of `tailwind-readers` would continue to be able to read the contents of the file system because they have been granted read and execute (list) permissions not by the ACLs but by the RBAC built in role at the level of the file system.
-- This approach takes into account that currently changes to ACLs do not inherit, so removing the write permission would require writing code that that traverses all of its content removing the permission at each folder and file object.
+- This approach takes into account that current changes to ACLs do not inherit permissions, so removing the write permission would require writing code that traverses all of its content removing the permission at each folder and file object.
 - This approach is relatively fast. RBAC role assignments may take up to five minutes to propagate, regardless of the volume of data being secured.
 
 ### Create Azure Active Directory security groups
