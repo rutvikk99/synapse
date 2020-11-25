@@ -1,6 +1,6 @@
 # Build automated data integration pipelines with Azure Synapse Pipelines
 
-In this demo, we show how Synapse Analytics enables you to ingest and transform data, using Synapse pipelines and code-free mapping data flows. We build on these concepts by adding a Notebook activity that uses Apache Spark to read data from a data lake, perform data engineering tasks, and write to a new location in the data lake. The following table of contents describes and links to the elements of the demo:
+In this demo, we show how Azure Synapse Analytics enables you to ingest and transform data using Synapse pipelines and code-free mapping data flows. We build on these concepts by adding a Notebook activity that uses Apache Spark to read data from a data lake, perform data engineering tasks, and write to a new location in the data lake. The following table of contents describes and links to the elements of the demo:
 
 - [Build automated data integration pipelines with Azure Synapse Pipelines](#build-automated-data-integration-pipelines-with-azure-synapse-pipelines)
   - [Demo prerequisites](#demo-prerequisites)
@@ -34,13 +34,13 @@ There is often a level of orchestration involved when moving data into a data wa
 
 ### Configure workload management classification
 
-When loading a large amount of data, it is best to run only one load job at a time for fastest performance. If this isn't possible, run a minimal number of loads concurrently. If you expect a large loading job, consider scaling up your SQL pool before the load.
+When loading a large amount of data, it is best to run only one load job at a time for fastest performance. If this isn't possible, run a minimal number of loads concurrently. If you expect a large loading job, consider scaling up your dedicated SQL pool before the load.
 
 Be sure that you allocate enough memory to the pipeline session. To do this, increase the resource class of a user which has permissions to rebuild the index on this table to the recommended minimum.
 
 To run loads with appropriate compute resources, create loading users designated for running loads. Assign each loading user to a specific resource class or workload group. To run a load, sign in as one of the loading users, and then run the load. The load runs with the user's resource class.
 
-1. Open Synapse Analytics Studio (<https://web.azuresynapse.net/>), and then navigate to the **Develop** hub.
+1. Open Synapse Studio (<https://web.azuresynapse.net/>), and then navigate to the **Develop** hub.
 
     ![The Develop menu item is highlighted.](media/develop-hub.png "Develop hub")
 
@@ -48,7 +48,7 @@ To run loads with appropriate compute resources, create loading users designated
 
     ![The SQL script context menu item is highlighted.](media/synapse-studio-new-sql-script.png "New SQL script")
 
-3. In the toolbar menu, connect to the **SQL Pool** database to execute the query.
+3. In the toolbar menu, connect to the **SQLPool01** database to execute the query.
 
     ![The connect to option is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-connect.png "Query toolbar")
 
@@ -96,7 +96,7 @@ To run loads with appropriate compute resources, create loading users designated
 
     ![Linked services is displayed.](media/linked-services.png "Linked services")
 
-10. Notice that the user name for the SQL Pool connection is the **`asa.sql.import01` user** we added to the `HeavyLoader` classifier. We will use this linked service in our new pipeline to reserve resources for the data load activity.
+10. Notice that the user name for the dedicated SQL pool connection is the **`asa.sql.import01` user** we added to the `HeavyLoader` classifier. We will use this linked service in our new pipeline to reserve resources for the data load activity.
 
     ![The user name is highlighted.](media/sqlpool01-import01-linked-service.png "Linked service")
 
@@ -146,7 +146,7 @@ To run loads with appropriate compute resources, create loading users designated
 
     ![The new button is highlighted.](media/pipeline-copy-sales-sink-new.png "Sink tab")
 
-11. Select the **Azure Synapse Analytics (formerly SQL DW)** data store **(1)**, then select **Continue (2)**.
+11. Select the **Azure Synapse Analytics** data store **(1)**, then select **Continue (2)**.
 
     ![Azure Synapse Analytics is selected.](media/new-dataset-asa.png "New dataset")
 
@@ -188,7 +188,7 @@ To run loads with appropriate compute resources, create loading users designated
 
 Tailwind Traders would like code-free options for data engineering tasks. Their motivation is driven by the desire to allow junior-level data engineers who understand the data but do not have a lot of development experience build and maintain data transformation operations. The other driver for this requirement is to reduce fragility caused by complex code with reliance on libraries pinned to specific versions, remove code testing requirements, and improve ease of long-term maintenance.
 
-Their other requirement is to maintain transformed data in a data lake in addition to the SQL pool. This gives them the flexibility to retain more fields in their data sets than they otherwise store in fact and dimension tables, and doing this allows them to access the data when they have paused the SQL pool, as a cost optimization.
+Their other requirement is to maintain transformed data in a data lake in addition to the dedicated SQL pool. This gives them the flexibility to retain more fields in their data sets than they otherwise store in fact and dimension tables, and doing this allows them to access the data when they have paused the dedicated SQL pool, as a cost optimization.
 
 Given these requirements, you recommend building Mapping Data Flows.
 
@@ -203,7 +203,7 @@ Additional benefits
 
 ### Create SQL table
 
-The Mapping Data Flow we will build will write user purchase data to a SQL pool. Tailwind Traders does not yet have a table to store this data. We will execute a SQL script to create this table as a pre-requisite.
+The Mapping Data Flow we will build will write user purchase data to a dedicated SQL pool. Tailwind Traders does not yet have a table to store this data. We will execute a SQL script to create this table as a pre-requisite.
 
 > **Note to presenter**: Skip this section if you have already created the `[wwi].[UserTopProductPurchases]` table.
 
@@ -215,7 +215,7 @@ The Mapping Data Flow we will build will write user purchase data to a SQL pool.
 
     ![The SQL script context menu item is highlighted.](media/synapse-studio-new-sql-script.png "New SQL script")
 
-3. In the toolbar menu, connect to the **SQL Pool** database to execute the query.
+3. In the toolbar menu, connect to the **SQLPool01** database to execute the query.
 
     ![The connect to option is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-connect.png "Query toolbar")
 
@@ -320,7 +320,7 @@ Complete the steps below to create the following two datasets: `asal400_ecommerc
 
     ![Create new Dataset.](media/new-dataset.png "New Dataset")
 
-12. Select **Azure Synapse Analytics (formerly SQL DW)** from the list **(1)**, then select **Continue (2)**.
+12. Select **Azure Synapse Analytics** from the list **(1)**, then select **Continue (2)**.
 
     ![The Azure Synapse Analytics option is highlighted.](media/new-synapse-dataset.png "Integration dataset")
 
@@ -339,7 +339,7 @@ Complete the steps below to create the following two datasets: `asal400_ecommerc
 
 ### Create Mapping Data Flow
 
-Tailwind Traders needs to combine top product purchases imported as JSON files from their eCommerce system with user preferred products from profile data stored as JSON documents in Azure Cosmos DB. They want to store the combined data in a SQL pool as well as their data lake for further analysis and reporting.
+Tailwind Traders needs to combine top product purchases imported as JSON files from their eCommerce system with user preferred products from profile data stored as JSON documents in Azure Cosmos DB. They want to store the combined data in a dedicated SQL pool as well as their data lake for further analysis and reporting.
 
 To do this, you will build a mapping data flow that performs the following tasks:
 
@@ -349,7 +349,7 @@ To do this, you will build a mapping data flow that performs the following tasks
 - Joins both data sources
 - Creates new fields on the joined data set based on conditional logic
 - Filters null records for required fields
-- Writes to the SQL pool
+- Writes to the dedicated SQL pool
 - Simultaneously writes to the data lake
 
 1. Navigate to the **Develop** hub.
@@ -567,7 +567,7 @@ To do this, you will build a mapping data flow that performs the following tasks
 
     ![The new Filter destination is highlighted.](media/data-flow-user-profiles-new-filter.png "New filter")
 
-    We are adding the Filter step to remove any records where the `ProductId` is null. The data sets have a small percentage of invalid records, and null `ProductId` values will cause errors when loading into the `UserTopProductPurchases` SQL pool table.
+    We are adding the Filter step to remove any records where the `ProductId` is null. The data sets have a small percentage of invalid records, and null `ProductId` values will cause errors when loading into the `UserTopProductPurchases` dedicated SQL pool table.
 
 28. Set the **Filter on** expression to **`!isNull(productId)`**.
 
@@ -669,7 +669,7 @@ Tailwind Traders is familiar with Azure Data Factory (ADF) pipelines and wants t
 
 You recommend using Synapse Pipelines, which includes over 90 built-in connectors, can load data by manual execution of the pipeline or by orchestration, supports common loading patterns, enables fully parallel loading into the data lake or SQL tables, and shares a code base with ADF.
 
-By using Synapse Pipelines, Tailwind Traders can experience the same familiar interface as ADF without having to use an orchestration service outside of Synapse Analytics.
+By using Synapse Pipelines, Tailwind Traders can experience the same familiar interface as ADF without having to use an orchestration service outside of Azure Synapse Analytics.
 
 ### Create pipeline
 
@@ -714,7 +714,7 @@ Let's start by executing our new Mapping Data Flow. In order to run the new data
 
     ![The mapping data flow activity settings are configured as described.](media/pipeline-user-profiles-data-flow-settings.png "Mapping data flow activity settings")
 
-    The staging options under PolyBase is recommended when you have a large amount of data to move into or out of Azure Synapse Analytics. You will want to experiment with enabling and disabling staging on the data flow in a production environment to evaluate the difference in performance.
+    The staging options under PolyBase are recommended when you have a large amount of data to move into or out of Azure Synapse Analytics. You will want to experiment with enabling and disabling staging on the data flow in a production environment to evaluate the difference in performance.
 
 10. Select **Publish all** then **Publish** to save your pipeline.
 
@@ -754,7 +754,7 @@ You have decided to show Tailwind Traders how to manually trigger, monitor, then
 
     ![The data flow details are displayed.](media/pipeline-user-profiles-data-flow-details.png "Data flow details")
 
-8. Select the `UserTopProductPurchasesASA` sink **(1)** to view its details. We can see that **1,622,203 rows** were calculated **(2)** with a total of 30 partitions. It took around **eight seconds** to stage the data **(3)** in ADLS Gen2 prior to writing the data to the SQL table. The total sink processing time in our case was around **44 seconds (4)**. It is also apparent that we have a **hot partition (5)** that is significantly larger than the others. If we need to squeeze extra performance out of this pipeline, we can re-evaluate data partitioning to more evenly spread the partitions to better facilitate parallel data loading and filtering. We could also experiment with disabling staging to see if there's a processing time difference. Finally, the size of the SQL Pool plays a factor in how long it takes to ingest data into the sink.
+8. Select the `UserTopProductPurchasesASA` sink **(1)** to view its details. We can see that **1,622,203 rows** were calculated **(2)** with a total of 30 partitions. It took around **eight seconds** to stage the data **(3)** in ADLS Gen2 prior to writing the data to the SQL table. The total sink processing time in our case was around **44 seconds (4)**. It is also apparent that we have a **hot partition (5)** that is significantly larger than the others. If we need to squeeze extra performance out of this pipeline, we can re-evaluate data partitioning to more evenly spread the partitions to better facilitate parallel data loading and filtering. We could also experiment with disabling staging to see if there's a processing time difference. Finally, the size of the dedicated SQL pool plays a factor in how long it takes to ingest data into the sink.
 
     ![The sink details are displayed.](media/pipeline-user-profiles-data-flow-sink-details.png "Sink details")
 
@@ -762,7 +762,7 @@ You have decided to show Tailwind Traders how to manually trigger, monitor, then
 
 Now that we have processed, joined, and imported the user profile data, let's analyze it in greater detail. In this segment, we will execute code to find the top 5 products for each user, based on which ones are both preferred and top, and have the most purchases in past 12 months. Then, we will calculate the top 5 products overall.
 
-> We will access the data from the data lake that was added as a second sink in the data flow, removing the SQL pool dependency.
+> We will access the data from the data lake that was added as a second sink in the data flow, removing the dedicated SQL pool dependency.
 
 1. Navigate to the **Data** hub.
 
