@@ -383,7 +383,7 @@ To do this, you will build a mapping data flow that performs the following tasks
 7. Select the **Source options** tab, then configure the following:
 
     - **Wildcard paths**: Enter `online-user-profiles-02/*.json`.
-    - **JSON Settings**: Expand this section, then select the **Single document** setting. This denotes that each file contains a single JSON document.
+    - **JSON Settings**: Expand this section, then select the **Array of documents** setting. This denotes that each file contains an array of JSON documents.
 
     ![The source options are configured as described.](media/data-flow-user-profiles-source-options.png "Source options")
 
@@ -1001,6 +1001,8 @@ Tailwind Traders wants to execute this notebook after the Mapping Data Flow runs
 
     ![The pipeline run succeeded.](media/pipeline-user-profiles-run-complete.png "Pipeline runs")
 
+    > It can take over 10 minutes for the run to complete with the addition of the notebook activity.
+
 12. Select the name of the pipeline to view the pipeline's activity runs.
 
     ![The pipeline name is selected.](media/select-pipeline.png "Pipeline runs")
@@ -1009,11 +1011,11 @@ Tailwind Traders wants to execute this notebook after the Mapping Data Flow runs
 
     ![The pipeline run details are displayed.](media/pipeline-run-details2.png "Write User Profile Data to ASA details")
 
-14. Here we see the Notebook run details. You can select the **Playback** button **(1)** to watch a playback of the progress through the **jobs (2)**. At the bottom, you can view the **log output** with different filter options **(3)**. To the right, we can view the run details, such as the duration, Livy ID, Spark pool details, etc. Select a **job** to view its details **(5)**.
+14. Here we see the Notebook run details. You can select the **Playback** button **(1)** to watch a playback of the progress through the **jobs (2)**. At the bottom, you can view the **Diagnostics** and **Logs** with different filter options **(3)**. To the right, we can view the run details, such as the duration, Livy ID, Spark pool details, etc. Select the **View details** link on a **job** to view its details **(5)**.
 
     ![The run details are displayed.](media/notebook-run-details.png "Notebook run details")
 
-15. The Spark UI opens in a new tab where we can see the stage details. Expand the **DAG Visualization** to view the stage details.
+15. The Spark application UI opens in a new tab where we can see the stage details. Expand the **DAG Visualization** to view the stage details.
 
     ![The Spark stage details are displayed.](media/spark-stage-details.png "Stage details")
 
