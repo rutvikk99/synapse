@@ -1,6 +1,6 @@
 # Support Hybrid Transactional Analytical Processing with Azure Synapse Link
 
-In this demo, we show how Azure Synapse Link enables you to seamlessly connect an Azure Cosmos DB account to your Synapse Analytics workspace. We walk through how to enable and configure Synapse link, then how to query the Azure Cosmos DB analytical store using Apache Spark and SQL Serverless. The following table of contents describes and links to the elements of the demo:
+In this demo, we show how Azure Synapse Link enables you to seamlessly connect an Azure Cosmos DB account to your Synapse workspace. We walk through how to enable and configure Synapse link, then how to query the Azure Cosmos DB analytical store using Apache Spark and SQL Serverless. The following table of contents describes and links to the elements of the demo:
 
 - [Support Hybrid Transactional Analytical Processing with Azure Synapse Link](#support-hybrid-transactional-analytical-processing-with-azure-synapse-link)
   - [Demo prerequisites](#demo-prerequisites)
@@ -8,8 +8,8 @@ In this demo, we show how Azure Synapse Link enables you to seamlessly connect a
     - [Enable Azure Synapse Link](#enable-azure-synapse-link)
     - [Create a new Azure Cosmos DB container](#create-a-new-azure-cosmos-db-container)
     - [Create and run a copy pipeline](#create-and-run-a-copy-pipeline)
-  - [Querying Azure Cosmos DB with Apache Spark for Synapse Analytics](#querying-azure-cosmos-db-with-apache-spark-for-synapse-analytics)
-  - [Querying Azure Cosmos DB with SQL Serverless for Synapse Analytics](#querying-azure-cosmos-db-with-sql-serverless-for-synapse-analytics)
+  - [Querying Azure Cosmos DB with Apache Spark for Azure Synapse](#querying-azure-cosmos-db-with-apache-spark-for-synapse-analytics)
+  - [Querying Azure Cosmos DB with serverless SQL pool for Azure Synapse](#querying-azure-cosmos-db-with-sql-serverless-for-synapse-analytics)
 
 ## Demo prerequisites
 
@@ -64,7 +64,7 @@ After creating the container, we will create a new Synapse Pipeline to copy data
 
     ![The form is configured as described.](media/new-container.png "New container")
 
-    Here we set the `partition key` value to `customerId`, because it is a field we use most often in queries and contains a relatively high cardinality (number of unique values) for good partitioning performance. We set the throughput to Autoscale with a maximum value of 4,000 request units (RUs). This means that the container will have a minimum of 400 RUs allocated (10% of the maximum number), and will scale up to a maximum of 4,000 when the scale engine detects a high enough demand to warrant increasing the throughput. Finally, we enably the **analytical store** on the container, which allows us to take full advantage of the Hybrid Transactional/Analytical Processing (HTAP) architecture from within Synapse Analytics.
+    Here we set the `partition key` value to `customerId`, because it is a field we use most often in queries and contains a relatively high cardinality (number of unique values) for good partitioning performance. We set the throughput to Autoscale with a maximum value of 4,000 request units (RUs). This means that the container will have a minimum of 400 RUs allocated (10% of the maximum number), and will scale up to a maximum of 4,000 when the scale engine detects a high enough demand to warrant increasing the throughput. Finally, we enable the **analytical store** on the container, which allows us to take full advantage of the Hybrid Transactional/Analytical Processing (HTAP) architecture from within Synapse Analytics.
 
     Let's take a quick look at the data we will copy over to the new container.
 
@@ -82,7 +82,7 @@ After creating the container, we will create a new Synapse Pipeline to copy data
 
 Now that we have the new Azure Cosmos DB container with the analytical store enabled, we need to copy the contents of the existing container by using a Synapse Pipeline.
 
-1. Open Synapse Analytics Studio (<https://web.azuresynapse.net/>), and then navigate to the **Orchestrate** hub.
+1. Open Synapse Studio (<https://web.azuresynapse.net/>), and then navigate to the **Orchestrate** hub.
 
     ![The Orchestrate menu item is highlighted.](media/orchestrate-hub.png "Orchestrate hub")
 
@@ -243,7 +243,7 @@ Tailwind Traders is trying to solve how they can use the list of preferred produ
 
     ![Cell output.](media/cell7.png "Cell 7 results")
 
-## Querying Azure Cosmos DB with SQL Serverless for Synapse Analytics
+## Querying Azure Cosmos DB with serverless SQL pool for Azure Synapse Analytics
 
 Tailwind Traders wants to explore the Azure Cosmos DB analytical store with T-SQL. Ideally, they can create views that can then be used for joins with other analytical store containers, files from the data lake, or accessed by external tools, like Power BI.
 
@@ -259,9 +259,9 @@ Tailwind Traders wants to explore the Azure Cosmos DB analytical store with T-SQ
 
     ![The properties pane is displayed.](media/new-script-properties.png "Properties")
 
-4. Verify that the Synapse SQL Serverless pool (**SQL on-demand**) is selected.
+4. Verify that the serverless SQL pool (**Built-in**) is selected.
 
-    ![The serverless pool is selected.](media/sql-on-demand-htap.png "SQL on-demand")
+    ![The serverless SQL pool is selected.](media/sql-on-demand-htap.png "SQL on-demand")
 
 5. Paste the following SQL query. In the OPENROWSET statement, replace **`YOUR_ACCOUNT_NAME`** with the Azure Cosmos DB account name and **`YOUR_ACCOUNT_KEY`** with the Azure Cosmos DB Primary Key value you copied in step 5 above after you created the container.
 
@@ -308,7 +308,7 @@ Tailwind Traders wants to explore the Azure Cosmos DB analytical store with T-SQ
 
     ![The create view portion of the query and the results are displayed.](media/htap-view.png "SQL query")
 
-    The query starts out by creating a new Synapse SQL Serverless database named `Profiles` if it does not exist, then executes `USE Profiles` to run the rest of the script contents against the `Profiles` database. Next, it drops the `UserProfileHTAP` view if it exists. Finally, it performs the following:
+    The query starts out by creating a new serverless SQL pool database named `Profiles` if it does not exist, then executes `USE Profiles` to run the rest of the script contents against the `Profiles` database. Next, it drops the `UserProfileHTAP` view if it exists. Finally, it performs the following:
 
     - **1.** Creates a SQL view named `UserProfileHTAP`.
     - **2.** Uses the `OPENROWSET` statement to set the data source type to `CosmosDB`, sets the account details, and specifies that we want to create the view over the Azure Cosmos DB analytical store container named `UserProfileHTAP`.
