@@ -2,12 +2,12 @@
 
 In this demo, we show how Azure Synapse Analytics enables you to perform data engineering tasks using the power of Apache Spark. The following table of contents describes and links to the elements of the demo:
 
-- [Perform Data Engineering with serverless Spark pools in Azure Synapse Analytics](#perform-data-engineering-with-azure-synapse-spark-pools)
+- [Perform Data Engineering with Serverless Spark Pools in Azure Synapse](#perform-data-engineering-with-serverless-spark-pools-in-azure-synapse)
   - [Demo prerequisites](#demo-prerequisites)
-  - [Ingesting data with Apache Spark notebooks in Azure Synapse Analytics](#ingesting-data-with-apache-spark-notebooks-in-azure-synapse-analytics)
-    - [Ingest and explore Parquet files from a data lake with Apache Spark for Azure Synapse Analytics](#ingest-and-explore-parquet-files-from-a-data-lake-with-synapse-spark)
-  - [Transforming data with DataFrames in Spark Pools in Azure Synapse Analytics](#transforming-data-with-dataframes-in-spark-pools-in-azure-synapse-analytics)
-    - [Query and transform JSON data with Synapse Spark](#query-and-transform-json-data-with-synapse-spark)
+  - [Ingesting data with Spark notebooks in Azure Synapse Analytics](#ingesting-data-with-spark-notebooks-in-azure-synapse-analytics)
+    - [Ingest and explore Parquet files from a data lake with Apache Spark for Azure Synapse](#ingest-and-explore-parquet-files-from-a-data-lake-with-apache-spark-for-azure-synapse)
+  - [Transforming data with DataFrames in Spark pools in Azure Synapse Analytics](#transforming-data-with-dataframes-in-spark-pools-in-azure-synapse-analytics)
+    - [Query and transform JSON data with Apache Spark for Azure Synapse](#query-and-transform-json-data-with-apache-spark-for-azure-synapse)
   - [Integrating SQL and Spark pools in Azure Synapse Analytics](#integrating-sql-and-spark-pools-in-azure-synapse-analytics)
 
 Tailwind Traders has unstructured and semi-structured files from various data sources. Their data engineers want to use their Spark expertise to explore, ingest, and transform these files.
@@ -32,7 +32,7 @@ You recommend using the Data hub to view the Parquet files in the connected stor
 
     ![The data hub is highlighted.](media/data-hub.png "Data hub")
 
-3. Select the **Linked** tab **(1)** and expand the primary data lake storage account (*the name may differ from what you see here; it is the first storage account listed*). Select the **wwi-02** container **(2)** and browser to the `sale-small/Year=2010/Quarter=Q4/Month=12/Day=20101231` folder **(3)**. Right-click the Parquet file **(4)** and select **New notebook (5)**.
+3. Select the **Linked** tab **(1)** and expand the `Azure Data Lake Storage Gen2` group, then expand the primary data lake storage account (*the name may differ from what you see here; it is the first storage account listed*). Select the **wwi-02** container **(2)** and browser to the `sale-small/Year=2010/Quarter=Q4/Month=12/Day=20101231` folder **(3)**. Right-click the Parquet file **(4)**, select **New notebook (5)**, then select **Load to DataFrame *6)**.
 
     ![The Parquet file is displayed as described.](media/2010-sale-parquet-new-notebook.png "New notebook")
 
@@ -48,19 +48,7 @@ You recommend using the Data hub to view the Parquet files in the connected stor
 
     > The auto-pause settings are configured on the Spark pool configuration in the Manage hub.
 
-    We can change the Spark configuration for this session by selecting **Configure session**. Let's do that now.
-
-5. Select **Configure session** at the bottom-left of the notebook.
-
-    ![Configure session.](media/configure-spark-session.png "Configure session")
-
-6. Set the number of **Executors** to **3 (1)**, then select **Apply (2)**.
-
-    ![The form is displayed.](media/configure-spark-session-form.png "Configure session")
-
-    We have just set the number of executors allocated to **SparkPool01** for the session.
-
-7. Add the following beneath the code in the cell to define a variable named `datalake` whose value is the name of the primary storage account (**replace the REPLACE_WITH_YOUR_DATALAKE_NAME value with the name of the storage account in line 2**):
+5. Add the following beneath the code in the cell to define a variable named `datalake` whose value is the name of the primary storage account (**replace the REPLACE_WITH_YOUR_DATALAKE_NAME value with the name of the storage account in line 2**):
 
     ```python
     datalake = 'REPLACE_WITH_YOUR_DATALAKE_NAME'
@@ -70,7 +58,7 @@ You recommend using the Data hub to view the Parquet files in the connected stor
 
     This variable will be used in a couple cells later on.
 
-8. Select **Run all** on the notebook toolbar to execute the notebook.
+6. Select **Run all** on the notebook toolbar to execute the notebook.
 
     ![Run all is highlighted.](media/notebook-run-all.png "Run all")
 
@@ -78,32 +66,32 @@ You recommend using the Data hub to view the Parquet files in the connected stor
 
     > **Note:** To run just the cell, either hover over the cell and select the _Run cell_ icon to the left of the cell, or select the cell then type **Ctrl+Enter** on your keyboard.
 
-9. After the cell run is complete, change the View to **Chart** in the cell output.
+7. After the cell run is complete, change the View to **Chart** in the cell output.
 
     ![The Chart view is highlighted.](media/2010-sale-parquet-table-output.png "Cell 1 output")
 
     By default, the cell outputs to a table view when we use the `display()` function. We see in the output the sales transaction data stored in the Parquet file for December 31, 2010. Let's select the **Chart** visualization to see a different view of the data.
 
-10. Select the **View options** button to the right.
+8.  Select the **View options** button to the right.
 
     ![The button is highlighted.](media/2010-sale-parquet-chart-options-button.png "View options")
 
-11. Set Key to **`ProductId`** and Values to **`TotalAmount` (1)**, then select **Apply (2)**.
+9.  Set Key to **`ProductId`** and Values to **`TotalAmount` (1)**, then select **Apply (2)**.
 
     ![The options are configured as described.](media/2010-sale-parquet-chart-options.png "View options")
 
-12. The chart visualization is displayed. Hover over the bars to view details.
+10. The chart visualization is displayed. Hover over the bars to view details.
 
     ![The configured chart is displayed.](media/2010-sale-parquet-chart.png "Chart view")
 
-13. Create a new cell underneath by selecting **{} Add code** when hovering over the blank space at the bottom of the notebook.
+11. Create a new cell underneath by selecting **{} Add code** when hovering over the blank space at the bottom of the notebook.
 
     ![The Add code button is highlighted underneath the chart.](media/chart-add-code.png "Add code")
 
-14. The Spark engine can analyze the Parquet files and infer the schema. To do this, enter the following in the new cell and **run** it:
+12. The Spark engine can analyze the Parquet files and infer the schema. To do this, enter the following in the new cell and **run** it:
 
     ```python
-    data_path.printSchema()
+    df.printSchema()
     ```
 
     Your output should look like the following:
@@ -125,14 +113,14 @@ You recommend using the Data hub to view the Parquet files in the connected stor
 
     Spark evaluates the file contents to infer the schema. This automatic inference is usually sufficient for data exploration and most transformation tasks. However, when you load data to an external resource like a SQL table, sometimes you need to declare your own schema and apply that to the dataset. For now, the schema looks good.
 
-15. Now let's use the dataframe to use aggregates and grouping operations to better understand the data. Create a new cell and enter the following, then **run** the cell:
+13. Now let's use the dataframe to use aggregates and grouping operations to better understand the data. Create a new cell and enter the following, then **run** the cell:
 
     ```python
     from pyspark.sql import SparkSession
     from pyspark.sql.types import *
     from pyspark.sql.functions import *
 
-    profitByDateProduct = (data_path.groupBy("TransactionDate","ProductId")
+    profitByDateProduct = (df.groupBy("TransactionDate","ProductId")
         .agg(
             sum("ProfitAmount").alias("(sum)ProfitAmount"),
             round(avg("Quantity"), 4).alias("(avg)Quantity"),
