@@ -104,9 +104,9 @@ To run loads with appropriate compute resources, create loading users designated
 
 ### Create pipeline with copy activity
 
-1. Navigate to the **Orchestrate** hub.
+1. Navigate to the **Integrate** hub.
 
-    ![The Orchestrate hub is highlighted.](media/orchestrate-hub.png "Orchestrate hub")
+    ![The Integrate hub is highlighted.](media/integrate-hub.png "Integrate hub")
 
 2. Select **+ (1)** then **Pipeline (2)** to create a new pipeline.
 
@@ -255,7 +255,7 @@ Azure Cosmos DB is one of the data sources that will be used in the Mapping Data
 
     ![Manage, New, and the Azure Cosmos DB linked service option are highlighted.](media/create-cosmos-db-linked-service-step1.png "New linked service")
 
-3. Name the linked service `asacosmosdb01` **(1)**, select the **Cosmos DB account name** and set the **Database name** value to `CustomerProfile` **(2)**. Select **Test connection** to ensure success **(3)**, then select **Create (4)**.
+3. Name the linked service `asacosmosdb01` **(1)**, select the **Cosmos DB account name** (`asacosmosdbSUFFIX`) and set the **Database name** value to `CustomerProfile` **(2)**. Select **Test connection** to ensure success **(3)**, then select **Create (4)**.
 
     ![New Azure Cosmos DB linked service.](media/create-cosmos-db-linked-service.png "New linked service")
 
@@ -470,6 +470,7 @@ To do this, you will build a mapping data flow that performs the following tasks
         ),
         allowSchemaDrift: true,
         validateSchema: false,
+        ignoreNoFilesFound: false,
         format: 'document') ~> UserProfiles
     ```
 
@@ -659,7 +660,7 @@ To do this, you will build a mapping data flow that performs the following tasks
 
     ![The completed data flow is displayed.](media/data-flow-user-profiles-complete.png "Completed data flow")
 
-38. Select **Publish all** to save your new data flow.
+38. Select **Publish all**, then **Publish** to save your new data flow.
 
     ![Publish all is highlighted.](media/publish-all-1.png "Publish all")
 
@@ -675,9 +676,9 @@ By using Synapse Pipelines, Tailwind Traders can experience the same familiar in
 
 Let's start by executing our new Mapping Data Flow. In order to run the new data flow, we need to create a new pipeline and add a data flow activity to it.
 
-1. Navigate to the **Orchestrate** hub.
+1. Navigate to the **Integrate** hub.
 
-    ![The Orchestrate hub is highlighted.](media/orchestrate-hub.png "Orchestrate hub")
+    ![The Integrate hub is highlighted.](media/integrate-hub.png "Integrate hub")
 
 2. Select **+ (1)**, then **Pipeline (2)**.
 
@@ -701,7 +702,7 @@ Let's start by executing our new Mapping Data Flow. In order to run the new data
 
 7. Select **OK (3)**.
 
-8. Select the mapping data flow activity on the canvas. Select the **Settings** tab **(1)**, then ensure `AutoResolveIntegrationRuntime` is selected for **Run on (Azure IR) (2)**. Choose the `Compute Optimized` **Compute type (3)** and select `64 (+ 16 cores)` for the **Core count (4)**.
+8. Select the mapping data flow activity on the canvas. Select the **Settings** tab **(1)**, then ensure `AutoResolveIntegrationRuntime` is selected for **Run on (Azure IR) (2)**. Choose the `General purpose` **Compute type (3)** and select `8 (+ 8 cores)` for the **Core count (4)**.
 
     ![The settings are configured as described.](media/data-flow-activity-settings1.png "Settings")
 
@@ -768,7 +769,7 @@ Now that we have processed, joined, and imported the user profile data, let's an
 
     ![The Data menu item is highlighted.](media/data-hub.png "Data hub")
 
-2. Select the **Linked** tab **(1)** and expand the **primary data lake storage account (2)** underneath the **Azure Data Lake Storage Gen2**. Select the **wwi-02** container **(3)** and open the **top-products** folder **(4)**. Right-click on any Parquet file **(5)**, then select the **New notebook** menu item **(6)**. If you don't see the folder, select `Refresh` above.
+2. Select the **Linked** tab **(1)** and expand the **primary data lake storage account (2)** underneath the **Azure Data Lake Storage Gen2**. Select the **wwi-02** container **(3)** and open the **top-products** folder **(4)**. Right-click on any Parquet file **(5)**, select the **New notebook** menu item **(6)**, then select **Load to DataFrame (7)**. If you don't see the folder, select `Refresh` above.
 
     ![The Parquet file and new notebook option are highlighted.](media/synapse-studio-top-products-folder.png "New notebook")
 
@@ -795,7 +796,7 @@ Now that we have processed, joined, and imported the user profile data, let's an
 7. Enter and execute the following in the new cell to populate a new dataframe called `topPurchases`, create a new temporary view named `top_purchases`, and show the first 100 rows:
 
     ```python
-    topPurchases = data_path.select(
+    topPurchases = df.select(
         "UserId", "ProductId",
         "ItemsPurchasedLast12Months", "IsTopProduct",
         "IsPreferredProduct")
