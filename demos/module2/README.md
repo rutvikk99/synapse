@@ -2,7 +2,7 @@
 
 In this demo, we show ways you can optimize data warehouse workloads that use the dedicated SQL pools. We cover useful developer features, how to define and use workload management and classification to control data loading, and methods to optimize query performance. The following table of contents describes and links to the elements of the demo:
 
-- [Optimize a Data Warehouse with dedicated SQL Pools in Azure Synapse](#optimize-a-data-warehouse-with-azure-synapse-sql-pools)
+- [Optimize a Data Warehouse with dedicated SQL Pools in Azure Synapse](#optimize-a-data-warehouse-with-dedicated-sql-pools-in-azure-synapse)
   - [Demo prerequisites](#demo-prerequisites)
   - [Understanding developer features of Azure Synapse Analytics](#understanding-developer-features-of-azure-synapse-analytics)
     - [Using window functions](#using-window-functions)
@@ -222,7 +222,7 @@ To understand their requirements, let's first execute a distinct count over the 
 
     ![The run button is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-run.png "Run")
 
-    The query takes up to 20 seconds to execute. That is expected, as distinct counts are one of the most difficult types of queries to optimize.
+    The query takes between 30 and 50 seconds to execute. That is expected, as distinct counts are one of the most difficult types of queries to optimize.
 
     The result should be `1,000,000`.
 
@@ -290,9 +290,9 @@ Tailwind Traders has asked you if there is a way to mark queries executed by the
 
     Now that we have confirmed that there are no running queries, we need to flood the system with queries and see what happens for `asa.sql.workload01` and `asa.sql.workload02`. To do this, we'll run a Synapse Pipeline which triggers queries.
 
-6. Select the **Orchestrate** hub.
+6. Select the **Integrate** hub.
 
-    ![The orchestrate hub is highlighted.](media/orchestrate-hub.png "Orchestrate hub")
+    ![The integrate hub is highlighted.](media/integrate-hub.png "Integrate hub")
 
 7. Select the **Lab 08 - Execute Data Analyst and CEO Queries** pipeline **(1)**, which will run / trigger the `asa.sql.workload01` and `asa.sql.workload02` queries. Select **Add trigger (2)**, then **Trigger now (3)**. In the dialog that appears, select **OK**.
 
@@ -318,7 +318,7 @@ Tailwind Traders has asked you if there is a way to mark queries executed by the
 
     ![SQL query results.](media/sql-query-2-results.png "SQL script")
 
-    > **Note to presenter**: This query could take over a minute to execute.
+    > **Note to presenter**: This query could take over a minute to execute. If it takes longer than this, cancel the query and run it again.
 
     Notice that the **Importance** level for all queries is set to **normal**.
 
@@ -430,9 +430,9 @@ Let's start by experimenting with different parameters.
 
     ![The run button is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-run.png "Run")
 
-7. Select the **Orchestrate** hub.
+7. Select the **Integrate** hub.
 
-    ![The orchestrate hub is highlighted.](media/orchestrate-hub.png "Orchestrate hub")
+    ![The integrate hub is highlighted.](media/integrate-hub.png "Integrate hub")
 
 8. Select the **Lab 08 - Execute Business Analyst Queries** Pipeline **(1)**, which will run / trigger  `asa.sql.workload02` queries. Select **Add trigger (2)**, then **Trigger now (3)**. In the dialog that appears, select **OK**.
 
@@ -709,7 +709,7 @@ Let's start by experimenting with different parameters.
 
     ![The run button is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-run.png "Run")
 
-    You should see a performance improvement executing against the new Hash table compared to the first time we ran the script against the Heap table. In our case, the query executed in about half the time.
+    You should see a performance improvement executing against the new Hash table compared to the first time we ran the script against the Heap table. In our case, the query executed in about 35 seconds.
 
     ![The script run time of 6 seconds is highlighted in the query results.](media/sale-hash-result.png "Hash table results")
 
@@ -721,7 +721,7 @@ Date columns are usually good candidates for partitioning tables at the distribu
 
 The dedicated SQL pool already contains two versions of the `Sale` table that have been partitioned using `TransactionDateId`. These tables are `[wwi_perf].[Sale_Partition01]` and `[wwi_perf].[Sale_Partition02]`. Below are the CTAS queries that have been used to create these tables.
 
-1. In the query window, replace the script with the following CTAS queries that create the partition tables:
+1. In the query window, replace the script with the following CTAS queries that create the partition tables (**do not** execute):
 
     ```sql
     CREATE TABLE [wwi_perf].[Sale_Partition01]
@@ -878,7 +878,7 @@ Result cache is evicted regularly based on a time-aware least recently used algo
 
 5. In the toolbar menu, connect to the **SQLPool01** database for the next query.
 
-    ![The connect to option is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-connect.png "Query toolbar")
+    ![The connect to option is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-sqlpool01-database.png "Query toolbar")
 
 6. In the query window, replace the script with the following query and immediately check if it hit the cache:
 
