@@ -2,14 +2,14 @@
 
 In this demo, we show how Azure Synapse enables you to use serverless SQL pool to query data stored in the data lake, as well as an external data source. We also cover security and how to control access to the files through RBAC and ACLs applied to the ADLS Gen2 data store. The following table of contents describes and links to the elements of the demo:
 
-- [Run interactive queries using serverless SQL pools with Azure Synapse](#run-interactive-queries-using-azure-synapse-sql-serverless)
+- [Run interactive queries using serverless SQL pool with Azure Synapse Analytics](#run-interactive-queries-using-serverless-sql-pool-with-azure-synapse-analytics)
   - [Demo prerequisites](#demo-prerequisites)
-  - [Querying a Data Lake Store using serverless SQL pools in Azure Synapse Analytics](#querying-a-data-lake-store-using-sql-serverless-in-azure-synapse-analytics)
-    - [Query sales Parquet data with serverless SQL pools](#query-sales-parquet-data-with-synapse-sql-serverless)
+  - [Querying a Data Lake Store using serverless SQL pools in Azure Synapse Analytics](#querying-a-data-lake-store-using-serverless-sql-pools-in-azure-synapse-analytics)
+    - [Query sales Parquet data with serverless SQL pools](#query-sales-parquet-data-with-serverless-sql-pools)
     - [Create an external table for 2019 sales data](#create-an-external-table-for-2019-sales-data)
     - [Create an external table for CSV files](#create-an-external-table-for-csv-files)
-    - [Create a view using a serverless SQL pool](#create-a-sql-serverless-view)
-  - [Securing access to data through using SQL Serverless in Azure Synapse Analytics](#securing-access-to-data-through-using-sql-serverless-in-azure-synapse-analytics)
+    - [Create a view with a serverless SQL pool](#create-a-view-with-a-serverless-sql-pool)
+  - [Securing access to data through using a serverless SQL pool in Azure Synapse Analytics](#securing-access-to-data-through-using-a-serverless-sql-pool-in-azure-synapse-analytics)
     - [Create Azure Active Directory security groups](#create-azure-active-directory-security-groups)
     - [Add group members](#add-group-members)
     - [Configure data lake security - Role-Based Access Control (RBAC)](#configure-data-lake-security---role-based-access-control-rbac)
@@ -46,7 +46,7 @@ When you query Parquet files using serverless SQL pools, you can explore the dat
 
 3. Ensure **Built-in** is selected **(1)** in the `Connect to` dropdown list above the query window, then run the query **(2)**. Data is loaded by the serverless SQL endpoint and processed as if was coming from any regular relational database.
 
-    ![The Built-in connection is highlighted.](media/sql-on-demand-selected.png "SQL Built-in")
+    ![The Built-in connection is highlighted.](media/built-in-selected.png "SQL Built-in")
 
     The cell output shows the query results from the Parquet file.
 
@@ -103,7 +103,7 @@ Rather than creating a script with `OPENROWSET` and a path to the root 2019 fold
 
     > **Note to presenter**: Make sure the script is connected to the serverless SQL pool (`Built-in`) **(1)** and the database is set to `demo` **(2)**.
 
-    ![The Built-in pool and demo database are selected.](media/on-demand-and-demo.png "Script toolbar")
+    ![The Built-in pool and demo database are selected.](media/built-in-and-demo.png "Script toolbar")
 
     The generated script contains the following components:
 
@@ -278,7 +278,7 @@ Let's create a view to wrap a SQL query. Views allow you to reuse queries and ar
 
     ![The run button is highlighted.](media/sql-run.png "Run")
 
-    We just created the view to wrap the SQL query that selects data from the CSV file and selected from the view:
+    We just created the view to wrap the SQL query that selects data from the CSV file, then selected rows from the view:
 
     ![The query results are displayed.](media/create-view-script-results.png "Query results")
 
@@ -475,7 +475,7 @@ To test out the permissions, we will add our own account to the `tailwind-reader
 
 3. Ensure **Built-in** is selected **(1)** in the `Connect to` dropdown list above the query window, then run the query **(2)**. Data is loaded by the serverless SQL pool endpoint and processed as if was coming from any regular relational database.
 
-    ![The Built-in connection is highlighted.](media/sql-on-demand-selected.png "Built-in SQL pool")
+    ![The Built-in connection is highlighted.](media/built-in-selected.png "Built-in SQL pool")
 
     The cell output shows the query results from the Parquet file.
 
@@ -487,19 +487,19 @@ To test out the permissions, we will add our own account to the `tailwind-reader
 
     Let's give it a try.
 
-4. In the **Data** hub, once again select the **Linked** tab **(1)** and expand **Azure Data Lake Storage Gen2**. Expand the `asaworkspaceXX` primary ADLS Gen2 account **(2)** and select the **`wwi-02`** container **(3)**. Navigate to the `sale-small/Year=2016/Quarter=Q4/Month=12/Day=20161231` folder **(4)**. Right-click on the `sale-small-20161231-snappy.parquet` file **(5)**, but this time select **New Notebook (6)**.
+4. In the **Data** hub, once again select the **Linked** tab **(1)** and expand **Azure Data Lake Storage Gen2**. Expand the `asaworkspaceXX` primary ADLS Gen2 account **(2)** and select the **`wwi-02`** container **(3)**. Navigate to the `sale-small/Year=2016/Quarter=Q4/Month=12/Day=20161231` folder **(4)**. Right-click on the `sale-small-20161231-snappy.parquet` file **(5)**, select **New Notebook (6)**, then select **Load to DataFrame (7)**.
 
     ![The Data hub is displayed with the options highlighted.](media/data-hub-parquet-new-notebook.png "New notebook")
 
 5. In the notebook, select **{} Add code** underneath Cell 1 **(1)**. Enter the following in the new cell, then **copy the Parquet path from cell 1** and paste the value to replace `REPLACE_WITH_PATH` **(2)**. Rename the Parquet file by adding `-test` to the end of the file name **(3)**:
 
     ```python
-    data_path.write.parquet('REPLACE_WITH_PATH')
+    df.write.parquet('REPLACE_WITH_PATH')
     ```
 
     ![The notebook is displayed with the new cell.](media/new-cell.png "New cell")
 
-6. Select **Run all** in the tool bar to run both cells. After a few minutes when the Spark pool starts and the cells run, you should see the file data in the output from cell 1 **(1)**. However, you should see a **403 error** in the output of cell 2 **(2)**.
+6. Select **Run all** in the toolbar to run both cells. After a few minutes when the Spark pool starts and the cells run, you should see the file data in the output from cell 1 **(1)**. However, you should see a **403 error** in the output of cell 2 **(2)**.
 
     ![The error is displayed in Cell 2's output.](media/notebook-error.png "Notebook error")
 
