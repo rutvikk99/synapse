@@ -8,8 +8,8 @@ In this demo, we show how Azure Synapse Link enables you to seamlessly connect a
     - [Enable Azure Synapse Link](#enable-azure-synapse-link)
     - [Create a new Azure Cosmos DB container](#create-a-new-azure-cosmos-db-container)
     - [Create and run a copy pipeline](#create-and-run-a-copy-pipeline)
-  - [Querying Azure Cosmos DB with Apache Spark for Azure Synapse](#querying-azure-cosmos-db-with-apache-spark-for-synapse-analytics)
-  - [Querying Azure Cosmos DB with serverless SQL pool for Azure Synapse](#querying-azure-cosmos-db-with-sql-serverless-for-synapse-analytics)
+  - [Querying Azure Cosmos DB with Apache Spark for Synapse Analytics](#querying-azure-cosmos-db-with-apache-spark-for-synapse-analytics)
+  - [Querying Azure Cosmos DB with serverless SQL pool for Azure Synapse Analytics](#querying-azure-cosmos-db-with-serverless-sql-pool-for-azure-synapse-analytics)
 
 ## Demo prerequisites
 
@@ -46,6 +46,13 @@ By combining the distributed scale of Cosmos DB's transactional processing with 
 
     Before we can create an Azure Cosmos DB container with an analytical store, we must first enable Azure Synapse Link.
 
+5. You must wait for this operation to complete before continuing. Check the status by selecting the Azure **Notifications** icon.
+
+    ![The Enabling Synapse Link process is running.](media/notifications-running.png "Notifications")
+
+    You will see a green checkmark next to "Enabling Synapse Link" when it successfully completes.
+
+    ![The operation completed successfully.](media/notifications-completed.png "Notifications")
 ### Create a new Azure Cosmos DB container
 
 Tailwind Traders has an Azure Cosmos DB container named `OnlineUserProfile01`. Since we enabled the Azure Synapse Link feature _after_ the container was already created, we cannot enable the analytical store on the container. We will create a new container that has the same partition key and enable the analytical store.
@@ -82,9 +89,9 @@ After creating the container, we will create a new Synapse Pipeline to copy data
 
 Now that we have the new Azure Cosmos DB container with the analytical store enabled, we need to copy the contents of the existing container by using a Synapse Pipeline.
 
-1. Open Synapse Studio (<https://web.azuresynapse.net/>), and then navigate to the **Orchestrate** hub.
+1. Open Synapse Studio (<https://web.azuresynapse.net/>), and then navigate to the **Integrate** hub.
 
-    ![The Orchestrate menu item is highlighted.](media/orchestrate-hub.png "Orchestrate hub")
+    ![The Integrate menu item is highlighted.](media/integrate-hub.png "Integrate hub")
 
 2. Select **+ (1)**, then **Pipeline (2)**.
 
@@ -261,7 +268,7 @@ Tailwind Traders wants to explore the Azure Cosmos DB analytical store with T-SQ
 
 4. Verify that the serverless SQL pool (**Built-in**) is selected.
 
-    ![The serverless SQL pool is selected.](media/sql-on-demand-htap.png "SQL on-demand")
+    ![The serverless SQL pool is selected.](media/built-in-htap.png "Built-in")
 
 5. Paste the following SQL query. In the OPENROWSET statement, replace **`YOUR_ACCOUNT_NAME`** with the Azure Cosmos DB account name and **`YOUR_ACCOUNT_KEY`** with the Azure Cosmos DB Primary Key value you copied in step 5 above after you created the container.
 
@@ -314,7 +321,7 @@ Tailwind Traders wants to explore the Azure Cosmos DB analytical store with T-SQ
     - **2.** Uses the `OPENROWSET` statement to set the data source type to `CosmosDB`, sets the account details, and specifies that we want to create the view over the Azure Cosmos DB analytical store container named `UserProfileHTAP`.
     - **3.** The `WITH` clause matches the property names in the JSON documents and applies the appropriate SQL data types. Notice that we set the `preferredProducts` and `productReviews` fields to `varchar(max)`. This is because both of these properties contain JSON-formatted data within.
     - **4.** Since the `productReviews` property in the JSON documents contain nested subarrays, we want to "join" the properties from the document with all elements of the array. Synapse SQL enables us to flatten the nested structure by applying the `OPENJSON` function on the nested array. We flatten the values within `productReviews` like we did using the Python `explode` function earlier in the Synapse Notebook.
-    - **5.** The output shows that the five statements successfully executed.
+    - **5.** The output shows that the statements successfully executed.
 
 6. Navigate to the **Data** hub.
 
