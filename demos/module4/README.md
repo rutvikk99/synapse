@@ -443,6 +443,10 @@ To do this, you will build a mapping data flow that performs the following tasks
 
     ![The derived column's settings are configured as described.](media/data-flow-user-profiles-derived-column2-settings.png "Derived column's settings")
 
+    > **Note**: To add a column to the derived column settings, select **+** to the right of the first column, then select **Add column**.
+
+    ![The add column menu item is highlighted.](media/data-flow-add-derived-column.png "Add derived column")
+
 14. Select **Add Source** on the data flow canvas beneath the `EcommerceUserProfiles` source.
 
     ![Select Add Source on the data flow canvas.](media/data-flow-user-profiles-add-source.png "Add Source")
@@ -497,6 +501,10 @@ To do this, you will build a mapping data flow that performs the following tasks
         | userId | `userId` |
 
     ![The flatten settings are configured as described.](media/data-flow-user-profiles-flatten2-settings.png "Flatten settings")
+
+    > **Note**: Add the second column by selecting **+** to the right of the first column, then selecting **Fixed mapping**.
+
+    ![The plus and fixed mapping menu items are highlighted.](media/data-flow-add-fixed-mapping.png "Add fixed mapping")
 
     These settings provide a flattened view of the data source with one or more rows per `userId`. Using data preview requires you to enable Debug mode, which we are not enabling for this lab. *The following screenshot is for illustration only*:
 
@@ -559,6 +567,10 @@ To do this, you will build a mapping data flow that performs the following tasks
         | userId | `iif(isNull(userId), visitorId, userId)` | Sets the `userId` output to either the `visitorId` or `userId` value, depending on whether `userId` is null.
 
     ![The derived column's settings are configured as described.](media/data-flow-user-profiles-derived-column3-settings.png "Derived column's settings")
+
+    > **Note**: Remember, select **+**, then **Add column** to the right of a derived column to add a new column below.
+
+    ![The plus and add column menu item are both highlighted.](media/data-flow-add-new-derived-column.png "Add column")
 
     The derived column settings provide the following result:
 
