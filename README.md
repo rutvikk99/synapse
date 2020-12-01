@@ -54,4 +54,4 @@ You have been hired as a consultant to work with the teams to help them achieve 
 
 ## PowerPoint 
 
-The [PowerPoint](./PowerPoint/) folder PowerPoint templates that contain supportin slides for each session. Should you wish to present this materials, you can use them as is, or make ammendments to meet your needs.
+The [PowerPoint](./PowerPoint/) folder contains PowerPoint templates that has supporting slides for each session. Should you wish to present these materials, you can use them as is, or make ammendments to meet your needs.
