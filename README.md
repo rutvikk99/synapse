@@ -6,6 +6,7 @@ Demos and labs for Synapse in a Day content.
   - [Setup](#setup)
   - [Demos](#demos)
   - [Tailwind Traders - In search of a modern data warehouse solution](#tailwind-traders---in-search-of-a-modern-data-warehouse-solution)
+  - [PowerPoint](#powerpoint)
 
 ## Setup
 
@@ -50,3 +51,7 @@ Tailwind Traders has a team of data analysts. They analyze sales data and create
 Tailwind Traders would like to gain business insights using historical, real-time, and predictive analytics.  The data may reside in both structured and unstructured data sources.  They want to enable their data engineers and data scientists to bring in and run complex queries over petabytes of structured data with billions of rows. At the same time, they want to enable data analysts to share a single source of truth and have a single workspace to collaborate and work with enriched data. They want to accomplish this while minimizing the number of tools and services required to ingest, transform, store, and query their data. They want their wide team that exists across various departments to use one shared tool. They hope they can increase collaboration, share best practices, centralize management, and mature their troubleshooting and monitoring process.
 
 You have been hired as a consultant to work with the teams to help them achieve their aspirations of building a modern data warehouse. Based on their needs, you recommend Azure Synapse Analytics and lead members from each team toward Tailwind Trader’s goal and ultimate success.
+
+## PowerPoint 
+
+The [PowerPoint](./PowerPoint/) folder PowerPoint templates that contain supportin slides for each session. Should you wish to present this materials, you can use them as is, or make ammendments to meet your needs.
