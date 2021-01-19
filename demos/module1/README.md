@@ -230,6 +230,8 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
     4. **Apache Spark applications** shows all the Spark applications that are running or have run in your workspace.
     5. **SQL requests** shows all SQL scripts executed either directly by you or another user, or executed in other ways, like from a pipeline run.
     6. **Data flow debug** shows active and previous debug sessions. When you author a data flow, you can enable the debugger and execute the data flow without needing to add it to a pipeline and trigger an execute. Using the debugger speeds up and simplifies the development process. Since the debugger requires an active Spark cluster, it can take a few minutes after you enable the debugger before you can use it.
+    7. **SQL pools** shows the serverless and dedicated SQL pools and their current status. When you select a dedicated SQL pool, you see a dashboard that shows the running, queued, and failed requests. You can also see the number of active requests and DWU usage over the past 24 hours, 7 days, or 30 days.
+    8. **Apache Spark pools** shows the current status of your Spark pools. Selecting a Spark pool displays a dashboard that shows the current memory and vCore allocation, active and failed applications, and a history of these items over the past 24 hours, 7 days, or 30 days.
 
 3. Select **SQL requests (1)**, then switch to the **SQLPool01 (2)** pool to see the list of SQL requests.
 
@@ -261,6 +263,7 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
     6. **Access control** is where you go to add and remove users to one of three security groups: workspace admin, SQL admin, and Apache Spark for Azure Synapse Analytics admin.
     7. **Credentials** lets you manage Service Principal credentials used by the workspace, including the workspace system identity account.
     8. **Managed private endpoints** is where you manage private endpoints, which use a private IP address from within a virtual network to connect to an Azure service or your own private link service. Connections using private endpoints listed here provide access to Synapse workspace endpoints (dedicated SQL, serverless SQL, and Dev).
+    9. **Git configuration** lets you connect to a repository for source control and collaboration for work on your workspace pipelines.
 
 ## Designing a Modern Data Warehouse using Azure Synapse Analytics
 
