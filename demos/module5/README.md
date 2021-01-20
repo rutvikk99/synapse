@@ -533,6 +533,8 @@ To test out the permissions, we will add our own account to the `tailwind-reader
 
     The cell succeeded this time because we added our account to the `tailwind-history-owners` group, which is assigned the **Storage Blob Data Owner** role.
 
+    > **Note**: If you encounter the same error this time, stop the Spark session on the notebook, then select **Publish all**, then Publish. After publishing your changes, select your user profile on the top-right corner of the page and log out. Close the browser tab after logout is successful, then re-launch Synapse Studio, re-open the notebook, then re-run the cell. This may be needed because you must refresh the security token for the auth changes to take place.
+
     Now let's verify that the file was written to the data lake.
 
 14. Navigate back to the `sale-small/Year=2016/Quarter=Q4/Month=12/Day=20161231` folder. You should now see a folder for the new `sale-small-20161231-snappy-test.parquet` file we wrote from the notebook **(1)**. If you don't see it listed here, select **... More** in the toolbar **(2)**, then select **Refresh (3)**.
