@@ -5,6 +5,8 @@ In this demo, we show how Azure Synapse Link enables you to seamlessly connect a
 - [Support Hybrid Transactional Analytical Processing with Azure Synapse Link](#support-hybrid-transactional-analytical-processing-with-azure-synapse-link)
   - [Demo prerequisites](#demo-prerequisites)
   - [Configuring Azure Synapse Link with Cosmos DB](#configuring-azure-synapse-link-with-cosmos-db)
+    - [(Optional) Create linked service](#optional-create-linked-service)
+    - [(Optional) Create dataset](#optional-create-dataset)
     - [Enable Azure Synapse Link](#enable-azure-synapse-link)
     - [Create a new Azure Cosmos DB container](#create-a-new-azure-cosmos-db-container)
     - [Create and run a copy pipeline](#create-and-run-a-copy-pipeline)
@@ -16,7 +18,9 @@ In this demo, we show how Azure Synapse Link enables you to seamlessly connect a
 - All demos use the same environment. If you have not done so already, Complete the [environment setup instructions](https://github.com/ctesta-oneillmsft/asa-vtd) (external link).
 - You need to have completed [Module 4](../module4/README.md).
   - You have created the Azure Cosmos DB linked service.
-  - You have created the `asal400_customerprofile_cosmosdb` integration data set.
+  - You have created the `asal400_customerprofile_cosmosdb` integration dataset.
+
+> If you did not complete Module 4, complete the first two optional tasks below to create the required Azure Cosmos DB linked service and dataset.
 
 ## Configuring Azure Synapse Link with Cosmos DB
 
@@ -27,6 +31,62 @@ While Tailwind Traders is happy with the capabilities and performance of Azure C
 You decide to enable Azure Synapse Link for Cosmos DB and enable the analytical store on their Azure Cosmos DB containers. With this configuration, all transactional data is automatically stored in a fully isolated column store. This store enables large-scale analytics against the operational data in Azure Cosmos DB, without impacting the transactional workloads or incurring resource unit (RU) costs. Azure Synapse Link for Cosmos DB creates a tight integration between Azure Cosmos DB and Azure Synapse Analytics, which enables Tailwind Traders to run near real-time analytics over their operational data with no-ETL and full performance isolation from their transactional workloads.
 
 By combining the distributed scale of Cosmos DB's transactional processing with the built-in analytical store and the computing power of Azure Synapse Analytics, Azure Synapse Link enables a Hybrid Transactional/Analytical Processing (HTAP) architecture for optimizing Tailwind Trader's business processes. This integration eliminates ETL processes, enabling business analysts, data engineers & data scientists to self-serve and run near real-time BI, analytics, and Machine Learning pipelines over operational data.
+
+### (Optional) Create linked service
+
+If you have not completed Module 4, complete the steps below to create an Azure Cosmos DB linked service.
+
+> **Note to presenter**: Skip this section if you have already created a Cosmos DB linked service.
+
+1. Navigate to the **Manage** hub.
+
+    ![The Manage menu item is highlighted.](media/manage-hub.png "Manage hub")
+
+2. Open **Linked services** and select **+ New** to create a new linked service. Select **Azure Cosmos DB (SQL API)** in the list of options, then select **Continue**.
+
+    ![Manage, New, and the Azure Cosmos DB linked service option are highlighted.](media/create-cosmos-db-linked-service-step1.png "New linked service")
+
+3. Name the linked service `asacosmosdb01` **(1)**, select the **Cosmos DB account name** (`asacosmosdbSUFFIX`) and set the **Database name** value to `CustomerProfile` **(2)**. Select **Test connection** to ensure success **(3)**, then select **Create (4)**.
+
+    ![New Azure Cosmos DB linked service.](media/create-cosmos-db-linked-service.png "New linked service")
+
+### (Optional) Create dataset
+
+If you have not completed Module 4, complete the steps below to create the `asal400_customerprofile_cosmosdb` dataset.
+
+> **Note to presenter**: Skip this section if you have already completed Module 4.
+
+1. Navigate to the **Data** hub.
+
+    ![The Data menu item is highlighted.](media/data-hub.png "Data hub")
+
+2. Select **+** in the toolbar **(1)**, then select **Integration dataset (2)** to create a new dataset.
+
+    ![Create new Dataset.](media/new-dataset.png "New Dataset")
+
+3. Select **Azure Cosmos DB (SQL API)** from the list **(1)**, then select **Continue (2)**.
+
+    ![The Azure Cosmos DB SQL API option is highlighted.](media/new-cosmos-db-dataset.png "Integration dataset")
+
+4. Configure the dataset with the following characteristics, then select **OK (4)**:
+
+    - **Name**: Enter `asal400_customerprofile_cosmosdb` **(1)**.
+    - **Linked service**: Select the Azure Cosmos DB linked service **(2)**.
+    - **Collection**: Select `OnlineUserProfile01` **(3)**.
+
+    ![New Azure Cosmos DB dataset.](media/create-cosmos-db-dataset.png "New Cosmos DB dataset")
+
+5. After creating the dataset, select **Preview data** under its **Connection** tab.
+
+    ![The preview data button on the dataset is highlighted.](media/cosmos-dataset-preview-data-link.png "Preview data")
+
+6. Preview data queries the selected Azure Cosmos DB collection and returns a sample of the documents within. The documents are stored in JSON format and include a `userId` field, `cartId`, `preferredProducts` (an array of product IDs that may be empty), and `productReviews` (an array of written product reviews that may be empty).
+
+    ![A preview of the Azure Cosmos DB data is displayed.](media/cosmos-db-dataset-preview-data.png "Preview data")
+
+7. Select **Publish all** then **Publish** to save your new resources.
+
+    ![Publish all is highlighted.](media/publish-all-1.png "Publish all")
 
 ### Enable Azure Synapse Link
 
@@ -53,6 +113,7 @@ By combining the distributed scale of Cosmos DB's transactional processing with 
     You will see a green checkmark next to "Enabling Synapse Link" when it successfully completes.
 
     ![The operation completed successfully.](media/notifications-completed.png "Notifications")
+
 ### Create a new Azure Cosmos DB container
 
 Tailwind Traders has an Azure Cosmos DB container named `OnlineUserProfile01`. Since we enabled the Azure Synapse Link feature _after_ the container was already created, we cannot enable the analytical store on the container. We will create a new container that has the same partition key and enable the analytical store.
