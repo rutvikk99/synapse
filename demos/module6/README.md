@@ -4,9 +4,9 @@ In this demo, we show how Azure Synapse Link enables you to seamlessly connect a
 
 - [Support Hybrid Transactional Analytical Processing with Azure Synapse Link](#support-hybrid-transactional-analytical-processing-with-azure-synapse-link)
   - [Demo prerequisites](#demo-prerequisites)
-  - [Configuring Azure Synapse Link with Cosmos DB](#configuring-azure-synapse-link-with-cosmos-db)
     - [(Optional) Create linked service](#optional-create-linked-service)
     - [(Optional) Create dataset](#optional-create-dataset)
+  - [Configuring Azure Synapse Link with Cosmos DB](#configuring-azure-synapse-link-with-cosmos-db)
     - [Enable Azure Synapse Link](#enable-azure-synapse-link)
     - [Create a new Azure Cosmos DB container](#create-a-new-azure-cosmos-db-container)
     - [Create and run a copy pipeline](#create-and-run-a-copy-pipeline)
@@ -21,16 +21,6 @@ In this demo, we show how Azure Synapse Link enables you to seamlessly connect a
   - You have created the `asal400_customerprofile_cosmosdb` integration dataset.
 
 > If you did not complete Module 4, complete the first two optional tasks below to create the required Azure Cosmos DB linked service and dataset.
-
-## Configuring Azure Synapse Link with Cosmos DB
-
-Tailwind Traders uses Azure Cosmos DB to store user profile data from their eCommerce site. The NoSQL document store provided by the Azure Cosmos DB SQL API provides the familiarity of managing their data using SQL syntax, while being able to read and write the files at a massive, global scale.
-
-While Tailwind Traders is happy with the capabilities and performance of Azure Cosmos DB, they are concerned about the cost of executing a large volume of analytical queries over multiple partitions (cross-partition queries) from their data warehouse. They want to efficiently access all the data without needing to increase the Azure Cosmos DB request units (RUs). They have looked at options for extracting data from their containers to the data lake as it changes, through the Azure Cosmos DB change feed mechanism. The problem with this approach is the extra service and code dependencies and long-term maintenance of the solution. They could perform bulk exports from a Synapse Pipeline, but then they won't have the most up-to-date information at any given moment.
-
-You decide to enable Azure Synapse Link for Cosmos DB and enable the analytical store on their Azure Cosmos DB containers. With this configuration, all transactional data is automatically stored in a fully isolated column store. This store enables large-scale analytics against the operational data in Azure Cosmos DB, without impacting the transactional workloads or incurring resource unit (RU) costs. Azure Synapse Link for Cosmos DB creates a tight integration between Azure Cosmos DB and Azure Synapse Analytics, which enables Tailwind Traders to run near real-time analytics over their operational data with no-ETL and full performance isolation from their transactional workloads.
-
-By combining the distributed scale of Cosmos DB's transactional processing with the built-in analytical store and the computing power of Azure Synapse Analytics, Azure Synapse Link enables a Hybrid Transactional/Analytical Processing (HTAP) architecture for optimizing Tailwind Trader's business processes. This integration eliminates ETL processes, enabling business analysts, data engineers & data scientists to self-serve and run near real-time BI, analytics, and Machine Learning pipelines over operational data.
 
 ### (Optional) Create linked service
 
@@ -87,6 +77,16 @@ If you have not completed Module 4, complete the steps below to create the `asal
 7. Select **Publish all** then **Publish** to save your new resources.
 
     ![Publish all is highlighted.](media/publish-all-1.png "Publish all")
+
+## Configuring Azure Synapse Link with Cosmos DB
+
+Tailwind Traders uses Azure Cosmos DB to store user profile data from their eCommerce site. The NoSQL document store provided by the Azure Cosmos DB SQL API provides the familiarity of managing their data using SQL syntax, while being able to read and write the files at a massive, global scale.
+
+While Tailwind Traders is happy with the capabilities and performance of Azure Cosmos DB, they are concerned about the cost of executing a large volume of analytical queries over multiple partitions (cross-partition queries) from their data warehouse. They want to efficiently access all the data without needing to increase the Azure Cosmos DB request units (RUs). They have looked at options for extracting data from their containers to the data lake as it changes, through the Azure Cosmos DB change feed mechanism. The problem with this approach is the extra service and code dependencies and long-term maintenance of the solution. They could perform bulk exports from a Synapse Pipeline, but then they won't have the most up-to-date information at any given moment.
+
+You decide to enable Azure Synapse Link for Cosmos DB and enable the analytical store on their Azure Cosmos DB containers. With this configuration, all transactional data is automatically stored in a fully isolated column store. This store enables large-scale analytics against the operational data in Azure Cosmos DB, without impacting the transactional workloads or incurring resource unit (RU) costs. Azure Synapse Link for Cosmos DB creates a tight integration between Azure Cosmos DB and Azure Synapse Analytics, which enables Tailwind Traders to run near real-time analytics over their operational data with no-ETL and full performance isolation from their transactional workloads.
+
+By combining the distributed scale of Cosmos DB's transactional processing with the built-in analytical store and the computing power of Azure Synapse Analytics, Azure Synapse Link enables a Hybrid Transactional/Analytical Processing (HTAP) architecture for optimizing Tailwind Trader's business processes. This integration eliminates ETL processes, enabling business analysts, data engineers & data scientists to self-serve and run near real-time BI, analytics, and Machine Learning pipelines over operational data.
 
 ### Enable Azure Synapse Link
 
