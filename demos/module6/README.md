@@ -38,7 +38,7 @@ If you have not completed Module 4, complete the steps below to create an Azure 
 
 > **Note to presenter**: Skip this section if you have already created a Cosmos DB linked service.
 
-1. Navigate to the **Manage** hub.
+1. Open Synapse Studio (<https://web.azuresynapse.net/>), and then navigate to the **Manage** hub.
 
     ![The Manage menu item is highlighted.](media/manage-hub.png "Manage hub")
 
