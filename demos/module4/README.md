@@ -419,6 +419,8 @@ To do this, you will build a mapping data flow that performs the following tasks
         | visitorId | `visitorId` |
         | topProductPurchases.productId | `productId` |
         | topProductPurchases.itemsPurchasedLast12Months | `itemsPurchasedLast12Months` |
+    
+    > Select **+ Add mapping**, then select **Fixed mapping** to add each new column mapping.
 
     ![The flatten settings are configured as described.](media/data-flow-user-profiles-flatten-settings.png "Flatten settings")
 
@@ -499,6 +501,8 @@ To do this, you will build a mapping data flow that performs the following tasks
         | --- | --- |
         | [] preferredProducts | `preferredProductId` |
         | userId | `userId` |
+
+    > Select **+ Add mapping**, then select **Fixed mapping** to add each new column mapping.
 
     ![The flatten settings are configured as described.](media/data-flow-user-profiles-flatten2-settings.png "Flatten settings")
 
