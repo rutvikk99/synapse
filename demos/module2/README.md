@@ -153,12 +153,17 @@ To do this, you decide to build window functions that use the `PERCENTILE_CONT` 
     ```sql
     --LAG Function
     SELECT ProductId,
-        [Hour] AS SalesHour,
-        TotalAmount AS CurrentSalesTotal,
-        LAG(TotalAmount, 1,0) OVER (ORDER BY [Hour]) AS PreviousSalesTotal,
-        TotalAmount - LAG(TotalAmount,1,0) OVER (ORDER BY [Hour]) AS Diff
-    FROM [wwi_perf].[Sale_Index]
-    WHERE ProductId = 3848 AND [Hour] BETWEEN 8 AND 20;
+        [Hour],
+        [HourSalesTotal],
+        LAG(HourSalesTotal,1,0) OVER (ORDER BY [Hour]) AS PreviousHouseSalesTotal,
+        [HourSalesTotal] - LAG(HourSalesTotal,1,0) OVER (ORDER BY [Hour]) AS Diff
+    FROM ( 
+        SELECT ProductId,
+            [Hour],
+            SUM(TotalAmount) AS HourSalesTotal
+        FROM [wwi_perf].[Sale_Index]
+        WHERE ProductId = 3848 AND [Hour] BETWEEN 8 AND 20
+        GROUP BY ProductID, [Hour]) as HourTotals
     ```
 
     Tailwind Traders wants to compare the sales totals for a product over an hourly basis over time, showing the difference in value.
@@ -222,7 +227,7 @@ To understand their requirements, let's first execute a distinct count over the 
 
     ![The run button is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-run.png "Run")
 
-    The query takes between 30 and 50 seconds to execute. That is expected, as distinct counts are one of the most difficult types of queries to optimize.
+    The query takes up to 50 seconds to execute. That is expected, as distinct counts are one of the most difficult types of queries to optimize.
 
     The result should be `1,000,000`.
 
@@ -584,7 +589,7 @@ Let's start by experimenting with different parameters.
 
     ![The run button is highlighted in the query toolbar.](media/synapse-studio-query-toolbar-run.png "Run")
   
-    The script takes up to **30 seconds** to execute and returns the result. There is clearly something wrong with the `Sale_Heap` table that induces the performance hit.
+    The script takes up to **50 seconds** to execute and returns the result. There is clearly something wrong with the `Sale_Heap` table that induces the performance hit.
 
     > If the script is still running after one minute, click on Cancel.
 
