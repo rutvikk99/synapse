@@ -107,7 +107,11 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
     ![The Packages pane of the Spark pool is displayed.](media/spark-pool-packages.png "Packages")
 
-    When you select **Packages (1)** on the left-hand menu, you can view whether a `requirements.txt` file has been added to manage Python packages for Spark instances. You can **upload an environment config file (2)**, or select the ellipses (...) to the **right-hand side of a package file (3)** to access options to re-upload, download, or delete the file.
+    When you select **Packages (1)** on the left-hand menu, you can view whether a requirements file has been added to manage Python packages for Spark instances. You can **upload or delete an environment config file (2)**, or select the ellipses (...) to the **right-hand side of a package file (3)** to access an option to download the file.
+
+    When you select the option to Force new settings **(4)**, you will end the all current sessions for the selected Spark pool. Once the sessions are ended, you will have to wait for the pool to restart. If this setting is unchecked when you make changes to the package files, then you will have to wait for the current Spark session to end or stop it manually. Once the session has ended, you will need to let the pool restart.
+
+    Under **workspace packages**, you can **select from workspace packages (5)** that you want to add to this Spark pool. Workspace packages can be custom code or a specific version of an open-source library in the form of `.whl` (Wheel) and `.jar` files, and are uploaded through the **Workspace packages** section of the Manage hub in Synapse Studio.
 
 ## Exploring Azure Synapse Studio
 
@@ -263,7 +267,8 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
     6. **Access control** is where you go to add and remove users to one of three security groups: workspace admin, SQL admin, and Apache Spark for Azure Synapse Analytics admin.
     7. **Credentials** lets you manage Service Principal credentials used by the workspace, including the workspace system identity account.
     8. **Managed private endpoints** is where you manage private endpoints, which use a private IP address from within a virtual network to connect to an Azure service or your own private link service. Connections using private endpoints listed here provide access to Synapse workspace endpoints (dedicated SQL, serverless SQL, and Dev).
-    9. **Git configuration** lets you connect to a repository for source control and collaboration for work on your workspace pipelines.
+    9. **Workspace packages** lets you upload custom code or a specific version of an open-source library that you would like to use in your Azure Synapse Analytics Workspace. These custom packages, in the form of `.whl` (Wheel) and `.jar` **files**, can be used by your Apache Spark pools.
+    10. **Git configuration** lets you connect to a repository for source control and collaboration for work on your workspace pipelines.
 
 ## Designing a Modern Data Warehouse using Azure Synapse Analytics
 
@@ -375,7 +380,7 @@ Azure Synapse enables you to ingest data from multiple data sources through its 
 
     You can scale dedicated SQL pool compute at any time by using this slider. You can also programmatically adjust the Data Warehouse Units, enabling scenarios where you automatically scale your pool based on a schedule or other factors.
 
-4. Cancel the Scale dialog, then select **Apache Spark pools (1)** in the Manage hub left-hand menu. Hover over **SparkPool01** and select the **auto-scale settings** button **(2)**.
+4. Cancel the Scale dialog, then select **Apache Spark pools (1)** in the Manage hub left-hand menu. Hover over **SparkPool01** and select the **scale settings** button **(2)**.
 
     ![The auto-scale settings button is highlighted.](media/spark-pool-scale-button.png "Scale")
 
