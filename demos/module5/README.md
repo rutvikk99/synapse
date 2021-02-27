@@ -28,7 +28,7 @@ Tailwind Trader's Data Engineers want a way to explore the data lake, transform 
 
 Understanding data through data exploration is one of the core challenges faced today by data engineers and data scientists as well. Depending on the underlying structure of the data as well as the specific requirements of the exploration process, different data processing engines will offer varying degrees of performance, complexity, and flexibility.
 
-In Azure Synapse Analytics, you can use either SQL, Apache Spark for Synapse, or both. Which service you use mostly depends on your personal preference and expertise. When conducting data engineering tasks, both options can be equally valid in many cases. However, there are certain situations where harnessing the power of Apache Spark can help you overcome problems with the source data. This is because in a Synapse Notebook, you can import from a large number of free libraries that add functionality to your environment when working with data. There are other situations where it is much more convenient and faster using serveless SQL pool to explore the data, or to expose data in the data lake through a SQL view that can be accessed from external tools, like Power BI.
+In Azure Synapse Analytics, you can use either SQL, Apache Spark for Synapse, or both. Which service you use mostly depends on your personal preference and expertise. When conducting data engineering tasks, both options can be equally valid in many cases. However, there are certain situations where harnessing the power of Apache Spark can help you overcome problems with the source data. This is because in a Synapse Notebook, you can import from a large number of free libraries that add functionality to your environment when working with data. There are other situations where it is much more convenient and faster using serverless SQL pool to explore the data, or to expose data in the data lake through a SQL view that can be accessed from external tools, like Power BI.
 
 In this exercise, you will explore the data lake using both options.
 
@@ -57,9 +57,9 @@ When you query Parquet files using serverless SQL pools, you can explore the dat
     ```sql
     SELECT
         TransactionDate, ProductId,
-            CAST(SUM(ProfitAmount) AS decimal(18,2)) AS [(sum) Profit],
-            CAST(AVG(ProfitAmount) AS decimal(18,2)) AS [(avg) Profit],
-            SUM(Quantity) AS [(sum) Quantity]
+        CAST(SUM(ProfitAmount) AS decimal(18,2)) AS [(sum) Profit],
+        CAST(AVG(ProfitAmount) AS decimal(18,2)) AS [(avg) Profit],
+        SUM(Quantity) AS [(sum) Quantity]
     FROM
         OPENROWSET(
             BULK 'https://asadatalakeSUFFIX.dfs.core.windows.net/wwi-02/sale-small/Year=2016/Quarter=Q4/Month=12/Day=20161231/sale-small-20161231-snappy.parquet',
@@ -201,11 +201,8 @@ You decide to create an external table that connects to the external data source
     ```text
     Started executing query at Line 1
 
-    (Affected rows: 0)
-    (Affected rows: 0)
-    (Affected rows: 0)
-    (Affected rows: 0)
-    Total execution time: 00:00:00.240
+    ()
+    Total execution time: 00:00:01.043
     ```
 
 3. Replace the SQL script with the following to select from the population external table, filtered by 2019 data where the population is greater than 100 million:
