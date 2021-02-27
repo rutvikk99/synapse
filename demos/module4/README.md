@@ -403,7 +403,7 @@ To do this, you will build a mapping data flow that performs the following tasks
 
     ![The derived column's settings are configured as described.](media/data-flow-user-profiles-derived-column-settings.png "Derived column's settings")
 
-10. Select the **+** to the right of the `userId` step, then select the **Flatten** schema modifier from the context menu.
+10. Select the **+** to the right of the `userId` step, then select the **Flatten** formatter from the context menu.
 
     ![The plus sign and the Flatten schema modifier are highlighted.](media/data-flow-user-profiles-new-flatten.png "New Flatten schema modifier")
 
@@ -419,7 +419,7 @@ To do this, you will build a mapping data flow that performs the following tasks
         | visitorId | `visitorId` |
         | topProductPurchases.productId | `productId` |
         | topProductPurchases.itemsPurchasedLast12Months | `itemsPurchasedLast12Months` |
-    
+
     > Select **+ Add mapping**, then select **Fixed mapping** to add each new column mapping.
 
     ![The flatten settings are configured as described.](media/data-flow-user-profiles-flatten-settings.png "Flatten settings")
@@ -486,7 +486,7 @@ To do this, you will build a mapping data flow that performs the following tasks
 
     ![The data preview tab is displayed with a sample of the file contents.](media/data-flow-user-profiles-data-preview2.png "Data preview")
 
-19. Select the **+** to the right of the `UserProfiles` source, then select the **Flatten** schema modifier from the context menu.
+19. Select the **+** to the right of the `UserProfiles` source, then select the **Flatten** formatter from the context menu.
 
     ![The plus sign and the Flatten schema modifier are highlighted.](media/data-flow-user-profiles-new-flatten2.png "New Flatten schema modifier")
 
@@ -644,8 +644,8 @@ To do this, you will build a mapping data flow that performs the following tasks
     - **Compression level**: Select `Fastest`.
     - **Vacuum**: Enter 0.
     - **Truncate table**: Check.
-    - **Merge schema**: Unchecked.
     - **Update method**: Check `Allow insert` and leave the rest unchecked.
+    - **Merge schema (under Delta options)**: Unchecked.
 
     ![The settings are shown.](media/data-flow-user-profiles-new-sink-settings-options2.png "Settings")
 
@@ -708,17 +708,15 @@ Let's start by executing our new Mapping Data Flow. In order to run the new data
 
     ![Drag the data flow activity onto the pipeline canvas.](media/pipeline-drag-data-flow.png "Pipeline canvas")
 
-6. In the `Adding data flow` blade, select **Use existing data flow (1)**, then select the `write_user_profile_to_asa` existing data flow **(2)** you created in the previous task.
+6. Under the **General** tab, set the Name to `write_user_profile_to_asa`.
 
-    ![The adding data flow form is displayed with the described configuration.](media/pipeline-user-profiles-adding-data-flow.png "Adding data flow")
+    ![The name is set on the general tab as described.](media/pipeline-data-flow-general.png "Name on the General tab")
 
-7. Select **OK (3)**.
-
-8. Select the mapping data flow activity on the canvas. Select the **Settings** tab **(1)**, then ensure `AutoResolveIntegrationRuntime` is selected for **Run on (Azure IR) (2)**. Choose the `General purpose` **Compute type (3)** and select `8 (+ 8 cores)` for the **Core count (4)**.
+7. Select the **Settings** tab **(1)**. Select `write_user_profile_to_asa` for **Data flow (2)**, then ensure `AutoResolveIntegrationRuntime` is selected for **Run on (Azure IR) (3)**. Choose the `General purpose` **Compute type (4)** and select `8 (+ 8 cores)` for the **Core count (5)**.
 
     ![The settings are configured as described.](media/data-flow-activity-settings1.png "Settings")
 
-9. Expand **staging** and configure the following:
+8. Expand **PolyBase** and configure the following:
 
     - **Staging linked service**: Select the `asadatalakeSUFFIX` linked service.
     - **Staging storage folder**: Enter `staging/userprofiles`. The `userprofiles` folder will be automatically created for you during the first pipeline run.
@@ -729,7 +727,7 @@ Let's start by executing our new Mapping Data Flow. In order to run the new data
 
     The staging options under PolyBase are recommended when you have a large amount of data to move into or out of Azure Synapse Analytics. You will want to experiment with enabling and disabling staging on the data flow in a production environment to evaluate the difference in performance.
 
-10. Select **Publish all** then **Publish** to save your pipeline.
+9. Select **Publish all** then **Publish** to save your pipeline.
 
     ![Publish all is highlighted.](media/publish-all-1.png "Publish all")
 
@@ -960,6 +958,14 @@ Now that we have processed, joined, and imported the user profile data, let's an
     ![The parquet file is highlighted.](media/top5-products-parquet.png "Top 5 products parquet")
 
     The Parquet write method on the dataframe in the Notebook cell created this directory since it did not previously exist.
+
+17. Return to the notebook. Select **Stop session** on the upper-right of the notebook. We want to stop the session to free up the compute resources for when we run the notebook inside the pipeline in the next section.
+
+    ![The stop session button is highlighted.](media/notebook-stop-session.png "Stop session")
+
+18. Select **Stop now** in the Stop current session.
+
+    ![The stop now button is highlighted.](media/notebook-stop-session-stop.png "Stop current session")
 
 ### Add the Notebook to the pipeline
 
