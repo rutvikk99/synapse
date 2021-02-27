@@ -372,10 +372,14 @@ The Apache Spark pool to Synapse SQL connector is a data source implementation f
 
     ```java
     %%spark
-    // Make sure the name of the dedcated SQL pool (SQLPool01 below) matches the name of your SQL pool.
+    // Make sure the name of the dedicated SQL pool (SQLPool01 below) matches the name of your SQL pool.
     val df = spark.sqlContext.sql("select * from top_purchases")
     df.write.sqlanalytics("SQLPool01.wwi.TopPurchases", Constants.INTERNAL)
     ```
+
+    After the cell run completes, the output displays details about the `df` dataframe:
+
+    ![The cell output is displayed.](media/df-write.png "Cell execution completed")
 
     > **Note to presenter**: The cell may take over a minute to execute. If you have run this command before, you will receive an error stating that "There is already and object named.." because the table already exists.
 
@@ -412,7 +416,7 @@ The Apache Spark pool to Synapse SQL connector is a data source implementation f
 
     ```java
     %%spark
-    // Make sure the name of the SQL pool (SQLPool01 below) matches the name of your SQL pool.
+    // Make sure the name of the dedicated SQL pool (SQLPool01 below) matches the name of your SQL pool.
     val df2 = spark.read.sqlanalytics("SQLPool01.wwi.TopPurchases")
     df2.createTempView("top_purchases_sql")
 
