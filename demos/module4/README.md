@@ -658,12 +658,12 @@ To do this, you will build a mapping data flow that performs the following tasks
         | Input columns | Output columns |
         | --- | --- |
         | visitorId | visitorId |
-        | productId | ProductId |
-        | itemsPurchasedLast12Months | ItemsPurchasedLast12Months |
+        | productId | productId |
+        | itemsPurchasedLast12Months | itemsPurchasedLast12Months |
         | preferredProductId | preferredProductId |
-        | userId | UserId |
-        | isTopProduct | IsTopProduct |
-        | isPreferredProduct | IsPreferredProduct |
+        | userId | userId |
+        | isTopProduct | isTopProduct |
+        | isPreferredProduct | isPreferredProduct |
 
     ![The mapping settings are configured as described.](media/data-flow-user-profiles-new-sink-settings-mapping2.png "Mapping")
 
