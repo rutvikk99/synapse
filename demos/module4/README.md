@@ -644,7 +644,7 @@ To do this, you will build a mapping data flow that performs the following tasks
     - **Compression type**: Select `snappy`.
     - **Compression level**: Select `Fastest`.
     - **Vacuum**: Enter 0.
-    - **Truncate table**: Check.
+    - **Truncate table**: Select.
     - **Update method**: Check `Allow insert` and leave the rest unchecked.
     - **Merge schema (under Delta options)**: Unchecked.
 
