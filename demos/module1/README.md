@@ -241,9 +241,9 @@ As you will see here in our workspace, Synapse brings all of our data into a sin
 
     ![The SQL requests pane is shown with the SQL pool selected.](media/monitoring-sql-requests.png "SQL requests")
 
-4. Hover over a SQL request, then select the **Request content** icon to view the SQL request that was sent to the SQL pool. *You may need to try a few before you find one with interesting content*.
+4. Select the **More** link next to a SQL request that was sent to the dedicated SQL pool to view the request content. *You may need to try a few before you find one with interesting content*.
 
-    ![The request content icon is highligghted.](media/request-content.png "Request content")
+    ![The more link is highlighted.](media/request-content.png "Request content")
 
     ![The content details are shown.](media/request-content-view.png "Request content")
 
