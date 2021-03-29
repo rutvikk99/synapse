@@ -631,7 +631,8 @@ To do this, you will build a mapping data flow that performs the following tasks
 
     - **Output stream name**: Enter `DataLake`.
     - **Incoming stream**: Select `Filter1`.
-    - **Sink type**: select `Delta`.
+    - **Sink type**: select `Inline`.
+    - **Inline dataset type**: select `Delta`.
     - **Linked service**: Select the default workspace data lake storage account (example: `asaworkspaceinaday84-WorspaceDefaultStorage`).
     - **Options**: Check `Allow schema drift` and uncheck `Validate schema`.
 
